@@ -5,7 +5,7 @@ const {ObjectId} = mongoose.Schema
 const unitpreferenceSchema = new mongoose.Schema({
     mahzor:{type:ObjectId , ref:'Mahzor'},
     job:{type:ObjectId,ref:'Job'},
-    candidates:[{type:ObjectId,ref:'Candidate'}],
+    preferencerankings:[{type:ObjectId,ref:'Preferenceranking'}],
 });
 
 const Unitpreference = mongoose.model('Unitpreference', unitpreferenceSchema);

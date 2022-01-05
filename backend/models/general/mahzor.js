@@ -6,10 +6,10 @@ const mahzorSchema = new mongoose.Schema({
     name:{type:String},
     startdate:{type:Date},
     enddate:{type:Date},
-    type:{type:String}
-    //affiliation:{type:ObjectId , ref:'Affiliation'},
-    //candidates:[{type:ObjectId,ref:'Candidate'}],
-    //jobs:[{type:ObjectId,ref:'Job'}],
+    numberofjobpicks:{type:Number},
+    status:{type:Number},
+    type:{type:String},
+    mahzoriosh:{type:ObjectId,ref:'Mahzoriosh'},
 });
 
 const Mahzor = mongoose.model('Mahzor', mahzorSchema);

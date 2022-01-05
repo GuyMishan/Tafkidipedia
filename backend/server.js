@@ -36,8 +36,8 @@ const userRoutes = require('./routes/authentication/user');
 app.use('/api', authRoutes)
 app.use('/api', userRoutes)
 //general routes
-const affiliationRoutes = require("./routes/general/affiliation");
 const candidateRoutes = require("./routes/general/candidate");
+const candidateineshkolRoutes = require("./routes/general/candidateineshkol");
 const candidatepreferenceRoutes = require("./routes/general/candidatepreference");
 const eshkolRoutes = require("./routes/general/eshkol");
 const finalcandidatepreferenceRoutes = require("./routes/general/finalcandidatepreference");
@@ -46,11 +46,12 @@ const finalunitpreferenceRoutes = require("./routes/general/finalunitpreference"
 const jobRoutes = require("./routes/general/job");
 const jobtypeRoutes = require("./routes/general/jobtype");
 const mahzorRoutes = require("./routes/general/mahzor");
+const mahzorioshRoutes = require("./routes/general/mahzoriosh");
 const unitRoutes = require("./routes/general/unit");
 const unitpreferenceRoutes = require("./routes/general/unitpreference");
 
-app.use('/api',affiliationRoutes)
 app.use('/api',candidateRoutes)
+app.use('/api',candidateineshkolRoutes)
 app.use('/api',candidatepreferenceRoutes)
 app.use('/api',eshkolRoutes)
 app.use('/api',finalcandidatepreferenceRoutes)
@@ -59,6 +60,7 @@ app.use('/api',finalunitpreferenceRoutes)
 app.use('/api',jobRoutes)
 app.use('/api',jobtypeRoutes)
 app.use('/api',mahzorRoutes)
+app.use('/api',mahzorioshRoutes)
 app.use('/api',unitRoutes)
 app.use('/api',unitpreferenceRoutes)
 

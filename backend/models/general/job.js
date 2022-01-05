@@ -15,7 +15,6 @@ const jobSchema = new mongoose.Schema({
     certain:{type:Boolean},
     migzar:{type:String},
     description:{type:String}
-    //affiliation:{type:ObjectId,ref:'Affiliation'},
 });
 
 const Job = mongoose.model('Job', jobSchema);
