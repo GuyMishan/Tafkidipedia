@@ -18,25 +18,27 @@ const SortingTable = ({ match }) => {
   }
 
   const getMahzorUnitsPreferences = async () => {//get + sort by mahzorid
-    try {
-      // await axios.get(`http://localhost:8000/api/smartunitpreference`)
-      await axios.get(`http://localhost:8000/api/smartunitpreference`)
-        .then(response => {
-          let tempdata = response.data;
-          let tempunitspreferences = [];
-          // for (let i = 0; i < tempdata.length; i++) {
-          //   if (tempdata[i].mahzor._id == match.params.mahzorid)
-          //   tempunitspreferences.push(tempdata[i])
-          // }
-          setData(tempdata)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }
-    catch {
-
-    }
+    await axios.get(`http://localhost:8000/api/smartunitpreference`)
+      .then(async response => {
+        let tempdata = response.data;
+        let tempunitspreferences = [];
+        for (let i = 0; i < tempdata.length; i++) {
+          if (tempdata[i].mahzor._id == match.params.mahzorid) {
+            for (let j = 0; j < tempdata[i].preferencerankings.length; j++) {
+              let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempdata[i].preferencerankings[j].candidate}`);
+              tempdata[i].preferencerankings[j].candidate = result1.data[0];
+              delete tempdata[i].preferencerankings[j].__v;
+              delete tempdata[i].preferencerankings[j]._id;
+              delete tempdata[i].preferencerankings[j].candidate.__v;
+            }
+            tempunitspreferences.push(tempdata[i])
+          }
+        }
+        setData(tempunitspreferences)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   useEffect(() => {
@@ -71,11 +73,11 @@ const SortingTable = ({ match }) => {
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table {...getTableProps()}>
-        <thead style={{ backgroundColor: '#4fff64' }}>
+          <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
-            <th colSpan="1">תפקיד</th>
-            <th colSpan="1">ודאי/לא ודאי</th>
-            <th colSpan="100%">מועמדים</th>
+              <th colSpan="1">תפקיד</th>
+              <th colSpan="1">ודאי/לא ודאי</th>
+              <th colSpan="100%">מועמדים</th>
             </tr>
           </thead>
           <tbody {...getTableBodyProps()}>
@@ -96,14 +98,13 @@ const SortingTable = ({ match }) => {
                         if (cell.column.id == "job.certain") {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
                         }
-                        if (cell.column.id == "candidates") {
-                          return <> {cell.value.users.map((user, index) => (
-                            <td>{user.name} {user.lastname}</td>
+                        if (cell.column.id == "preferencerankings") {
+                          return <> {cell.value.map((preferenceranking, index) => (
+                            <td>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname} ({preferenceranking.rank})</td>
                           ))}</>
                         }
                       })
                     }
-                    {/* {console.log(row)} */}
                   </tr>
                 )
               })

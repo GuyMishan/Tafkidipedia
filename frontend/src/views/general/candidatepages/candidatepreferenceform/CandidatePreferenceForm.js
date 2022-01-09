@@ -28,42 +28,90 @@ import { generate } from 'shortid'
 import { toast } from "react-toastify";
 
 const CandidatePreferenceForm = ({ match }) => {
-  const [, forceUpdate] = useState();
-  //react validator
-  const simpleValidator = useRef(new SimpleReactValidator({
-    messages: {
-      default: 'נדרש למלא שדה זה'
-    },
-    element: message => <div style={{ background: '#F66C6C', textAlign: 'center', fontWeight: 'bold' }}>{message}</div>
-  }))
+  //mahzor
+  const [mahzordata, setMahzorData] = useState({})
+  //mahzor
 
-  const [candidatepreference, setCandidatePreference] = useState({})
+  //jobs
   const [certmahzorjobs, setCertMahzorJobs] = useState([]);
   const [noncertmahzorjobs, setNonCertMahzorJobs] = useState([]);
+  //jobs
 
-  function handleChange(evt) {
+  //old-preference
+  const [oldcandidatepreference, setOldcandidatePreference] = useState({})
+  //old-preference
+
+  //preference
+  const [candidatepreference, setCandidatePreference] = useState({})
+  //preference
+
+  function handleChangecertjobpreferences(evt) {
     const value = evt.target.value;
-    setCandidatePreference({ ...candidatepreference, [evt.target.name]: value });
+    const index = parseInt(evt.target.name);
+    let rank = index + 1;
+
+    let tempcandidatepreference = [...candidatepreference.certjobpreferences];
+    tempcandidatepreference[index] = { job: value, rank: rank }
+    setCandidatePreference({ ...candidatepreference, certjobpreferences: tempcandidatepreference });
+  }
+
+  function handleChangenoncertjobpreferences(evt) {
+    const value = evt.target.value;
+    const index = parseInt(evt.target.name);
+    let rank = index + 1;
+
+    let tempcandidatepreference = [...candidatepreference.noncertjobpreferences];
+    tempcandidatepreference[index] = { job: value, rank: rank }
+    setCandidatePreference({ ...candidatepreference, noncertjobpreferences: tempcandidatepreference });
+  }
+
+  const loadmahzor = () => {
+    axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
+      .then(response => {
+        let tempmahzor = response.data;
+        tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
+        tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
+        setMahzorData(tempmahzor);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   const loadcandidatepreference = async () => {
     let tempcandidatepreferencedata; //look for existing preference
     let result = await axios.get(`http://localhost:8000/api/candidatepreference/candidatepreferencebycandidateid/${match.params.candidateid}`);
     tempcandidatepreferencedata = result.data[0];
-    if(tempcandidatepreferencedata) //has existing pref
-    {
-    tempcandidatepreferencedata.certjobpreference1 = tempcandidatepreferencedata.certjobpreference1._id
-    tempcandidatepreferencedata.certjobpreference2 = tempcandidatepreferencedata.certjobpreference2._id
-    tempcandidatepreferencedata.certjobpreference3 = tempcandidatepreferencedata.certjobpreference3._id
-    tempcandidatepreferencedata.noncertjobpreference1 = tempcandidatepreferencedata.noncertjobpreference1._id
-    tempcandidatepreferencedata.noncertjobpreference2 = tempcandidatepreferencedata.noncertjobpreference2._id
-    tempcandidatepreferencedata.noncertjobpreference3 = tempcandidatepreferencedata.noncertjobpreference3._id
-    delete tempcandidatepreferencedata.mahzor;
-    delete tempcandidatepreferencedata.candidate;
-    setCandidatePreference(tempcandidatepreferencedata)
-    }
-    else{ //dont have existing pref
 
+    if (tempcandidatepreferencedata) //has existing pref
+    {
+      for (let i = 0; i < tempcandidatepreferencedata.certjobpreferences.length; i++) {
+        let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatepreferencedata.certjobpreferences[i]}`);
+        tempcandidatepreferencedata.certjobpreferences[i] = result1.data;
+        delete tempcandidatepreferencedata.certjobpreferences[i].__v;
+        delete tempcandidatepreferencedata.certjobpreferences[i]._id;
+      }
+      for (let i = 0; i < tempcandidatepreferencedata.noncertjobpreferences.length; i++) {
+        let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatepreferencedata.noncertjobpreferences[i]}`);
+        tempcandidatepreferencedata.noncertjobpreferences[i] = result1.data;
+        delete tempcandidatepreferencedata.noncertjobpreferences[i].__v;
+        delete tempcandidatepreferencedata.noncertjobpreferences[i]._id;
+      }
+
+      delete tempcandidatepreferencedata.mahzor;
+      delete tempcandidatepreferencedata.candidate;
+      setCandidatePreference(tempcandidatepreferencedata)
+
+      let tempoldcandidatepreferencedata; //if has existing preference save the old one
+      let oldresult = await axios.get(`http://localhost:8000/api/candidatepreference/candidatepreferencebycandidateid/${match.params.candidateid}`);
+      tempoldcandidatepreferencedata = oldresult.data[0];
+      setOldcandidatePreference(tempoldcandidatepreferencedata)
+    }
+    else { //dont have existing pref
+      let tempcandidatepreferencedata2 = {};
+      tempcandidatepreferencedata2.certjobpreferences = []
+      tempcandidatepreferencedata2.noncertjobpreferences = []
+      setCandidatePreference(tempcandidatepreferencedata2)
     }
     // console.log(tempcandidatepreferencedata)
   }
@@ -76,12 +124,12 @@ const CandidatePreferenceForm = ({ match }) => {
     let jobs = result.data;
 
     for (let i = 0; i < jobs.length; i++) {
-      if(jobs[i].certain==true) // תפקיד ודאי
+      if (jobs[i].certain == true) // תפקיד ודאי
       {
         let tempjob = jobs[i];
         tempcertjobs.push(tempjob)
       }
-      else{// תפקיד לא ודאי
+      else {// תפקיד לא ודאי
         let tempjob = jobs[i];
         tempnoncertjobs.push(tempjob)
       }
@@ -92,46 +140,162 @@ const CandidatePreferenceForm = ({ match }) => {
   }
 
   const clickSubmit = event => {//CheckPreferenceData->AddPreferenceToDb
-    const formValid = simpleValidator.current.allValid()
-    if (!formValid) {
-      simpleValidator.current.showMessages()
-      forceUpdate(1)
-      toast.error("שגיאה בטופס")
-    } else {
+    if (CheckPreferenceData() == true)
       AddPreferenceToDb();
-    }
   }
 
-  function AddPreferenceToDb() { //if candidatepref has id- means it exists and needs to be updated else its new..
+  function CheckPreferenceData() {
+    let flag = true;
+    let certjobsemptyflag = true;
+    let noncertjobsemptyflag = true;
+    let certjobsflag = true;
+    let noncertjobsflag = true;
+    let error = [];
+
+    if (candidatepreference.certjobpreferences.length != mahzordata.numberofjobpicks) //ודאי-בדיקה
+    {
+      certjobsemptyflag = false;
+    }
+
+    if (candidatepreference.noncertjobpreferences.length != mahzordata.numberofjobpicks) //לא ודאי-בדיקה
+    {
+      noncertjobsemptyflag = false;
+    }
+
+    //ודאי-בדיקה
+    for (let i = 0; i < candidatepreference.certjobpreferences.length - 1; i++) {
+      if (candidatepreference.certjobpreferences[i] == null || candidatepreference.certjobpreferences[i] == undefined) {
+        certjobsemptyflag = false;
+        break;
+      }
+      if (candidatepreference.certjobpreferences[i] ? candidatepreference.certjobpreferences[i].job == "בחר תפקיד" : false) {
+        certjobsemptyflag = false;
+        break;
+      }
+      for (let j = i + 1; j < candidatepreference.certjobpreferences.length; j++) {
+        if (candidatepreference.certjobpreferences[i].job == candidatepreference.certjobpreferences[j].job) {
+          certjobsflag = false;
+        }
+      }
+    }
+
+    //לא ודאי- בדיקה
+    for (let i = 0; i < candidatepreference.noncertjobpreferences.length - 1; i++) {
+      if (candidatepreference.noncertjobpreferences[i] == null || candidatepreference.noncertjobpreferences[i] == undefined) {
+        noncertjobsemptyflag = false;
+        break;
+      }
+      if (candidatepreference.noncertjobpreferences[i] ? candidatepreference.noncertjobpreferences[i].job == "בחר תפקיד" : false) {
+        noncertjobsemptyflag = false;
+        break;
+      }
+      for (let j = i + 1; j < candidatepreference.noncertjobpreferences.length; j++) {
+        if (candidatepreference.noncertjobpreferences[i].job == candidatepreference.noncertjobpreferences[j].job) {
+          noncertjobsflag = false;
+        }
+      }
+    }
+
+    //
+    if (certjobsemptyflag == false)
+      error.push('יש להזין את כל ההעדפות - ודאי')
+    if (certjobsflag == false)
+      error.push('אין להזין אותו תפקיד פעמיים - ודאי')
+
+    if (noncertjobsemptyflag == false)
+      error.push('יש להזין את כל ההעדפות - לא ודאי')
+    if (noncertjobsflag == false)
+      error.push('אין להזין אותו תפקיד פעמיים - לא ודאי')
+    //
+
+    if (error.length != 0) {
+      for (let i = 0; i < error.length; i++)
+        toast.error(error[i])
+      flag = false;
+    }
+    return flag;
+  }
+
+  async function AddPreferenceToDb() { //if candidatepref has id- means it exists and needs to be updated else its new..
     let tempcandidatepreference = candidatepreference;
     tempcandidatepreference.mahzor = match.params.mahzorid;
     tempcandidatepreference.candidate = match.params.candidateid;
 
-    if (!tempcandidatepreference._id) { //create new
-      axios.post(`http://localhost:8000/api/candidatepreference`, tempcandidatepreference)
+    if (!tempcandidatepreference._id) {
+      //create all candidate preference rankings 
+      let tempcandidatepreference_certjobpreferencesid = [];
+      let tempcandidatepreference_noncertjobpreferencesid = [];
+
+      for (let i = 0; i < tempcandidatepreference.certjobpreferences.length; i++) {
+        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.certjobpreferences[i])
+          .then(res => {
+            tempcandidatepreference_certjobpreferencesid.push(res.data._id)
+          })
+      }
+      for (let i = 0; i < tempcandidatepreference.noncertjobpreferences.length; i++) {
+        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.noncertjobpreferences[i])
+          .then(res => {
+            tempcandidatepreference_noncertjobpreferencesid.push(res.data._id)
+          })
+      }
+
+      //create new candidate preference
+      tempcandidatepreference.certjobpreferences = tempcandidatepreference_certjobpreferencesid;
+      tempcandidatepreference.noncertjobpreferences = tempcandidatepreference_noncertjobpreferencesid;
+
+      await axios.post(`http://localhost:8000/api/candidatepreference`, tempcandidatepreference)
         .then(res => {
-          // console.log(res.data._id)
-          toast.success("העדפה נקלטה בהצלחה")
+          toast.success("העדפה עודכנה בהצלחה")
           history.goBack();
         })
-        .catch(error => {
-
-        })
     }
-    else {//update
-      axios.put(`http://localhost:8000/api/candidatepreference/${tempcandidatepreference._id}`, tempcandidatepreference)
-      .then(res => {
-        // console.log(res.data._id)
-        toast.success("העדפה עודכנה בהצלחה")
-        history.goBack();
-      })
-      .catch(error => {
 
-      })
+    else {
+      // delete all previous preference rankings
+      for (let i = 0; i < oldcandidatepreference.certjobpreferences.length; i++) {
+        await axios.delete(`http://localhost:8000/api/candidatepreferenceranking/${oldcandidatepreference.certjobpreferences[i]}`)
+          .then(res => {
+
+          })
+      }
+      for (let i = 0; i < oldcandidatepreference.noncertjobpreferences.length; i++) {
+        await axios.delete(`http://localhost:8000/api/candidatepreferenceranking/${oldcandidatepreference.noncertjobpreferences[i]}`)
+          .then(res => {
+
+          })
+      }
+
+      // create all candidate preference rankings
+      let tempcandidatepreference_certjobpreferencesid = [];
+      let tempcandidatepreference_noncertjobpreferencesid = [];
+
+      for (let i = 0; i < tempcandidatepreference.certjobpreferences.length; i++) {
+        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.certjobpreferences[i])
+          .then(res => {
+            tempcandidatepreference_certjobpreferencesid.push(res.data._id)
+          })
+      }
+      for (let i = 0; i < tempcandidatepreference.noncertjobpreferences.length; i++) {
+        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.noncertjobpreferences[i])
+          .then(res => {
+            tempcandidatepreference_noncertjobpreferencesid.push(res.data._id)
+          })
+      }
+
+      //update candidate preference
+      tempcandidatepreference.certjobpreferences = tempcandidatepreference_certjobpreferencesid;
+      tempcandidatepreference.noncertjobpreferences = tempcandidatepreference_noncertjobpreferencesid;
+
+      await axios.put(`http://localhost:8000/api/candidatepreference/${tempcandidatepreference._id}`, tempcandidatepreference)
+        .then(res => {
+          toast.success("העדפה עודכנה בהצלחה")
+          history.goBack();
+        })
     }
   }
 
   function init() {
+    loadmahzor()
     loadcandidatepreference()
     loadmahzorjobs()
   }
@@ -150,86 +314,81 @@ const CandidatePreferenceForm = ({ match }) => {
 
           <CardBody style={{ direction: 'rtl' }}>
             <Container>
+              {/*edit existing*/}
+              {(candidatepreference.certjobpreferences && candidatepreference._id) ?
+                <>
+                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - ודאי (1- גבוה ביותר)</h5>
+                  <Row>
+                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                      <Col xs={12} md={4}>
+                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                        <FormGroup dir="rtl" >
+                          <Input type="select" name={i} value={candidatepreference.certjobpreferences[i].job} onChange={handleChangecertjobpreferences}>
+                            <option value={undefined}>{"בחר תפקיד"}</option>
+                            {certmahzorjobs.map((job, index) => (
+                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>)}
+                  </Row>
 
-              <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - ודאי (1- גבוה ביותר)</h5>
-              <Row>
-                <Col xs={12} md={4}>
-                  <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד 1</div>
-                  <FormGroup dir="rtl" >
-                    <Input type="select" name="certjobpreference1" value={candidatepreference.certjobpreference1} onChange={handleChange} onBlur={() => simpleValidator.current.showMessageFor('certjobpreference1')}>
-                      <option value={undefined}>{"בחר תפקיד"}</option>
-                      {certmahzorjobs.map((job, index) => (
-                        <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                      ))}
-                    </Input>
-                    {simpleValidator.current.message('certjobpreference1', candidatepreference.certjobpreference1, 'required')}
-                  </FormGroup>
-                </Col>
-                <Col xs={12} md={4}>
-                  <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד 2</div>
-                  <FormGroup dir="rtl" >
-                    <Input type="select" name="certjobpreference2" value={candidatepreference.certjobpreference2} onChange={handleChange} onBlur={() => simpleValidator.current.showMessageFor('certjobpreference2')}>
-                      <option value={undefined}>{"בחר תפקיד"}</option>
-                      {certmahzorjobs.map((job, index) => (
-                        <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                      ))}
-                    </Input>
-                    {simpleValidator.current.message('certjobpreference2', candidatepreference.certjobpreference2, 'required')}
-                  </FormGroup>
-                </Col>
-                <Col xs={12} md={4}>
-                  <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד 3</div>
-                  <FormGroup dir="rtl" >
-                    <Input type="select" name="certjobpreference3" value={candidatepreference.certjobpreference3} onChange={handleChange} onBlur={() => simpleValidator.current.showMessageFor('certjobpreference3')}>
-                      <option value={undefined}>{"בחר תפקיד"}</option>
-                      {certmahzorjobs.map((job, index) => (
-                        <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                      ))}
-                    </Input>
-                    {simpleValidator.current.message('certjobpreference3', candidatepreference.certjobpreference3, 'required')}
-                  </FormGroup>
-                </Col>
-              </Row>
 
-              <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
-              <Row>
-                <Col xs={12} md={4}>
-                  <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד 1</div>
-                  <FormGroup dir="rtl" >
-                    <Input type="select" name="noncertjobpreference1" value={candidatepreference.noncertjobpreference1} onChange={handleChange} onBlur={() => simpleValidator.current.showMessageFor('noncertjobpreference1')}>
-                      <option value={undefined}>{"בחר תפקיד"}</option>
-                      {noncertmahzorjobs.map((job, index) => (
-                        <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                      ))}
-                    </Input>
-                    {simpleValidator.current.message('noncertjobpreference1', candidatepreference.noncertjobpreference1, 'required')}
-                  </FormGroup>
-                </Col>
-                <Col xs={12} md={4}>
-                  <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד 2</div>
-                  <FormGroup dir="rtl" >
-                    <Input type="select" name="noncertjobpreference2" value={candidatepreference.noncertjobpreference2} onChange={handleChange} onBlur={() => simpleValidator.current.showMessageFor('noncertjobpreference2')}>
-                      <option value={undefined}>{"בחר תפקיד"}</option>
-                      {noncertmahzorjobs.map((job, index) => (
-                        <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                      ))}
-                    </Input>
-                    {simpleValidator.current.message('noncertjobpreference2', candidatepreference.noncertjobpreference2, 'required')}
-                  </FormGroup>
-                </Col>
-                <Col xs={12} md={4}>
-                  <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד 3</div>
-                  <FormGroup dir="rtl" >
-                    <Input type="select" name="noncertjobpreference3" value={candidatepreference.noncertjobpreference3} onChange={handleChange} onBlur={() => simpleValidator.current.showMessageFor('noncertjobpreference3')}>
-                      <option value={undefined}>{"בחר תפקיד"}</option>
-                      {noncertmahzorjobs.map((job, index) => (
-                        <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                      ))}
-                    </Input>
-                    {simpleValidator.current.message('noncertjobpreference3', candidatepreference.noncertjobpreference3, 'required')}
-                  </FormGroup>
-                </Col>
-              </Row>
+                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
+                  <Row>
+                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                      <Col xs={12} md={4}>
+                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                        <FormGroup dir="rtl" >
+                          <Input type="select" name={i} value={candidatepreference.noncertjobpreferences[i].job} onChange={handleChangenoncertjobpreferences}>
+                            <option value={undefined}>{"בחר תפקיד"}</option>
+                            {noncertmahzorjobs.map((job, index) => (
+                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>)}
+                  </Row>
+                </>
+                : null}
+
+              {/*edit new*/}
+              {(candidatepreference.certjobpreferences && !candidatepreference._id) ?
+                <>
+                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - ודאי (1- גבוה ביותר)</h5>
+                  <Row>
+                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                      <Col xs={12} md={4}>
+                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                        <FormGroup dir="rtl" >
+                          <Input type="select" name={i} /*value={candidatepreference.certjobpreferences[i].job}*/ onChange={handleChangecertjobpreferences}>
+                            <option value={undefined}>{"בחר תפקיד"}</option>
+                            {certmahzorjobs.map((job, index) => (
+                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>)}
+                  </Row>
+
+
+                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
+                  <Row>
+                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                      <Col xs={12} md={4}>
+                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                        <FormGroup dir="rtl" >
+                          <Input type="select" name={i} /*value={candidatepreference.noncertjobpreferences[i].job}*/ onChange={handleChangenoncertjobpreferences}>
+                            <option value={undefined}>{"בחר תפקיד"}</option>
+                            {noncertmahzorjobs.map((job, index) => (
+                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>)}
+                  </Row>
+                </>
+                : null}
 
               <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                 <button className="btn btn-primary" onClick={clickSubmit}>עדכן העדפות</button>

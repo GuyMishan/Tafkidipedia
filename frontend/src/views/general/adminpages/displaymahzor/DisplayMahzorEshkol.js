@@ -36,144 +36,77 @@ function DisplayMahzorEshkol({ match }) {
         let tempdata = response1.data;
         // console.log(tempdata)
 
-        //calculate all eshkols of certain mahzor
-        let response2 = await axios.get(`http://localhost:8000/api/candidatepreferencebymahzorid/${match.params.mahzorid}`)
-        let candidatespreferences = response2.data;
+        let tempmahzoreshkol = [];// final result
 
-        let tempmahzoreshkol = [];
-        for (let i = 0; i < candidatespreferences.length; i++) {
-            let iscertjobpreference1alreadyhaseshkol = false;
-            let iscertjobpreference2alreadyhaseshkol = false;
-            let iscertjobpreference3alreadyhaseshkol = false;
+        //get all jobs of mahzor
+        let response2 = await axios.get(`http://localhost:8000/api/jobsbymahzorid/${match.params.mahzorid}`)
+        let tempmahzorjobs = response2.data;
+        console.log(tempmahzorjobs)
 
-            let isnoncertjobpreference1alreadyhaseshkol = false;
-            let isnoncertjobpreference2alreadyhaseshkol = false;
-            let isnoncertjobpreference3alreadyhaseshkol = false;
-
-            for (let j = 0; j < tempmahzoreshkol.length; j++) {
-                if (candidatespreferences[i].certjobpreference1._id == tempmahzoreshkol[j].job) {
-                    iscertjobpreference1alreadyhaseshkol = true;
-                    let isuseralreadypickedjob = false;
-                    for (let k = 0; k < tempmahzoreshkol[j].candidates.length; k++) {
-                        if (candidatespreferences[i].candidate._id == tempmahzoreshkol[j].candidates[k]) {
-                            // same user already picked that job
-                            isuseralreadypickedjob = true;
-                        }
-                    }
-                    if (isuseralreadypickedjob == false) {
-                        // user picked that job -> insert
-                        tempmahzoreshkol[j].candidates.push(candidatespreferences[i].candidate._id)
-                    }
-                }
-                if(iscertjobpreference1alreadyhaseshkol==false)
-                if (candidatespreferences[i].certjobpreference2._id == tempmahzoreshkol[j].job) {
-                    iscertjobpreference2alreadyhaseshkol = true;
-                    let isuseralreadypickedjob = false;
-                    for (let k = 0; k < tempmahzoreshkol[j].candidates.length; k++) {
-                        if (candidatespreferences[i].candidate._id == tempmahzoreshkol[j].candidates[k]) {
-                            // same user already picked that job
-                            isuseralreadypickedjob = true;
-                        }
-                    }
-                    if (isuseralreadypickedjob == false) {
-                        // user picked that job -> insert
-                        tempmahzoreshkol[j].candidates.push(candidatespreferences[i].candidate._id)
-                    }
-                }
-                if((iscertjobpreference1alreadyhaseshkol==false)&&(iscertjobpreference2alreadyhaseshkol==false))
-                if (candidatespreferences[i].certjobpreference3._id == tempmahzoreshkol[j].job) {
-                    iscertjobpreference3alreadyhaseshkol = true;
-                    let isuseralreadypickedjob = false;
-                    for (let k = 0; k < tempmahzoreshkol[j].candidates.length; k++) {
-                        if (candidatespreferences[i].candidate._id == tempmahzoreshkol[j].candidates[k]) {
-                            // same user already picked that job
-                            isuseralreadypickedjob = true;
-                        }
-                    }
-                    if (isuseralreadypickedjob == false) {
-                        // user picked that job -> insert
-                        tempmahzoreshkol[j].candidates.push(candidatespreferences[i].candidate._id)
-                    }
-                }
-                
-                if (candidatespreferences[i].noncertjobpreference1._id == tempmahzoreshkol[j].job) {
-                    isnoncertjobpreference1alreadyhaseshkol = true;
-                    let isuseralreadypickedjob = false;
-                    for (let k = 0; k < tempmahzoreshkol[j].candidates.length; k++) {
-                        if (candidatespreferences[i].candidate._id == tempmahzoreshkol[j].candidates[k]) {
-                            // same user already picked that job
-                            isuseralreadypickedjob = true;
-                        }
-                    }
-                    if (isuseralreadypickedjob == false) {
-                        // user picked that job -> insert
-                        tempmahzoreshkol[j].candidates.push(candidatespreferences[i].candidate._id)
-                    }
-                }
-
-                if(isnoncertjobpreference1alreadyhaseshkol==false)
-                if (candidatespreferences[i].noncertjobpreference2._id == tempmahzoreshkol[j].job) {
-                    isnoncertjobpreference2alreadyhaseshkol = true;
-                    let isuseralreadypickedjob = false;
-                    for (let k = 0; k < tempmahzoreshkol[j].candidates.length; k++) {
-                        if (candidatespreferences[i].candidate._id == tempmahzoreshkol[j].candidates[k]) {
-                            // same user already picked that job
-                            isuseralreadypickedjob = true;
-                        }
-                    }
-                    if (isuseralreadypickedjob == false) {
-                        // user picked that job -> insert
-                        tempmahzoreshkol[j].candidates.push(candidatespreferences[i].candidate._id)
-                    }
-                }
-
-                if((isnoncertjobpreference1alreadyhaseshkol==false)&&(isnoncertjobpreference2alreadyhaseshkol==false))
-                if (candidatespreferences[i].noncertjobpreference3._id == tempmahzoreshkol[j].job) {
-                    isnoncertjobpreference3alreadyhaseshkol = true;
-                    let isuseralreadypickedjob = false;
-                    for (let k = 0; k < tempmahzoreshkol[j].candidates.length; k++) {
-                        if (candidatespreferences[i].candidate._id == tempmahzoreshkol[j].candidates[k]) {
-                            // same user already picked that job
-                            isuseralreadypickedjob = true;
-                        }
-                    }
-                    if (isuseralreadypickedjob == false) {
-                        // user picked that job -> insert
-                        tempmahzoreshkol[j].candidates.push(candidatespreferences[i].candidate._id)
-                    }
-                }
+        //get all candidatepreferences of mahzor
+        let response3 = await axios.get(`http://localhost:8000/api/candidatepreferencebymahzorid/${match.params.mahzorid}`)
+        let tempcandidatespreferencesdata = response3.data;
+        for (let i = 0; i < tempcandidatespreferencesdata.length; i++) {
+            for (let j = 0; j < tempcandidatespreferencesdata[i].certjobpreferences.length; j++) {
+                let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].certjobpreferences[j]}`);
+                tempcandidatespreferencesdata[i].certjobpreferences[j] = result1.data;
+                delete tempcandidatespreferencesdata[i].certjobpreferences[j].__v;
+                delete tempcandidatespreferencesdata[i].certjobpreferences[j]._id;
             }
-            if (iscertjobpreference1alreadyhaseshkol == false) {
-                // job doesnt has eshkol -> insert
-                tempmahzoreshkol.push({ mahzor:match.params.mahzorid, job: candidatespreferences[i].certjobpreference1._id, candidates: [candidatespreferences[i].candidate._id] })
-            }
-            if ((iscertjobpreference2alreadyhaseshkol == false)&&(candidatespreferences[i].certjobpreference1._id!=candidatespreferences[i].certjobpreference2._id)) {
-                // job doesnt has eshkol -> insert
-                tempmahzoreshkol.push({ mahzor:match.params.mahzorid, job: candidatespreferences[i].certjobpreference2._id, candidates: [candidatespreferences[i].candidate._id] })
-            }
-            if ((iscertjobpreference3alreadyhaseshkol == false)&&(candidatespreferences[i].certjobpreference1._id!=candidatespreferences[i].certjobpreference3._id)&&(candidatespreferences[i].certjobpreference2._id!=candidatespreferences[i].certjobpreference3._id)) {
-                // job doesnt has eshkol -> insert
-                tempmahzoreshkol.push({ mahzor:match.params.mahzorid, job: candidatespreferences[i].certjobpreference3._id, candidates: [candidatespreferences[i].candidate._id] })
-            }
-            if (isnoncertjobpreference1alreadyhaseshkol == false) {
-                // job doesnt has eshkol -> insert
-                tempmahzoreshkol.push({ mahzor:match.params.mahzorid, job: candidatespreferences[i].noncertjobpreference1._id, candidates: [candidatespreferences[i].candidate._id] })
-            }
-            if ((isnoncertjobpreference2alreadyhaseshkol == false)&&(candidatespreferences[i].noncertjobpreference1._id!=candidatespreferences[i].noncertjobpreference2._id)) {
-                // job doesnt has eshkol -> insert
-                tempmahzoreshkol.push({ mahzor:match.params.mahzorid, job: candidatespreferences[i].noncertjobpreference2._id, candidates: [candidatespreferences[i].candidate._id] })
-            }
-            if ((isnoncertjobpreference3alreadyhaseshkol == false)&&(candidatespreferences[i].noncertjobpreference1._id!=candidatespreferences[i].noncertjobpreference3._id)&&(candidatespreferences[i].noncertjobpreference2._id!=candidatespreferences[i].noncertjobpreference3._id)) {
-                // job doesnt has eshkol -> insert
-                tempmahzoreshkol.push({ mahzor:match.params.mahzorid, job: candidatespreferences[i].noncertjobpreference3._id, candidates: [candidatespreferences[i].candidate._id] })
+            for (let j = 0; j < tempcandidatespreferencesdata[i].noncertjobpreferences.length; j++) {
+                let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].noncertjobpreferences[j]}`);
+                tempcandidatespreferencesdata[i].noncertjobpreferences[j] = result1.data;
+                delete tempcandidatespreferencesdata[i].noncertjobpreferences[j].__v;
+                delete tempcandidatespreferencesdata[i].noncertjobpreferences[j]._id;
             }
         }
-        //post mahzor eshkols to db
+        console.log(tempcandidatespreferencesdata)
+
+        //get all unitpreferences of mahzor
+        let response4 = await axios.get(`http://localhost:8000/api/unitpreferencebymahzorid/${match.params.mahzorid}`)
+        let tempunitspreferences = response4.data;
+        console.log(tempunitspreferences)
+
+        //calculate eshkols!!!!
+        for (let i = 0; i < tempmahzorjobs.length; i++) {
+            tempmahzoreshkol[i] = ({ mahzor: match.params.mahzorid, job: tempmahzorjobs[i]._id, finalconfirmation: false, candidatesineshkol: [] })
+            for (let j = 0; j < tempcandidatespreferencesdata.length; j++) {
+                for (let k = 0; k < tempcandidatespreferencesdata[j].certjobpreferences.length; k++) {
+                    if (tempcandidatespreferencesdata[j].certjobpreferences[k].job == tempmahzorjobs[i]._id) {
+                        tempmahzoreshkol[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].certjobpreferences[k].rank })
+                    }
+                }
+                for (let k = 0; k < tempcandidatespreferencesdata[j].noncertjobpreferences.length; k++) {
+                    if (tempcandidatespreferencesdata[j].noncertjobpreferences[k].job == tempmahzorjobs[i]._id) {
+                        tempmahzoreshkol[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].noncertjobpreferences[k].rank })
+                    }
+                }
+            }
+        }
+
         for (let i = 0; i < tempmahzoreshkol.length; i++) {
-            let response1 = await axios.post(`http://localhost:8000/api/eshkol`, tempmahzoreshkol[i])
-            // let tempdata = response1.data;
+            for (let j = 0; j < tempunitspreferences.length; j++) {
+                if (tempunitspreferences[j].job._id == tempmahzoreshkol[i].job) {
+                    for (let k = 0; k < tempunitspreferences[j].preferencerankings.length; k++) {
+                        for (let l = 0; l < tempmahzoreshkol[i].candidatesineshkol.length; l++) {
+                            if(tempmahzoreshkol[i].candidatesineshkol[l].candidate==tempunitspreferences[j].preferencerankings[k].candidate)
+                            {
+                                tempmahzoreshkol[i].candidatesineshkol[l].unitrank =tempunitspreferences[j].preferencerankings[k].rank;
+                            }
+                        }
+                    }
+                }
+            }
         }
-        setCount(count + 1);
+        console.log(tempmahzoreshkol)
+
+
+        // //post mahzor eshkols to db
+        // for (let i = 0; i < tempmahzoreshkol.length; i++) {
+        //     let response1 = await axios.post(`http://localhost:8000/api/eshkol`, tempmahzoreshkol[i])
+        //     // let tempdata = response1.data;
+        // }
+        // setCount(count + 1);
     }
 
     function init() {
@@ -187,7 +120,7 @@ function DisplayMahzorEshkol({ match }) {
     return (
         <Container>
             <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת אשכולות</h3>
-            <SortingTable mahzorid={match.params.mahzorid} refresh={count}/>
+            <SortingTable mahzorid={match.params.mahzorid} refresh={count} />
             <Button onClick={() => CalculateMahzorEshkol()}>חשב אשכולות</Button>
         </Container>
     );

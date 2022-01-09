@@ -142,9 +142,9 @@ const MahzorJobs = (props) => {
                                 {/* <td style={{ textAlign: "center" }}>{job.description}</td> */}
                                 <td style={{ textAlign: "center" }}>{job.location}</td>
                                 <td style={{ textAlign: "center" }}>{job.peilut}</td>
-                                <td style={{ textAlign: "center" }}>{job.damah == true ? "יש" : "אין"}</td>
+                                <td style={{ textAlign: "center" }}>{job.damah.toString() /* == true ? "אין" : "יש"*/}</td>
                                 <td style={{ textAlign: "center" }}>{job.sivug}</td>
-                                <td style={{ textAlign: "center" }}>{job.certain == true ? "ודאי" : "לא ודאי"}</td>
+                                <td style={{ textAlign: "center" }}>{job.certain.toString() /* == true ? "לא ודאי" : "ודאי"*/}</td>
                                 {/* <td style={{ textAlign: "center" }}>
                                     <button
                                         className="btn btn-success"

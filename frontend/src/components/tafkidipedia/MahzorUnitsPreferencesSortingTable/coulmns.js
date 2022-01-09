@@ -12,7 +12,7 @@ export const COLUMNS = [
     },
     {
         Header: '',
-        accessor: 'candidates',
+        accessor: 'preferencerankings',
         Filter: ColumnFilter
     },
 ]

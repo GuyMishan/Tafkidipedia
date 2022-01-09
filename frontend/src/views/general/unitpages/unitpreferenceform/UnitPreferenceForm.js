@@ -29,28 +29,49 @@ import { toast } from "react-toastify";
 import soldier from "assets/img/soldier.png";
 
 const UnitPreferenceForm = ({ match }) => {
-  //unitpreference data
-  const [unitpreference, setUnitPreference] = useState({})
-  const [unitpreferencecandidates, setUnitPreferenceCandidates] = useState([]);
-  //unitpreference data
 
   //mahzor data
   const [mahzorcandidates, setMahzorCandidates] = useState([]);
   const [job, setJob] = useState([]);
   //mahzor data
 
-  const isDuplicate = (data, obj) =>
-    data.some((el) =>
-      Object.entries(obj).every(([key, value]) => value._id === el[key]._id)
-    );
+  //old-preference
+  const [oldunitpreference, setOldunitPreference] = useState({})
+  //old-preference
+
+  //unitpreference data
+  const [unitpreference, setUnitPreference] = useState({})
+  //unitpreference data
+
+  const isDuplicate = (data, obj) => {
+    let flag = false;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].candidate._id == obj._id) {
+        flag = true
+      }
+    }
+    return flag;
+  }
 
   const handleChangCandidatesOfPreference = event => {
     if (event.target.value != "בחר מועמד") {
       let tempcandidate = mahzorcandidates[event.target.value];
-      if (!isDuplicate(unitpreferencecandidates, tempcandidate)) {
-        setUnitPreferenceCandidates(unitpreferencecandidates => [...unitpreferencecandidates, tempcandidate]);
+      let tempunitpreferencepreferencerankings = [...unitpreference.preferencerankings];
+
+      if (!isDuplicate(tempunitpreferencepreferencerankings, tempcandidate)) {
+        tempunitpreferencepreferencerankings.push({ candidate: tempcandidate, rank: 1 })
+        setUnitPreference({ ...unitpreference, preferencerankings: tempunitpreferencepreferencerankings });
       }
     }
+  }
+
+  const handleChangePreferenceRank = event => {
+    let temprank = parseInt(event.target.value);
+    let tempindex = parseInt(event.target.name);
+
+    let tempunitpreferencepreferencerankings = [...unitpreference.preferencerankings];
+    tempunitpreferencepreferencerankings[tempindex].rank = temprank;
+    setUnitPreference({ ...unitpreference, preferencerankings: tempunitpreferencepreferencerankings });
   }
 
   const loadmahzordata = async () => {
@@ -76,73 +97,111 @@ const UnitPreferenceForm = ({ match }) => {
     //unitpreference
     let result1 = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
     let tempunitpreference = result1.data[0];
-    setUnitPreference(tempunitpreference);
 
     if (tempunitpreference) //has unitprefernce to the job
     {
-      let tempunitpreferencecandidates = []
-      for (let i = 0; i < tempunitpreference.candidates.length; i++) {
-        let tempcandidatedata = {};
-        for (let j = 0; j < users.length; j++) {
-          if (tempunitpreference.candidates[i].user == users[j]._id) {
-            tempcandidatedata._id = tempunitpreference.candidates[i]._id;
-            tempcandidatedata.user = users[j];
-            tempcandidatedata.mahzor = match.params.mahzorid;//maybe problem?
-          }
-        }
-        tempunitpreferencecandidates.push(tempcandidatedata)
+      for (let i = 0; i < tempunitpreference.preferencerankings.length; i++) {
+        let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempunitpreference.preferencerankings[i].candidate}`);
+        tempunitpreference.preferencerankings[i].candidate = result1.data[0];
+        delete tempunitpreference.preferencerankings[i].__v;
+        delete tempunitpreference.preferencerankings[i]._id;
+        delete tempunitpreference.preferencerankings[i].candidate.__v;
       }
-      setUnitPreferenceCandidates(tempunitpreferencecandidates);
+      tempunitpreference.job = match.params.jobid;
+      tempunitpreference.mahzor = match.params.mahzorid;
+      setUnitPreference(tempunitpreference);
+
+      let tempoldunitpreferencedata; //if has existing preference save the old one
+      let oldresult = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
+      tempoldunitpreferencedata = oldresult.data[0];
+      setOldunitPreference(tempoldunitpreferencedata)
     }
     else { //doesnt has unitprefernce to the job
-
+      setUnitPreference({ preferencerankings: [], job: match.params.jobid, mahzor: match.params.mahzorid })
     }
   }
 
-  function DeleteCandidateFromUnitPreferenceCandidates(user) {
-    let tempunitpreferencecandidates = unitpreferencecandidates;
-    tempunitpreferencecandidates = tempunitpreferencecandidates.filter(function (item) {
-      return item !== user
+  async function DeletePreferencerankingFromUnitPreference(preferenceranking) {
+    let temppreferencerankings = await unitpreference.preferencerankings;
+    temppreferencerankings = temppreferencerankings.filter(function (item) {
+      return item !== preferenceranking
     })
-    setUnitPreferenceCandidates(tempunitpreferencecandidates);
+    setUnitPreference({ ...unitpreference, preferencerankings: temppreferencerankings });
   }
 
   const clickSubmit = event => {
-    if (unitpreference)
+    if (unitpreference._id) {
       UpdateUnitPreferenceInDb();
+    }
     else {
       AddUnitPreferenceToDb();
     }
   }
 
   async function AddUnitPreferenceToDb() {
-    let tempunitpreferencecandidates = []
-    unitpreferencecandidates.map((candidte, index) => (
-      tempunitpreferencecandidates.push(candidte._id)
-    ))
-    let tempunitpreference = { mahzor: match.params.mahzorid, job: match.params.jobid, candidates: tempunitpreferencecandidates }
-    // console.log(tempunitpreference)
-    let result = await axios.post(`http://localhost:8000/api/unitpreference`, tempunitpreference)
-    toast.success("העדפה נוספה בהצלחה")
-    history.goBack();
+    let tempunitpreference = unitpreference;
+    //init preferencerankings candidates to only ids..
+    for (let i = 0; i < tempunitpreference.preferencerankings.length; i++) {
+      tempunitpreference.preferencerankings[i].candidate = tempunitpreference.preferencerankings[i].candidate._id
+    }
+
+    //create all unit preferencerankings 
+    let tempunitpreference_preferencerankings_ids = [];
+
+    for (let i = 0; i < tempunitpreference.preferencerankings.length; i++) {
+      await axios.post(`http://localhost:8000/api/unitpreferenceranking`, tempunitpreference.preferencerankings[i])
+        .then(res => {
+          tempunitpreference_preferencerankings_ids.push(res.data._id)
+        })
+    }
+
+    //create new unit preference
+    tempunitpreference.preferencerankings = tempunitpreference_preferencerankings_ids;
+
+    await axios.post(`http://localhost:8000/api/unitpreference`, tempunitpreference)
+      .then(res => {
+        toast.success("העדפה עודכנה בהצלחה")
+        history.goBack();
+      })
   }
 
   async function UpdateUnitPreferenceInDb() {
-    let tempunitpreferencecandidates = []
-    unitpreferencecandidates.map((candidte, index) => (
-      tempunitpreferencecandidates.push(candidte._id)
-    ))
-    let tempunitpreference = { mahzor: match.params.mahzorid, job: match.params.jobid, candidates: tempunitpreferencecandidates }
-    // console.log(tempunitpreference)
-    let result = await axios.put(`http://localhost:8000/api/unitpreference/${unitpreference._id}`, tempunitpreference)
-    toast.success("העדפה עודכנה בהצלחה")
-    history.goBack();
+    let tempunitpreference = unitpreference;
+    //init preferencerankings candidates to only ids..
+    for (let i = 0; i < tempunitpreference.preferencerankings.length; i++) {
+      tempunitpreference.preferencerankings[i].candidate = tempunitpreference.preferencerankings[i].candidate._id
+    }
+
+    //delete all old unit preferencerankings 
+   for (let i = 0; i < oldunitpreference.preferencerankings.length; i++) {
+    await axios.delete(`http://localhost:8000/api/unitpreferenceranking/${oldunitpreference.preferencerankings[i]._id}`)
+      .then(res => {
+
+      })
+  }
+
+    //create all unit preferencerankings 
+    let tempunitpreference_preferencerankings_ids = [];
+
+    for (let i = 0; i < tempunitpreference.preferencerankings.length; i++) {
+      await axios.post(`http://localhost:8000/api/unitpreferenceranking`, tempunitpreference.preferencerankings[i])
+        .then(res => {
+          tempunitpreference_preferencerankings_ids.push(res.data._id)
+        })
+    }
+
+    //create new unit preference
+    tempunitpreference.preferencerankings = tempunitpreference_preferencerankings_ids;
+
+    await axios.put(`http://localhost:8000/api/unitpreference/${unitpreference._id}`, tempunitpreference)
+      .then(res => {
+        toast.success("העדפה עודכנה בהצלחה")
+        history.goBack();
+      })
   }
 
   async function init() {
-    // await loadusers()
     await loadunitpreference()
-    // FindEshkolByJob();
     loadmahzordata();
   }
 
@@ -175,17 +234,24 @@ const UnitPreferenceForm = ({ match }) => {
               </Row>
 
               <Row style={{ direction: "rtl", paddingTop: '10px' }} >
-                {unitpreferencecandidates ?unitpreferencecandidates.map((candidate, index) => (
+                {unitpreference && unitpreference.preferencerankings ? unitpreference.preferencerankings.map((ranking, index) => (
                   <Col xs={12} md={4} key={index}>
-                    <Row style={{ direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px' }}>
+                    <Row style={{ direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit' }}>
                       <Col xs={12} md={2} style={{ textAlign: 'center', alignSelf: 'center' }}>
                         <img src={soldier} alt="bookmark" style={{ height: "2rem" }} />
                       </Col>
-                      <Col xs={12} md={6} style={{ alignSelf: 'center' }}>
-                        <h3 style={{ textAlign: "right", margin: '0px' }}>{candidate.user.name} {candidate.user.lastname}</h3>
-                      </Col>
                       <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
-                        <Button className="btn btn-danger" onClick={(e) => DeleteCandidateFromUnitPreferenceCandidates(candidate, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
+                        <h5 style={{ textAlign: "right", margin: '0px' }}>{ranking.candidate.user.name} {ranking.candidate.user.lastname}</h5>
+                      </Col>
+                      <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                        <Input type="select" name={index} value={ranking.rank} onChange={handleChangePreferenceRank}>
+                          <option value={"1"}>1</option>
+                          <option value={"2"}>2</option>
+                          <option value={"3"}>3</option>
+                        </Input>
+                      </Col>
+                      <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                        <Button className="btn btn-danger" onClick={(e) => DeletePreferencerankingFromUnitPreference(ranking, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
                       </Col>
                     </Row>
                   </Col>

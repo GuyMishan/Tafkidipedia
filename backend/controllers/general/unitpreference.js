@@ -4,22 +4,6 @@ const mongoose = require('mongoose');
 let readtipul = [
   {
     $lookup: {
-      from: "candidates",
-      localField: "candidates",
-      foreignField: "_id",
-      as: "candidates"
-    }
-  },
-  // {
-  //   $lookup: {
-  //     from: "users",
-  //     localField: "candidates.user",
-  //     foreignField: "_id",
-  //     as: "candidates.users"
-  //   }
-  // },
-  {
-    $lookup: {
       from: "mahzors",
       localField: "mahzor",
       foreignField: "_id",
@@ -62,71 +46,15 @@ let readtipul = [
   {
     $unwind: "$job.unit"
   },
-];
-
-let readtipul2 = [
   {
     $lookup: {
-      from: "candidates",
-      localField: "candidates",
+      from: "unitpreferencerankings",
+      localField: "preferencerankings",
       foreignField: "_id",
-      as: "candidates"
+      as: "preferencerankings"
     }
-  },
-  {
-    $lookup: {
-      from: "users",
-      localField: "candidates.user",
-      foreignField: "_id",
-      as: "candidates.users"
-    }
-  },
-  {
-    $lookup: {
-      from: "mahzors",
-      localField: "mahzor",
-      foreignField: "_id",
-      as: "mahzor"
-    }
-  },
-  {
-    $unwind: "$mahzor"
-  },
-  {
-    $lookup: {
-      from: "jobs",
-      localField: "job",
-      foreignField: "_id",
-      as: "job"
-    }
-  },
-  {
-    $unwind: "$job"
-  },
-  {
-    $lookup: {
-      from: "jobtypes",
-      localField: "job.jobtype",
-      foreignField: "_id",
-      as: "job.jobtype"
-    }
-  },
-  {
-    $unwind: "$job.jobtype"
-  },
-  {
-    $lookup: {
-      from: "units",
-      localField: "job.unit",
-      foreignField: "_id",
-      as: "job.unit"
-    }
-  },
-  {
-    $unwind: "$job.unit"
   },
 ];
-
 
 exports.findById = async(req, res) => {
   const unitpreference = await Unitpreference.findOne().where({_id:req.params.id})
@@ -201,7 +129,7 @@ exports.unitpreferencebyjobid = (req, res) => {
 };
 
 exports.smartunitpreference = (req, res) => {
-  let tipulfindquerry = readtipul2.slice();
+  let tipulfindquerry = readtipul.slice();
   let finalquerry = tipulfindquerry;
 
   // let andquery = [];
@@ -214,6 +142,38 @@ exports.smartunitpreference = (req, res) => {
   //   };
   //   finalquerry.push(matchquerry)
   // }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Unitpreference.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+};
+
+exports.unitpreferencebymahzorid = (req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //mahzorid
+  if (req.params.mahzorid != 'undefined') {
+    andquery.push({ "mahzor._id": mongoose.Types.ObjectId(req.params.mahzorid) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
 
   // console.log(matchquerry)
   //console.log(andquery)

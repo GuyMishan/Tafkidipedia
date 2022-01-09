@@ -39,6 +39,7 @@ app.use('/api', userRoutes)
 const candidateRoutes = require("./routes/general/candidate");
 const candidateineshkolRoutes = require("./routes/general/candidateineshkol");
 const candidatepreferenceRoutes = require("./routes/general/candidatepreference");
+const candidatepreferencerankingRoutes = require("./routes/general/candidatepreferenceranking");
 const eshkolRoutes = require("./routes/general/eshkol");
 const finalcandidatepreferenceRoutes = require("./routes/general/finalcandidatepreference");
 const finaleshkolRoutes = require("./routes/general/finaleshkol");
@@ -49,10 +50,12 @@ const mahzorRoutes = require("./routes/general/mahzor");
 const mahzorioshRoutes = require("./routes/general/mahzoriosh");
 const unitRoutes = require("./routes/general/unit");
 const unitpreferenceRoutes = require("./routes/general/unitpreference");
+const unitpreferencerankingRoutes = require("./routes/general/unitpreferenceranking");
 
 app.use('/api',candidateRoutes)
 app.use('/api',candidateineshkolRoutes)
 app.use('/api',candidatepreferenceRoutes)
+app.use('/api',candidatepreferencerankingRoutes)
 app.use('/api',eshkolRoutes)
 app.use('/api',finalcandidatepreferenceRoutes)
 app.use('/api',finaleshkolRoutes)
@@ -63,6 +66,7 @@ app.use('/api',mahzorRoutes)
 app.use('/api',mahzorioshRoutes)
 app.use('/api',unitRoutes)
 app.use('/api',unitpreferenceRoutes)
+app.use('/api',unitpreferencerankingRoutes)
 
 if(process.env.NODE_ENV === 'production'){
     //set static folder
