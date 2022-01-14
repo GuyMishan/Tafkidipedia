@@ -56,26 +56,28 @@ const MahzorCandidates = (props) => {
                                 <Input type="select" onChange={props.handleChangeUsersToCandidate}>
                                     <option value={"בחר מועמד"}>בחר מועמד</option>
                                     {props.users.map((user, index) => (
-                                        <option key={index} value={index}>{user.name}</option>
+                                        <option key={index} value={index}>{user.name} {user.lastname}</option>
                                     ))}
                                 </Input>
                             </FormGroup>
                         </Col>
                     </Row>
-                    <Row style={{ direction: "rtl",paddingTop:'10px'}} >
+                    <Row style={{ direction: "rtl", paddingTop: '10px' }} >
                         {props.userstocandidate ? props.userstocandidate.map((user, index) => (
                             <Col xs={12} md={4} key={index}>
-                                <Row style={{ direction: "rtl",boxShadow:'0px 0px 5px 0px rgb(0 0 0 / 40%)',borderRadius:'10px'}}>
-                                    <Col xs={12} md={2} style={{textAlign:'center',alignSelf:'center'}}>
-                                        <img src={soldier} alt="bookmark" style={{ height: "2rem" }}/>
-                                    </Col>
-                                    <Col xs={12} md={4} style={{alignSelf:'center'}}>
-                                        <h3 style={{ textAlign: "right", margin: '0px' }}>{user.name}</h3>
-                                    </Col>
-                                    <Col xs={12} md={6} style={{alignSelf:'center'}}>
-                                        <Button className="btn btn-danger" onClick={(e) => props.DeleteUserFromUsersToCandidate(user, e)} style={{padding:'11px 20px 11px 20px'}}>X</Button>
-                                    </Col>
-                                </Row>
+                                <Card style={{ direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px' }}>
+                                    <Row>
+                                        <Col xs={12} md={2} style={{ textAlign: 'center', alignSelf: 'center' }}>
+                                            <img src={soldier} alt="bookmark" style={{ height: "2rem" }} />
+                                        </Col>
+                                        <Col xs={12} md={7} style={{ alignSelf: 'center' }}>
+                                            <h3 style={{ textAlign: "right", margin: '0px' }}>{user.name} {user.lastname}</h3>
+                                        </Col>
+                                        <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                                            <Button className="btn btn-danger" onClick={(e) => props.DeleteUserFromUsersToCandidate(user, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
+                                        </Col>
+                                    </Row>
+                                </Card>
                             </Col>
                         )) : null}
                     </Row>

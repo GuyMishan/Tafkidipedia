@@ -3,14 +3,10 @@ const {ObjectId} = mongoose.Schema
 
 
 const finalcandidatepreferenceSchema = new mongoose.Schema({
-    mahzor:{type:ObjectId , ref:'Mahzor'},
+    mahzor:{type:ObjectId,ref:'Mahzor'},
     candidate:{type:ObjectId,ref:'Candidate'},
-    certjobpreference1:{type:ObjectId,ref:'Job'},
-    certjobpreference2:{type:ObjectId,ref:'Job'},
-    certjobpreference3:{type:ObjectId,ref:'Job'},
-    noncertjobpreference1:{type:ObjectId,ref:'Job'},
-    noncertjobpreference1:{type:ObjectId,ref:'Job'},
-    noncertjobpreference1:{type:ObjectId,ref:'Job'},
+    certjobpreferences:[{type:ObjectId,ref:'Candidatepreferenceranking'}],
+    noncertjobpreferences:[{type:ObjectId,ref:'Candidatepreferenceranking'}],
 });
 
 const FinalCandidatepreference = mongoose.model('FinalCandidatepreference', finalcandidatepreferenceSchema);

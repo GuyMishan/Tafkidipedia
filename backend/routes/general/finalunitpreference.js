@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { create, find, update, remove, findById} = require('../../controllers/general/finalunitpreference');
+const { create, find, update, remove, findById,finalunitpreferencebyjobid,smartfinalunitpreference,finalunitpreferencebymahzorid} = require('../../controllers/general/finalunitpreference');
 
 // find spec 
 router.get('/finalunitpreference/:id', findById)
@@ -13,5 +13,11 @@ router.post('/finalunitpreference',create); /**/
 router.put('/finalunitpreference/:finalunitpreferenceId', update)
 //delete 
 router.delete('/finalunitpreference/:id', remove )
+
+router.get('/finalunitpreferencebyjobid/:jobid', finalunitpreferencebyjobid )
+
+router.get('/smartfinalunitpreference/', smartfinalunitpreference )
+
+router.get('/finalunitpreferencebymahzorid/:mahzorid', finalunitpreferencebymahzorid )
 
 module.exports = router;

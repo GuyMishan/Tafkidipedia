@@ -1,5 +1,60 @@
 const Finalunitpreference = require("../../models/general/finalunitpreference");
 
+let readtipul = [
+  {
+    $lookup: {
+      from: "mahzors",
+      localField: "mahzor",
+      foreignField: "_id",
+      as: "mahzor"
+    }
+  },
+  {
+    $unwind: "$mahzor"
+  },
+  {
+    $lookup: {
+      from: "jobs",
+      localField: "job",
+      foreignField: "_id",
+      as: "job"
+    }
+  },
+  {
+    $unwind: "$job"
+  },
+  {
+    $lookup: {
+      from: "jobtypes",
+      localField: "job.jobtype",
+      foreignField: "_id",
+      as: "job.jobtype"
+    }
+  },
+  {
+    $unwind: "$job.jobtype"
+  },
+  {
+    $lookup: {
+      from: "units",
+      localField: "job.unit",
+      foreignField: "_id",
+      as: "job.unit"
+    }
+  },
+  {
+    $unwind: "$job.unit"
+  },
+  {
+    $lookup: {
+      from: "unitpreferencerankings",
+      localField: "preferencerankings",
+      foreignField: "_id",
+      as: "preferencerankings"
+    }
+  },
+];
+
 exports.findById = async(req, res) => {
   const finalunitpreference = await Finalunitpreference.findOne().where({_id:req.params.id})
   
@@ -39,4 +94,95 @@ exports.remove = (req, res) => {
     Finalunitpreference.deleteOne({ _id: req.params.id })
     .then((finalunitpreference) => res.json(finalunitpreference))
     .catch((err) => res.status(400).json("Error: " + err));
+};
+
+exports.finalunitpreferencebyjobid = (req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //jobid
+  if (req.params.jobid != 'undefined') {
+    andquery.push({ "job._id": mongoose.Types.ObjectId(req.params.jobid) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Finalunitpreference.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+};
+
+exports.smartfinalunitpreference = (req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  // let andquery = [];
+
+  // if (andquery.length != 0) {
+  //   let matchquerry = {
+  //     "$match": {
+  //       "$and": andquery
+  //     }
+  //   };
+  //   finalquerry.push(matchquerry)
+  // }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Finalunitpreference.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+};
+
+exports.finalunitpreferencebymahzorid = (req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //mahzorid
+  if (req.params.mahzorid != 'undefined') {
+    andquery.push({ "mahzor._id": mongoose.Types.ObjectId(req.params.mahzorid) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Finalunitpreference.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 };

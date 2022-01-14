@@ -58,25 +58,28 @@ function DisplayMahzor({ match }) {
           <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{mahzordata.name}</h1>
         </Container>} />
 
-      <Card style={{marginTop:'30px'}}>
+      {mahzordata.status == 3 ? 
+      <Card style={{ marginTop: '30px' }}>
         <CardBody>
-          <DisplayMahzorEshkol/>
+          <DisplayMahzorEshkol />
         </CardBody>
-      </Card>
+      </Card> : null}
 
-      <Card>
+      {mahzordata.status == 2 || mahzordata.status == 3 ? 
+      <Card style={{ marginTop: '30px' }}>
         <CardBody>
           <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות מועמדים</h3>
           <MahzorCandidatesPreferencesSortingTable />
         </CardBody>
-      </Card>
+      </Card>: null}
 
+      {mahzordata.status == 2 ||mahzordata.status == 3 ? 
       <Card>
         <CardBody>
           <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות יחידות</h3>
           <MahzorUnitsPreferencesSortingTable />
         </CardBody>
-      </Card>
+      </Card> : null}
 
       <Link to={`/mahzorform/${mahzordata._id}`}><Button>ערוך מחזור</Button></Link>
     </Container>

@@ -4,23 +4,12 @@ const mongoose = require('mongoose');
 let readtipul = [
   {
     $lookup: {
-      from: "candidates",
-      localField: "candidates",
+      from: "candidateineshkols",
+      localField: "candidatesineshkol",
       foreignField: "_id",
-      as: "candidates"
+      as: "candidatesineshkol"
     }
   },
-  {
-    $lookup: {
-      from: "users",
-      localField: "candidates.user",
-      foreignField: "_id",
-      as: "candidates.user"
-    }
-  },
-  // {
-  //   $unwind: "$users"
-  // },
   {
     $lookup: {
       from: "mahzors",

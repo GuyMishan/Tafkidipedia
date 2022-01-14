@@ -31,6 +31,7 @@ import soldier from "assets/img/soldier.png";
 const UnitPreferenceForm = ({ match }) => {
 
   //mahzor data
+  const [mahzordata, setMahzorData] = useState({})
   const [mahzorcandidates, setMahzorCandidates] = useState([]);
   const [job, setJob] = useState([]);
   //mahzor data
@@ -88,6 +89,18 @@ const UnitPreferenceForm = ({ match }) => {
     let result2 = await axios.get(`http://localhost:8000/api/jobbyid/${match.params.jobid}`)
     let job = result2.data[0];
     setJob(job);
+
+    //mahzor - for knowing the status..
+    axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
+    .then(response => {
+      let tempmahzor = response.data;
+      tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
+      tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
+      setMahzorData(tempmahzor);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   const loadunitpreference = async () => {
@@ -210,6 +223,7 @@ const UnitPreferenceForm = ({ match }) => {
   }, [])
 
   return (
+    mahzordata.status == 2 ?
     <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
       <Row>
         <Card>
@@ -266,6 +280,14 @@ const UnitPreferenceForm = ({ match }) => {
         </Card>
       </Row>
     </Container>
+     :
+     <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
+       <Card>
+         <CardHeader style={{ direction: 'rtl' }}>
+           <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>שלב המחזור לא תואם - לא ניתן להזין העדפה כרגע</CardTitle>
+         </CardHeader>
+       </Card>
+     </Container>
   );
 }
 export default withRouter(UnitPreferenceForm);;

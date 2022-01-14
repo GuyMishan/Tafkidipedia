@@ -39,6 +39,10 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
   const [mahzordata, setMahzorData] = useState({})
   //mahzor
 
+  //mahzor
+  const [oldmahzordata, setOldmahzorData] = useState({})
+  //mahzor
+
   //candidates
   const [mahzororiginalcandidates, setMahzorOriginalCandidates] = useState([]);
   const [userstocandidate, setUsersToCandidate] = useState([]);
@@ -59,6 +63,10 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
   //modal
   const [isjobmodalopen, setIsJobModalOpen] = useState(false);
   //modal
+
+  //candidates
+  const [mahzoriosh, setMahzoriosh] = useState([]);
+  //candidates
 
   //End Of Data!
 
@@ -117,18 +125,17 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
   }
 
   function OpenModal() {
-    setTempJobToAdd({unit:units[0],jobtype:jobtypes[0]});
+    setTempJobToAdd({ unit: units[0], jobtype: jobtypes[0] });
     setIsJobModalOpen(true)
   }
 
   function AddJobToJobsToAdd() {
-    if(CheckModalData())
-    {
-    setJobsToAdd(jobstoadd => [...jobstoadd, tempjobtoadd]);
-    setTempJobToAdd({});
-    setIsJobModalOpen(false);
+    if (CheckModalData()) {
+      setJobsToAdd(jobstoadd => [...jobstoadd, tempjobtoadd]);
+      setTempJobToAdd({});
+      setIsJobModalOpen(false);
     }
-    else{
+    else {
       toast.error("שגיאה בטופס")
     }
   }
@@ -150,11 +157,11 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
   function CheckModalData() {
     let flag = true;
 
-    if (((tempjobtoadd.certain == "בחר ודאי/לא ודאי")||(!tempjobtoadd.certain))/* || ((tempjobtoadd.damah == 'בחר דמ"ח')||(!tempjobtoadd.damah))*/ || 
-    ((tempjobtoadd.description== '')||(!tempjobtoadd.description)) || ((tempjobtoadd.jobtype== null)||(!tempjobtoadd.jobtype)) || 
-    ((tempjobtoadd.location== '')||(!tempjobtoadd.location)) || ((tempjobtoadd.mahlaka== '')||(!tempjobtoadd.mahlaka)) || 
-    ((tempjobtoadd.peilut== '')||(!tempjobtoadd.peilut)) || ((tempjobtoadd.sivug== "בחר סיווג")||(!tempjobtoadd.sivug)) || 
-    ((tempjobtoadd.thom== '')||(!tempjobtoadd.thom)) || ((tempjobtoadd.unit== null)||(!tempjobtoadd.unit))) {
+    if (((tempjobtoadd.certain == "בחר ודאי/לא ודאי") || (!tempjobtoadd.certain))/* || ((tempjobtoadd.damah == 'בחר דמ"ח')||(!tempjobtoadd.damah))*/ ||
+      ((tempjobtoadd.description == '') || (!tempjobtoadd.description)) || ((tempjobtoadd.jobtype == null) || (!tempjobtoadd.jobtype)) ||
+      ((tempjobtoadd.location == '') || (!tempjobtoadd.location)) || ((tempjobtoadd.mahlaka == '') || (!tempjobtoadd.mahlaka)) ||
+      ((tempjobtoadd.peilut == '') || (!tempjobtoadd.peilut)) || ((tempjobtoadd.sivug == "בחר סיווג") || (!tempjobtoadd.sivug)) ||
+      ((tempjobtoadd.thom == '') || (!tempjobtoadd.thom)) || ((tempjobtoadd.unit == null) || (!tempjobtoadd.unit))) {
       flag = false;
     }
     return flag;
@@ -180,6 +187,7 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
         let tempmahzor = response.data;
         tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
         tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
+        setOldmahzorData(tempmahzor);
         setMahzorData(tempmahzor);
         loadcandidates(tempmahzor);
         loadjobs(tempmahzor);
@@ -218,9 +226,19 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     setMahzorOriginalJobs(tempjobs)
   }
 
+  const loadmahzoriosh = () => {
+    axios.get(`http://localhost:8000/api/mahzoriosh`)
+      .then(response => {
+        setMahzoriosh(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
   const loadusers = () => {
-    let candidaterole='2'
-    axios.get(`http://localhost:8000/api//usersbyrole/${candidaterole}`)
+    let candidaterole = '2'
+    axios.get(`http://localhost:8000/api/usersbyrole/${candidaterole}`)
       .then(response => {
         setUsers(response.data);
       })
@@ -253,6 +271,7 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     if (match.params.mahzorid != 0) {
       loadmahzor()
     }
+    loadmahzoriosh();
     loadusers();
     loadunits();
     loadjobtypes();
@@ -264,7 +283,7 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
       toast.success("המחזור עודכן בהצלחה")
       history.goBack();
     }
-    else{
+    else {
       toast.error("שגיאה בטופס")
     }
   }
@@ -273,7 +292,7 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     let flag = true;
     let error = "";
 
-    if (((mahzordata.name == undefined) || (mahzordata.name == "")) || ((mahzordata.startdate == undefined) || (mahzordata.startdate == "")) || ((mahzordata.enddate == undefined) || (mahzordata.enddate == ""))) {
+    if (((mahzordata.name == undefined) || (mahzordata.name == "")) || ((mahzordata.startdate == undefined) || (mahzordata.startdate == "")) || ((mahzordata.enddate == undefined) || (mahzordata.enddate == "")) || ((mahzordata.mahzoriosh == undefined) || (mahzordata.mahzoriosh == "")) || ((mahzordata.status == undefined) || (mahzordata.status == "")) || ((mahzordata.numberofjobpicks == undefined) || (mahzordata.numberofjobpicks == ""))) {
       error += "פרטים כלליים שגויים"
       flag = false;
     }
@@ -288,7 +307,7 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
       tempmahzordata = result.data;
     }
     else { // update mahzor
-      let tempmahzorwithdeleteid=mahzordata;
+      let tempmahzorwithdeleteid = mahzordata;
       delete tempmahzorwithdeleteid._id;
       let result = await axios.put(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`, tempmahzorwithdeleteid);
       tempmahzordata = result.data;
@@ -348,39 +367,39 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     //candidates
 
     //jobs
-     let jobsoriginalandnew = [];//to do nothing
-     let jobsoriginalandnotnew = [];//to delete
-     let jobsnotoriginalandnew = [];//to add
- 
-     for (let i = 0; i < mahzororiginaljobs.length; i++) {
-       let flag = false;
-       for (let j = 0; j < jobstoadd.length; j++) {
-         if (mahzororiginaljobs[i]._id == jobstoadd[j]._id) {
-           flag = true;
-         }
-       }
-       if (flag == true) {
+    let jobsoriginalandnew = [];//to do nothing
+    let jobsoriginalandnotnew = [];//to delete
+    let jobsnotoriginalandnew = [];//to add
+
+    for (let i = 0; i < mahzororiginaljobs.length; i++) {
+      let flag = false;
+      for (let j = 0; j < jobstoadd.length; j++) {
+        if (mahzororiginaljobs[i]._id == jobstoadd[j]._id) {
+          flag = true;
+        }
+      }
+      if (flag == true) {
         jobsoriginalandnew.push(mahzororiginaljobs[i])
-       }
-       else {
+      }
+      else {
         jobsoriginalandnotnew.push(mahzororiginaljobs[i])
-       }
-     }
- 
-     for (let i = 0; i < jobstoadd.length; i++) {
-       let flag = false;
-       for (let j = 0; j < mahzororiginaljobs.length; j++) {
-         if (jobstoadd[i]._id == mahzororiginaljobs[j]._id) {
-           flag = true;
-         }
-       }
-       if (flag == false) {
+      }
+    }
+
+    for (let i = 0; i < jobstoadd.length; i++) {
+      let flag = false;
+      for (let j = 0; j < mahzororiginaljobs.length; j++) {
+        if (jobstoadd[i]._id == mahzororiginaljobs[j]._id) {
+          flag = true;
+        }
+      }
+      if (flag == false) {
         jobsnotoriginalandnew.push(jobstoadd[i])
-       }
-       else {
-         //nothing
-       }
-     }
+      }
+      else {
+        //nothing
+      }
+    }
 
     // console.log("jobsoriginalandnew")
     // console.log(jobsoriginalandnew)
@@ -388,18 +407,18 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     // console.log(jobsoriginalandnotnew)
     // console.log("jobsnotoriginalandnew")
     // console.log(jobsnotoriginalandnew)
- 
-     for (let i = 0; i < jobsnotoriginalandnew.length; i++) { //add jobs thats no in db
+
+    for (let i = 0; i < jobsnotoriginalandnew.length; i++) { //add jobs thats no in db
       let tempjob = jobsnotoriginalandnew[i];
-        tempjob.mahzor = tempmahzordata._id;
-        tempjob.jobtype = jobsnotoriginalandnew[i].jobtype._id;
-        tempjob.unit = jobsnotoriginalandnew[i].unit._id;
-       let result = await axios.post(`http://localhost:8000/api/job`, tempjob);
-     }
- 
-     for (let i = 0; i < jobsoriginalandnotnew.length; i++) {//delete jobd thats in db and unwanted
-       let result = await axios.delete(`http://localhost:8000/api/job/${jobsoriginalandnotnew[i]._id}`);
-     }
+      tempjob.mahzor = tempmahzordata._id;
+      tempjob.jobtype = jobsnotoriginalandnew[i].jobtype._id;
+      tempjob.unit = jobsnotoriginalandnew[i].unit._id;
+      let result = await axios.post(`http://localhost:8000/api/job`, tempjob);
+    }
+
+    for (let i = 0; i < jobsoriginalandnotnew.length; i++) {//delete jobd thats in db and unwanted
+      let result = await axios.delete(`http://localhost:8000/api/job/${jobsoriginalandnotnew[i]._id}`);
+    }
     //jobs
 
   }
@@ -410,11 +429,11 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
 
   return (
     <Container style={{ direction: 'rtl' }}>
-      <MahzorDataComponent mahzordata={mahzordata} handleChangeMahzorData={handleChange} />
+      <MahzorDataComponent mahzordata={mahzordata} oldmahzordata={oldmahzordata} mahzoriosh={mahzoriosh} handleChangeMahzorData={handleChange} />
 
       <MahzorCandidates handleChangeUsersToCandidate={handleChangeUsersToCandidate} users={users} userstocandidate={userstocandidate} DeleteUserFromUsersToCandidate={DeleteUserFromUsersToCandidate} />
 
-      <MahzorJobs tempjobtoadd={tempjobtoadd} TempJobToAddhandleChange={TempJobToAddhandleChange} TempJobToAddhandleChange={TempJobToAddhandleChange} DeleteJobFromJobsToAdd={DeleteJobFromJobsToAdd} PrepEditModal={PrepEditModal} setIsJobModalOpen={setIsJobModalOpen} isjobmodalopen={isjobmodalopen} AddJobToJobsToAdd={AddJobToJobsToAdd} jobstoadd={jobstoadd} units={units} jobtypes={jobtypes} CheckModalClosing={CheckModalClosing} OpenModal={OpenModal}/>
+      <MahzorJobs tempjobtoadd={tempjobtoadd} TempJobToAddhandleChange={TempJobToAddhandleChange} TempJobToAddhandleChange={TempJobToAddhandleChange} DeleteJobFromJobsToAdd={DeleteJobFromJobsToAdd} PrepEditModal={PrepEditModal} setIsJobModalOpen={setIsJobModalOpen} isjobmodalopen={isjobmodalopen} AddJobToJobsToAdd={AddJobToJobsToAdd} jobstoadd={jobstoadd} units={units} jobtypes={jobtypes} CheckModalClosing={CheckModalClosing} OpenModal={OpenModal} />
 
       <Button type="primary" onClick={() => clickSubmit()}>
         אישור

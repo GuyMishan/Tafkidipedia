@@ -305,99 +305,108 @@ const CandidatePreferenceForm = ({ match }) => {
   }, [])
 
   return (
-    <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
-      <Row>
+    mahzordata.status == 2 ?
+      <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
+        <Row>
+          <Card>
+            <CardHeader style={{ direction: 'rtl' }}>
+              <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס העדפות מועמד</CardTitle>{/*headline*/}
+            </CardHeader>
+
+            <CardBody style={{ direction: 'rtl' }}>
+              <Container>
+                {/*edit existing*/}
+                {(candidatepreference.certjobpreferences && candidatepreference._id) ?
+                  <>
+                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - ודאי (1- גבוה ביותר)</h5>
+                    <Row>
+                      {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                        <Col xs={12} md={4}>
+                          <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                          <FormGroup dir="rtl" >
+                            <Input type="select" name={i} value={candidatepreference.certjobpreferences[i].job} onChange={handleChangecertjobpreferences}>
+                              <option value={undefined}>{"בחר תפקיד"}</option>
+                              {certmahzorjobs.map((job, index) => (
+                                <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                              ))}
+                            </Input>
+                          </FormGroup>
+                        </Col>)}
+                    </Row>
+
+
+                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
+                    <Row>
+                      {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                        <Col xs={12} md={4}>
+                          <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                          <FormGroup dir="rtl" >
+                            <Input type="select" name={i} value={candidatepreference.noncertjobpreferences[i].job} onChange={handleChangenoncertjobpreferences}>
+                              <option value={undefined}>{"בחר תפקיד"}</option>
+                              {noncertmahzorjobs.map((job, index) => (
+                                <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                              ))}
+                            </Input>
+                          </FormGroup>
+                        </Col>)}
+                    </Row>
+                  </>
+                  : null}
+
+                {/*edit new*/}
+                {(candidatepreference.certjobpreferences && !candidatepreference._id) ?
+                  <>
+                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - ודאי (1- גבוה ביותר)</h5>
+                    <Row>
+                      {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                        <Col xs={12} md={4}>
+                          <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                          <FormGroup dir="rtl" >
+                            <Input type="select" name={i} /*value={candidatepreference.certjobpreferences[i].job}*/ onChange={handleChangecertjobpreferences}>
+                              <option value={undefined}>{"בחר תפקיד"}</option>
+                              {certmahzorjobs.map((job, index) => (
+                                <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                              ))}
+                            </Input>
+                          </FormGroup>
+                        </Col>)}
+                    </Row>
+
+
+                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
+                    <Row>
+                      {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
+                        <Col xs={12} md={4}>
+                          <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
+                          <FormGroup dir="rtl" >
+                            <Input type="select" name={i} /*value={candidatepreference.noncertjobpreferences[i].job}*/ onChange={handleChangenoncertjobpreferences}>
+                              <option value={undefined}>{"בחר תפקיד"}</option>
+                              {noncertmahzorjobs.map((job, index) => (
+                                <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
+                              ))}
+                            </Input>
+                          </FormGroup>
+                        </Col>)}
+                    </Row>
+                  </>
+                  : null}
+
+                <div style={{ textAlign: 'center', paddingTop: '20px' }}>
+                  <button className="btn btn-primary" onClick={clickSubmit}>עדכן העדפות</button>
+                </div>
+              </Container>
+            </CardBody>
+          </Card>
+        </Row>
+      </Container>
+      :
+      <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
         <Card>
           <CardHeader style={{ direction: 'rtl' }}>
-            <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס העדפות מועמד</CardTitle>{/*headline*/}
+            <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>שלב המחזור לא תואם - לא ניתן להזין העדפה כרגע</CardTitle>
           </CardHeader>
-
-          <CardBody style={{ direction: 'rtl' }}>
-            <Container>
-              {/*edit existing*/}
-              {(candidatepreference.certjobpreferences && candidatepreference._id) ?
-                <>
-                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - ודאי (1- גבוה ביותר)</h5>
-                  <Row>
-                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
-                      <Col xs={12} md={4}>
-                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
-                        <FormGroup dir="rtl" >
-                          <Input type="select" name={i} value={candidatepreference.certjobpreferences[i].job} onChange={handleChangecertjobpreferences}>
-                            <option value={undefined}>{"בחר תפקיד"}</option>
-                            {certmahzorjobs.map((job, index) => (
-                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                            ))}
-                          </Input>
-                        </FormGroup>
-                      </Col>)}
-                  </Row>
-
-
-                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
-                  <Row>
-                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
-                      <Col xs={12} md={4}>
-                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
-                        <FormGroup dir="rtl" >
-                          <Input type="select" name={i} value={candidatepreference.noncertjobpreferences[i].job} onChange={handleChangenoncertjobpreferences}>
-                            <option value={undefined}>{"בחר תפקיד"}</option>
-                            {noncertmahzorjobs.map((job, index) => (
-                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                            ))}
-                          </Input>
-                        </FormGroup>
-                      </Col>)}
-                  </Row>
-                </>
-                : null}
-
-              {/*edit new*/}
-              {(candidatepreference.certjobpreferences && !candidatepreference._id) ?
-                <>
-                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - ודאי (1- גבוה ביותר)</h5>
-                  <Row>
-                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
-                      <Col xs={12} md={4}>
-                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
-                        <FormGroup dir="rtl" >
-                          <Input type="select" name={i} /*value={candidatepreference.certjobpreferences[i].job}*/ onChange={handleChangecertjobpreferences}>
-                            <option value={undefined}>{"בחר תפקיד"}</option>
-                            {certmahzorjobs.map((job, index) => (
-                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                            ))}
-                          </Input>
-                        </FormGroup>
-                      </Col>)}
-                  </Row>
-
-
-                  <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
-                  <Row>
-                    {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
-                      <Col xs={12} md={4}>
-                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
-                        <FormGroup dir="rtl" >
-                          <Input type="select" name={i} /*value={candidatepreference.noncertjobpreferences[i].job}*/ onChange={handleChangenoncertjobpreferences}>
-                            <option value={undefined}>{"בחר תפקיד"}</option>
-                            {noncertmahzorjobs.map((job, index) => (
-                              <option value={job._id}>{job.jobtype.jobname + "/" + job.unit.name}</option>
-                            ))}
-                          </Input>
-                        </FormGroup>
-                      </Col>)}
-                  </Row>
-                </>
-                : null}
-
-              <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                <button className="btn btn-primary" onClick={clickSubmit}>עדכן העדפות</button>
-              </div>
-            </Container>
-          </CardBody>
         </Card>
-      </Row>
-    </Container>
+      </Container>
   );
 }
 export default withRouter(CandidatePreferenceForm);;

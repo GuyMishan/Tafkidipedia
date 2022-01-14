@@ -18,18 +18,15 @@ const SortingTable = (props) => {
   }
 
   const getMahzorEshkol = async () => {
-    try {
-      await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${props.mahzorid}`)
-        .then(response => {
-          setData(response.data)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+    let response = await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${props.mahzorid}`)
+    let tempeshkolbymahzorid = response.data;
+    for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
+      for (let j = 0; j < tempeshkolbymahzorid[i].candidatesineshkol.length; j++) {
+        let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkolbymahzorid[i].candidatesineshkol[j].candidate}`);
+        tempeshkolbymahzorid[i].candidatesineshkol[j].candidate = result1.data[0];
+      }
     }
-    catch {
-
-    }
+    setData(tempeshkolbymahzorid)
   }
 
   useEffect(() => {
@@ -70,9 +67,9 @@ const SortingTable = (props) => {
         <table {...getTableProps()}>
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
-            <th colSpan="1">תפקיד</th>
-            <th colSpan="1">ודאי/לא ודאי</th>
-            <th colSpan="100%">מועמדים</th>
+              <th colSpan="1">תפקיד</th>
+              <th colSpan="1">ודאי/לא ודאי</th>
+              <th colSpan="100%">מועמדים</th>
             </tr>
           </thead>
           <tbody {...getTableBodyProps()}>
@@ -89,9 +86,27 @@ const SortingTable = (props) => {
                         if (cell.column.id == "job.certain") {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
                         }
-                        if (cell.column.id == "candidates") {
-                          return <> {cell.value.user.map((user, index) => (
-                            <td>{user.name} {user.lastname}</td>
+                        if (cell.column.id == "candidatesineshkol") {
+                          return <> {cell.value.map((candidateineshkol, index) => (
+                            (candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
+                              <td style={{backgroundColor:'lime'}}>
+                              {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                              {candidateineshkol.candidaterank?<p>דירוג מתמודד:{candidateineshkol.candidaterank}</p>:null}
+                              {candidateineshkol.unitrank?<p>דירוג יחידה:{candidateineshkol.unitrank}</p>:null}
+                              </td>
+                              : 
+                              (candidateineshkol.candidaterank && !candidateineshkol.unitrank) ?
+                              <td style={{backgroundColor:'red'}}>
+                              {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                              {candidateineshkol.candidaterank?<p>דירוג מתמודד:{candidateineshkol.candidaterank}</p>:null}
+                              </td>
+                              :
+                              (!candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
+                              <td style={{backgroundColor:'yellow'}}>
+                              {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                              {candidateineshkol.unitrank?<p>דירוג יחידה:{candidateineshkol.unitrank}</p>:null}
+                              </td>
+                              :null
                           ))}</>
                         }
                       })

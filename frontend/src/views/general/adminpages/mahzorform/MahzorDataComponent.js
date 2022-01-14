@@ -69,6 +69,62 @@ const MahzorDataComponent = (props) => {
                             </FormGroup>
                         </Col>
                     </Row>
+                    <Row>
+                        <Col xs={12} md={4}>
+                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>סוג מחזור</div>
+                            <FormGroup dir="rtl" >
+                                <Input type="select" name="mahzoriosh" value={props.mahzordata.mahzoriosh} onChange={props.handleChangeMahzorData}>
+                                    <option value={""}>בחר סוג מחזור</option>
+                                    {props.mahzoriosh.map((mahzoriosh, index) => (
+                                        <option key={mahzoriosh._id} value={mahzoriosh._id}>{mahzoriosh.name}</option>
+                                    ))}
+                                </Input>
+                            </FormGroup>
+                        </Col>
+                        <Col xs={12} md={4}>
+                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>כמות בחירות תפקיד (למועמד)</div>
+                            <FormGroup dir="rtl" >
+                                <Input type="number" name="numberofjobpicks" value={props.mahzordata.numberofjobpicks} onChange={props.handleChangeMahzorData}></Input>
+                            </FormGroup>
+                        </Col>
+                        <Col xs={12} md={4}>
+                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>סטטוס מחזור (אין לחזור אחורה בסטטוס)</div>
+                            <FormGroup dir="rtl" >
+                                <Input type="select" name="status" value={props.mahzordata.status} onChange={props.handleChangeMahzorData}>
+                                    {props.oldmahzordata ?
+                                        props.oldmahzordata.status == 1 ?
+                                            <>
+                                                <option key={1} value={1}>התחלת מחזור חדש</option>
+                                                <option key={2} value={2}>התחלת סבב העדפות ראשון</option>
+                                            </> :
+                                            props.oldmahzordata.status == 2 ?
+                                                <>
+                                                    <option key={2} value={2}>התחלת סבב העדפות ראשון</option>
+                                                    <option key={3} value={3}>סיום סבב העדפות ראשון</option>
+                                                </> :
+                                                props.oldmahzordata.status == 3 ?
+                                                    <>
+                                                        <option key={3} value={3}>סיום סבב העדפות ראשון</option>
+                                                        <option key={4} value={4}>התחלת סבב העדפות שני (לאחר ראיונות)</option>
+                                                    </> :
+                                                    props.oldmahzordata.status == 4 ?
+                                                        <>
+                                                            <option key={4} value={4}>התחלת סבב העדפות שני (לאחר ראיונות)</option>
+                                                            <option key={5} value={5}>שיבוצים סופיים</option>
+                                                        </> :
+                                                        props.oldmahzordata.status == 5 ?
+                                                            <>
+                                                                <option key={5} value={5}>שיבוצים סופיים</option>
+                                                            </> : null
+                                        :
+                                        <>
+                                            <option value={""}>בחר סטטוס מחזור</option>
+                                            <option key={1} value={1}>התחלת מחזור חדש</option>
+                                        </>}
+                                </Input>
+                            </FormGroup>
+                        </Col>
+                    </Row>
                 </Container>
             </CardBody>
         </Card>

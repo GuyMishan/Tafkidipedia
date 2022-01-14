@@ -8,7 +8,6 @@ const mahzorSchema = new mongoose.Schema({
     enddate:{type:Date},
     numberofjobpicks:{type:Number},
     status:{type:Number},
-    type:{type:String},
     mahzoriosh:{type:ObjectId,ref:'Mahzoriosh'},
 });
 

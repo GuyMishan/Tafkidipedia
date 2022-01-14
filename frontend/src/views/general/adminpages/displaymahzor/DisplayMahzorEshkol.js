@@ -22,14 +22,6 @@ import SortingTable from 'components/tafkidipedia/EshkolByMahzorSortingTable/Sor
 function DisplayMahzorEshkol({ match }) {
     const [count, setCount] = useState(0); //to refresh table...
 
-    //candidatespreferences
-    //const [candidatespreferences, setCandidatesPreferences] = useState({})
-    //candidatespreferences
-
-    //mahzoreshkol
-    // const [mahzoreshkol, setMahzorEshkol] = useState({})
-    //mahzoreshkol
-
     async function CalculateMahzorEshkol() {
         //delete all eshkols of certain mahzor
         let response1 = await axios.delete(`http://localhost:8000/api/eshkol/deletemahzoreshkol/${match.params.mahzorid}`)
@@ -67,46 +59,67 @@ function DisplayMahzorEshkol({ match }) {
         let tempunitspreferences = response4.data;
         console.log(tempunitspreferences)
 
-        //calculate eshkols!!!!
+        //init eshkols
         for (let i = 0; i < tempmahzorjobs.length; i++) {
             tempmahzoreshkol[i] = ({ mahzor: match.params.mahzorid, job: tempmahzorjobs[i]._id, finalconfirmation: false, candidatesineshkol: [] })
+        }
+
+        for (let i = 0; i < tempmahzoreshkol.length; i++) {
+
+            //calculate eshkols candidate preferences 
             for (let j = 0; j < tempcandidatespreferencesdata.length; j++) {
                 for (let k = 0; k < tempcandidatespreferencesdata[j].certjobpreferences.length; k++) {
-                    if (tempcandidatespreferencesdata[j].certjobpreferences[k].job == tempmahzorjobs[i]._id) {
+                    if (tempcandidatespreferencesdata[j].certjobpreferences[k].job == tempmahzoreshkol[i].job) {
                         tempmahzoreshkol[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].certjobpreferences[k].rank })
                     }
                 }
                 for (let k = 0; k < tempcandidatespreferencesdata[j].noncertjobpreferences.length; k++) {
-                    if (tempcandidatespreferencesdata[j].noncertjobpreferences[k].job == tempmahzorjobs[i]._id) {
+                    if (tempcandidatespreferencesdata[j].noncertjobpreferences[k].job == tempmahzoreshkol[i].job) {
                         tempmahzoreshkol[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].noncertjobpreferences[k].rank })
                     }
                 }
             }
-        }
 
-        for (let i = 0; i < tempmahzoreshkol.length; i++) {
-            for (let j = 0; j < tempunitspreferences.length; j++) {
-                if (tempunitspreferences[j].job._id == tempmahzoreshkol[i].job) {
-                    for (let k = 0; k < tempunitspreferences[j].preferencerankings.length; k++) {
-                        for (let l = 0; l < tempmahzoreshkol[i].candidatesineshkol.length; l++) {
-                            if(tempmahzoreshkol[i].candidatesineshkol[l].candidate==tempunitspreferences[j].preferencerankings[k].candidate)
-                            {
-                                tempmahzoreshkol[i].candidatesineshkol[l].unitrank =tempunitspreferences[j].preferencerankings[k].rank;
+            //calculate eshkols unit preferences 
+            for (let l = 0; l < tempunitspreferences.length; l++) {
+                if (tempunitspreferences[l].job._id == tempmahzoreshkol[i].job) {
+                    for (let m = 0; m < tempunitspreferences[l].preferencerankings.length; m++) {
+                        let flag = false;  //flag = is candidate exists in certain eshkol 
+                        for (let n = 0; n < tempmahzoreshkol[i].candidatesineshkol.length; n++) {
+                            if (tempmahzoreshkol[i].candidatesineshkol[n].candidate == tempunitspreferences[l].preferencerankings[m].candidate) {
+                                flag = true;
+                                tempmahzoreshkol[i].candidatesineshkol[n].unitrank = tempunitspreferences[l].preferencerankings[m].rank;
                             }
+                        }
+                        if (flag == false) {
+                            tempmahzoreshkol[i].candidatesineshkol.push({ candidate: tempunitspreferences[l].preferencerankings[m].candidate, unitrank: tempunitspreferences[l].preferencerankings[m].rank })
                         }
                     }
                 }
             }
         }
+        console.log("before:")
         console.log(tempmahzoreshkol)
 
 
-        // //post mahzor eshkols to db
-        // for (let i = 0; i < tempmahzoreshkol.length; i++) {
-        //     let response1 = await axios.post(`http://localhost:8000/api/eshkol`, tempmahzoreshkol[i])
-        //     // let tempdata = response1.data;
-        // }
-        // setCount(count + 1);
+        //post mahzor eshkols candidatesineshkol to db
+        for (let i = 0; i < tempmahzoreshkol.length; i++) {
+            for (let j = 0; j < tempmahzoreshkol[i].candidatesineshkol.length; j++) {
+                let response1 = await axios.post(`http://localhost:8000/api/candidateineshkol`, tempmahzoreshkol[i].candidatesineshkol[j])
+                let tempdata = response1.data;
+                tempmahzoreshkol[i].candidatesineshkol[j]=tempdata._id
+            }
+        }
+
+        console.log("after:")
+        console.log(tempmahzoreshkol)
+
+        //post mahzor eshkols to db
+        for (let i = 0; i < tempmahzoreshkol.length; i++) {
+            let response1 = await axios.post(`http://localhost:8000/api/eshkol`, tempmahzoreshkol[i])
+            // let tempdata = response1.data;
+        }
+        setCount(count + 1);
     }
 
     function init() {
