@@ -65,8 +65,8 @@ const CandidatePreferenceForm = ({ match }) => {
     setCandidatePreference({ ...candidatepreference, noncertjobpreferences: tempcandidatepreference });
   }
 
-  const loadmahzor = () => {
-    axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
+  const loadmahzor = async () => {
+    await axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
       .then(response => {
         let tempmahzor = response.data;
         tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
@@ -80,8 +80,17 @@ const CandidatePreferenceForm = ({ match }) => {
 
   const loadcandidatepreference = async () => {
     let tempcandidatepreferencedata; //look for existing preference
-    let result = await axios.get(`http://localhost:8000/api/candidatepreference/candidatepreferencebycandidateid/${match.params.candidateid}`);
-    tempcandidatepreferencedata = result.data[0];
+
+    if(mahzordata.status == 2)
+    {
+      let result = await axios.get(`http://localhost:8000/api/candidatepreference/candidatepreferencebycandidateid/${match.params.candidateid}`);
+      tempcandidatepreferencedata = result.data[0];
+    }
+    else if(mahzordata.status == 4)
+    {
+      let result = await axios.get(`http://localhost:8000/api/finalcandidatepreference/finalcandidatepreferencebycandidateid/${match.params.candidateid}`);
+      tempcandidatepreferencedata = result.data[0];
+    }
 
     if (tempcandidatepreferencedata) //has existing pref
     {
@@ -102,10 +111,20 @@ const CandidatePreferenceForm = ({ match }) => {
       delete tempcandidatepreferencedata.candidate;
       setCandidatePreference(tempcandidatepreferencedata)
 
+      if( mahzordata.status == 2)
+      {
       let tempoldcandidatepreferencedata; //if has existing preference save the old one
       let oldresult = await axios.get(`http://localhost:8000/api/candidatepreference/candidatepreferencebycandidateid/${match.params.candidateid}`);
       tempoldcandidatepreferencedata = oldresult.data[0];
       setOldcandidatePreference(tempoldcandidatepreferencedata)
+      }
+      else if( mahzordata.status == 4)
+      {
+      let tempoldcandidatepreferencedata; //if has existing preference save the old one
+      let oldresult = await axios.get(`http://localhost:8000/api/finalcandidatepreference/finalcandidatepreferencebycandidateid/${match.params.candidateid}`);
+      tempoldcandidatepreferencedata = oldresult.data[0];
+      setOldcandidatePreference(tempoldcandidatepreferencedata)
+      }
     }
     else { //dont have existing pref
       let tempcandidatepreferencedata2 = {};
@@ -243,11 +262,22 @@ const CandidatePreferenceForm = ({ match }) => {
       tempcandidatepreference.certjobpreferences = tempcandidatepreference_certjobpreferencesid;
       tempcandidatepreference.noncertjobpreferences = tempcandidatepreference_noncertjobpreferencesid;
 
+      if( mahzordata.status == 2)
+      {
       await axios.post(`http://localhost:8000/api/candidatepreference`, tempcandidatepreference)
         .then(res => {
           toast.success("העדפה עודכנה בהצלחה")
           history.goBack();
         })
+      }
+      else if( mahzordata.status == 4)
+      {
+        await axios.post(`http://localhost:8000/api/finalcandidatepreference`, tempcandidatepreference)
+        .then(res => {
+          toast.success("העדפה עודכנה בהצלחה")
+          history.goBack();
+        })
+      }
     }
 
     else {
@@ -286,17 +316,27 @@ const CandidatePreferenceForm = ({ match }) => {
       tempcandidatepreference.certjobpreferences = tempcandidatepreference_certjobpreferencesid;
       tempcandidatepreference.noncertjobpreferences = tempcandidatepreference_noncertjobpreferencesid;
 
+      if( mahzordata.status == 2)
+      {
       await axios.put(`http://localhost:8000/api/candidatepreference/${tempcandidatepreference._id}`, tempcandidatepreference)
         .then(res => {
           toast.success("העדפה עודכנה בהצלחה")
           history.goBack();
         })
+      }
+      else if( mahzordata.status == 4)
+      {
+        await axios.put(`http://localhost:8000/api/finalcandidatepreference/${tempcandidatepreference._id}`, tempcandidatepreference)
+        .then(res => {
+          toast.success("העדפה עודכנה בהצלחה")
+          history.goBack();
+        })
+      }
     }
   }
 
   function init() {
     loadmahzor()
-    loadcandidatepreference()
     loadmahzorjobs()
   }
 
@@ -304,8 +344,12 @@ const CandidatePreferenceForm = ({ match }) => {
     init();
   }, [])
 
+  useEffect(() => {
+    loadcandidatepreference()
+  }, [mahzordata])
+
   return (
-    mahzordata.status == 2 ?
+    mahzordata.status == 2 || mahzordata.status == 4 ?
       <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
         <Row>
           <Card>

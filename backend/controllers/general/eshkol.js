@@ -56,18 +56,18 @@ let readtipul = [
   },
 ];
 
-exports.findById = async(req, res) => {
-  const eshkol = await Eshkol.findOne().where({_id:req.params.id})
-  
-  if(!eshkol){
-      res.status(500).json({success: false})
+exports.findById = async (req, res) => {
+  const eshkol = await Eshkol.findOne().where({ _id: req.params.id })
+
+  if (!eshkol) {
+    res.status(500).json({ success: false })
   }
   res.send(eshkol)
-  
- }
+
+}
 
 exports.find = (req, res) => {
-    Eshkol.find()
+  Eshkol.find()
     .then((eshkol) => res.json(eshkol))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -85,22 +85,21 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const eshkol = new Eshkol(req.body);
-  Eshkol.updateOne(eshkol)
+  Eshkol.findByIdAndUpdate(req.params.eshkolId, req.body)
     .then((eshkol) => res.json(eshkol))
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.remove = (req, res) => {
-    Eshkol.deleteOne({ _id: req.params.id })
+  Eshkol.deleteOne({ _id: req.params.id })
     .then((eshkol) => res.json(eshkol))
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.deleteMahzorEshkol = (req, res) => {
   Eshkol.deleteMany({ mahzor: req.params.mahzorid })
-  .then((eshkol) => res.json(eshkol))
-  .catch((err) => res.status(400).json("Error: " + err));
+    .then((eshkol) => res.json(eshkol))
+    .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.eshkolbymahzorid = (req, res) => {
@@ -181,6 +180,38 @@ exports.eshkolbyjobid = (req, res) => {
   //jobid
   if (req.params.jobid != 'undefined') {
     andquery.push({ "job._id": mongoose.Types.ObjectId(req.params.jobid) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Eshkol.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+};
+
+exports.eshkolbyid = (req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //id
+  if (req.params.id != 'undefined') {
+    andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
   }
 
   if (andquery.length != 0) {

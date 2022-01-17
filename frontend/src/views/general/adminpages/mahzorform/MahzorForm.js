@@ -40,7 +40,7 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
   //mahzor
 
   //mahzor
-  const [oldmahzordata, setOldmahzorData] = useState({})
+  const [oldmahzordata, setOldmahzorData] = useState(undefined)
   //mahzor
 
   //candidates
@@ -431,9 +431,9 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     <Container style={{ direction: 'rtl' }}>
       <MahzorDataComponent mahzordata={mahzordata} oldmahzordata={oldmahzordata} mahzoriosh={mahzoriosh} handleChangeMahzorData={handleChange} />
 
-      <MahzorCandidates handleChangeUsersToCandidate={handleChangeUsersToCandidate} users={users} userstocandidate={userstocandidate} DeleteUserFromUsersToCandidate={DeleteUserFromUsersToCandidate} />
+      <MahzorCandidates mahzordata={mahzordata} handleChangeUsersToCandidate={handleChangeUsersToCandidate} users={users} userstocandidate={userstocandidate} DeleteUserFromUsersToCandidate={DeleteUserFromUsersToCandidate} />
 
-      <MahzorJobs tempjobtoadd={tempjobtoadd} TempJobToAddhandleChange={TempJobToAddhandleChange} TempJobToAddhandleChange={TempJobToAddhandleChange} DeleteJobFromJobsToAdd={DeleteJobFromJobsToAdd} PrepEditModal={PrepEditModal} setIsJobModalOpen={setIsJobModalOpen} isjobmodalopen={isjobmodalopen} AddJobToJobsToAdd={AddJobToJobsToAdd} jobstoadd={jobstoadd} units={units} jobtypes={jobtypes} CheckModalClosing={CheckModalClosing} OpenModal={OpenModal} />
+      <MahzorJobs mahzordata={mahzordata} tempjobtoadd={tempjobtoadd} TempJobToAddhandleChange={TempJobToAddhandleChange} TempJobToAddhandleChange={TempJobToAddhandleChange} DeleteJobFromJobsToAdd={DeleteJobFromJobsToAdd} PrepEditModal={PrepEditModal} setIsJobModalOpen={setIsJobModalOpen} isjobmodalopen={isjobmodalopen} AddJobToJobsToAdd={AddJobToJobsToAdd} jobstoadd={jobstoadd} units={units} jobtypes={jobtypes} CheckModalClosing={CheckModalClosing} OpenModal={OpenModal} />
 
       <Button type="primary" onClick={() => clickSubmit()}>
         אישור

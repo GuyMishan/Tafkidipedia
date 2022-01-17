@@ -2,7 +2,7 @@ import { ColumnFilter } from './ColumnFilter'
 export const COLUMNS = [
     {
         Header: 'תפקיד',
-        accessor: 'job',
+        accessor: 'job.jobtype.jobname',
         Filter: ColumnFilter
     },
     {
@@ -11,13 +11,8 @@ export const COLUMNS = [
         Filter: ColumnFilter
     },
     {
-        Header: 'ערוך',
-        accessor: '_id',
-        Filter: ColumnFilter
-    },
-    {
         Header: '',
-        accessor: 'candidatesineshkol',
+        accessor: 'preferencerankings',
         Filter: ColumnFilter
     },
 ]

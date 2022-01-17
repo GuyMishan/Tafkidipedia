@@ -1,4 +1,5 @@
 const Finaleshkol = require("../../models/general/finaleshkol");
+const mongoose = require('mongoose');
 
 let readtipul = [
   {
@@ -84,8 +85,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const finaleshkol = new Finaleshkol(req.body);
-  Finaleshkol.updateOne(finaleshkol)
+  Finaleshkol.findByIdAndUpdate(req.params.finaleshkolId, req.body)
     .then((finaleshkol) => res.json(finaleshkol))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -180,6 +180,38 @@ exports.finaleshkolbyjobid = (req, res) => {
   //jobid
   if (req.params.jobid != 'undefined') {
     andquery.push({ "job._id": mongoose.Types.ObjectId(req.params.jobid) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Finaleshkol.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+};
+
+exports.finaleshkolbyid = (req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //id
+  if (req.params.id != 'undefined') {
+    andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
   }
 
   if (andquery.length != 0) {

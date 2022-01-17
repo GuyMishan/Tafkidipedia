@@ -8,35 +8,43 @@ import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
-const SortingTable = (props) => {
+const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
   const [data, setData] = useState([])
 
   function init() {
-    getMahzorEshkol();
+    getMahzorUnitsPreferences();
   }
 
-  const getMahzorEshkol = async () => {
-    let response = await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${props.mahzorid}`)
-    let tempeshkolbymahzorid = response.data;
-    for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
-      for (let j = 0; j < tempeshkolbymahzorid[i].candidatesineshkol.length; j++) {
-        let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkolbymahzorid[i].candidatesineshkol[j].candidate}`);
-        tempeshkolbymahzorid[i].candidatesineshkol[j].candidate = result1.data[0];
-      }
-    }
-    setData(tempeshkolbymahzorid)
+  const getMahzorUnitsPreferences = async () => {//get + sort by mahzorid
+    await axios.get(`http://localhost:8000/api/smartfinalunitpreference`)
+      .then(async response => {
+        let tempdata = response.data;
+        let tempunitspreferences = [];
+        for (let i = 0; i < tempdata.length; i++) {
+          if (tempdata[i].mahzor._id == match.params.mahzorid) {
+            for (let j = 0; j < tempdata[i].preferencerankings.length; j++) {
+              let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempdata[i].preferencerankings[j].candidate}`);
+              tempdata[i].preferencerankings[j].candidate = result1.data[0];
+              delete tempdata[i].preferencerankings[j].__v;
+              delete tempdata[i].preferencerankings[j]._id;
+              delete tempdata[i].preferencerankings[j].candidate.__v;
+            }
+            tempunitspreferences.push(tempdata[i])
+          }
+        }
+        setData(tempunitspreferences)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   useEffect(() => {
-    // init();
+    init();
     setPageSize(5);
   }, []);
-
-  useEffect(() => {
-    init()
-  }, [props.refresh]);
 
   const {
     getTableProps,
@@ -69,7 +77,6 @@ const SortingTable = (props) => {
             <tr>
               <th colSpan="1">תפקיד</th>
               <th colSpan="1">ודאי/לא ודאי</th>
-              <th colSpan="1">ערוך</th>
               <th colSpan="100%">מועמדים</th>
             </tr>
           </thead>
@@ -81,44 +88,23 @@ const SortingTable = (props) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id == "job") {
-                          return <td>{cell.value.jobtype.jobname}/{cell.value.unit.name}</td>
+                        // if (cell.column.id != "candidate.user.name") {
+                        //   return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                        // }
+                        // else {
+                        if (cell.column.id == "job.jobtype.jobname") {
+                          return <td>{cell.value}{"/"}{row.original.job.unit.name}</td>
                         }
                         if (cell.column.id == "job.certain") {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
                         }
-                        if (cell.column.id == "_id") {
-                          return <td><Link to={`/editeshkol/${true}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
-                        }
-                        if (cell.column.id == "candidatesineshkol") {
-                          return <> {cell.value.map((candidateineshkol, index) => (
-                            (candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
-                              <td style={{ backgroundColor: 'lime' }}>
-                                {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
-                                {candidateineshkol.candidaterank ? <p>דירוג מתמודד:{candidateineshkol.candidaterank}</p> : null}
-                                {candidateineshkol.unitrank ? <p>דירוג יחידה:{candidateineshkol.unitrank}</p> : null}
-                              </td>
-                              :
-                              (candidateineshkol.candidaterank && !candidateineshkol.unitrank) ?
-                                <td style={{ backgroundColor: 'red' }}>
-                                  {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
-                                  {candidateineshkol.candidaterank ? <p>דירוג מתמודד:{candidateineshkol.candidaterank}</p> : null}
-                                </td>
-                                :
-                                (!candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
-                                  <td style={{ backgroundColor: 'yellow' }}>
-                                    {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
-                                    {candidateineshkol.unitrank ? <p>דירוג יחידה:{candidateineshkol.unitrank}</p> : null}
-                                  </td>
-                                  : <td style={{ backgroundColor: 'blue' }}>
-                                    {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
-                                    <p>הוסף ע"י מנהל מערכת</p>
-                                  </td>
+                        if (cell.column.id == "preferencerankings") {
+                          return <> {cell.value.map((preferenceranking, index) => (
+                            <td>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname} ({preferenceranking.rank})</td>
                           ))}</>
                         }
                       })
                     }
-                    {/* {console.log(row)} */}
                   </tr>
                 )
               })

@@ -108,8 +108,17 @@ const UnitPreferenceForm = ({ match }) => {
     let result = await axios.get(`http://localhost:8000/api/users`)
     let users = result.data;
     //unitpreference
-    let result1 = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
-    let tempunitpreference = result1.data[0];
+    let tempunitpreference;
+    if(mahzordata.status==2)
+    {
+      let result1 = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
+      tempunitpreference = result1.data[0];
+    }
+    else if(mahzordata.status==4)
+    {
+      let result1 = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobid/${match.params.jobid}`)
+      tempunitpreference = result1.data[0];
+    }
 
     if (tempunitpreference) //has unitprefernce to the job
     {
@@ -125,9 +134,18 @@ const UnitPreferenceForm = ({ match }) => {
       setUnitPreference(tempunitpreference);
 
       let tempoldunitpreferencedata; //if has existing preference save the old one
-      let oldresult = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
-      tempoldunitpreferencedata = oldresult.data[0];
-      setOldunitPreference(tempoldunitpreferencedata)
+      if(mahzordata.status==2)
+      {
+        let oldresult = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
+        tempoldunitpreferencedata = oldresult.data[0];
+        setOldunitPreference(tempoldunitpreferencedata)
+      }
+      else if(mahzordata.status==4)
+      {
+        let oldresult = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobid/${match.params.jobid}`)
+        tempoldunitpreferencedata = oldresult.data[0];
+        setOldunitPreference(tempoldunitpreferencedata)
+      }
     }
     else { //doesnt has unitprefernce to the job
       setUnitPreference({ preferencerankings: [], job: match.params.jobid, mahzor: match.params.mahzorid })
@@ -171,11 +189,22 @@ const UnitPreferenceForm = ({ match }) => {
     //create new unit preference
     tempunitpreference.preferencerankings = tempunitpreference_preferencerankings_ids;
 
+    if(mahzordata.status==2)
+    {
     await axios.post(`http://localhost:8000/api/unitpreference`, tempunitpreference)
       .then(res => {
         toast.success("העדפה עודכנה בהצלחה")
         history.goBack();
       })
+    }
+    else if(mahzordata.status==4)
+    {
+      await axios.post(`http://localhost:8000/api/finalunitpreference`, tempunitpreference)
+      .then(res => {
+        toast.success("העדפה עודכנה בהצלחה")
+        history.goBack();
+      })
+    }
   }
 
   async function UpdateUnitPreferenceInDb() {
@@ -206,24 +235,38 @@ const UnitPreferenceForm = ({ match }) => {
     //create new unit preference
     tempunitpreference.preferencerankings = tempunitpreference_preferencerankings_ids;
 
+    if(mahzordata.status==2)
+    {
     await axios.put(`http://localhost:8000/api/unitpreference/${unitpreference._id}`, tempunitpreference)
       .then(res => {
         toast.success("העדפה עודכנה בהצלחה")
         history.goBack();
       })
+    }
+    else if(mahzordata.status==4)
+    {
+      await axios.put(`http://localhost:8000/api/finalunitpreference/${unitpreference._id}`, tempunitpreference)
+      .then(res => {
+        toast.success("העדפה עודכנה בהצלחה")
+        history.goBack();
+      })
+    }
   }
 
   async function init() {
-    await loadunitpreference()
-    loadmahzordata();
+    await loadmahzordata();
   }
 
   useEffect(() => {
     init();
   }, [])
 
+  useEffect(() => {
+    loadunitpreference()
+  }, [mahzordata])
+
   return (
-    mahzordata.status == 2 ?
+    mahzordata.status == 2 || mahzordata.status == 4?
     <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
       <Row>
         <Card>

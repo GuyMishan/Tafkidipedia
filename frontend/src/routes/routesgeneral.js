@@ -27,6 +27,10 @@ import DisplayJob from "views/general/DisplayJob";
 import Unitmahzorimpage from "views/general/unitpages/unitmahzorimpage/Unitmahzorimpage";
 import UnitPreferenceForm from "views/general/unitpages/unitpreferenceform/UnitPreferenceForm";
 
+import EditEshkolForm from "views/general/adminpages/EditEshkol/EditEshkolForm";
+
+// import Exceluploadusers from "views/general/excelpages/ExcelUploadUsers"
+
 const routesgeneral =
     (
         <>
@@ -52,6 +56,8 @@ const routesgeneral =
             <AdminRoute path="/dashboard" exact component={AdminDashboard} />
             <AdminRoute path="/mahzorimpage" exact component={MahzorimPage} />
             <AdminRoute path="/displaymahzor/:mahzorid" exact component={DisplayMahzor} />
+
+            <AdminRoute path="/editeshkol/:iseshkol/:eshkolid" exact component={EditEshkolForm} />
             {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
 
             {/*////////////////////////////////////////Unit User//////////////////////////////////////////////////*/}
@@ -65,6 +71,10 @@ const routesgeneral =
             <CandidateRoute path="/usermahzorimpage/:userid" exact component={Usermahzorimpage} />
             <CandidateRoute path="/candidatepreferenceform/:mahzorid/:candidateid" exact component={CandidatePreferenceForm} />
             {/*////////////////////////////////////////Candidate User//////////////////////////////////////////////////*/}
+
+            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
+            {/* <Route path="/exceluploadusers" exact component={Exceluploadusers} /> */}
+            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
         </>
     )
 

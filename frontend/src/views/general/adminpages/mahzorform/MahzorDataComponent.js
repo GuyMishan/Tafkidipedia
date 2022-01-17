@@ -33,6 +33,8 @@ import SettingModal from "../../../../components/general/modal/SettingModal";
 
 const MahzorDataComponent = (props) => {
 
+    const [isdisabledfield, setIsdisabledfield] = useState(true)
+
     function init() {
 
     }
@@ -40,6 +42,15 @@ const MahzorDataComponent = (props) => {
     useEffect(() => {
         init();
     }, [])
+
+    useEffect(() => {
+        if (props.mahzordata.status == 1||props.mahzordata.status == '1') {
+            setIsdisabledfield(false)
+        }
+        else{
+            setIsdisabledfield(true)
+        }
+    }, [props.mahzordata.status])
 
     return (
         <Card>
@@ -53,19 +64,19 @@ const MahzorDataComponent = (props) => {
                         <Col xs={12} md={4}>
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>שם</div>
                             <FormGroup dir="rtl" >
-                                <Input type="text" name="name" value={props.mahzordata.name} onChange={props.handleChangeMahzorData}></Input>
+                                <Input type="text" name="name" value={props.mahzordata.name} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
                             </FormGroup>
                         </Col>
                         <Col xs={12} md={4}>
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>תאריך התחלה</div>
                             <FormGroup dir="rtl" >
-                                <Input type="date" name="startdate" value={props.mahzordata.startdate} onChange={props.handleChangeMahzorData}></Input>
+                                <Input type="date" name="startdate" value={props.mahzordata.startdate} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
                             </FormGroup>
                         </Col>
                         <Col xs={12} md={4}>
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>תאריך סיום</div>
                             <FormGroup dir="rtl" >
-                                <Input type="date" name="enddate" value={props.mahzordata.enddate} onChange={props.handleChangeMahzorData}></Input>
+                                <Input type="date" name="enddate" value={props.mahzordata.enddate} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
                             </FormGroup>
                         </Col>
                     </Row>
@@ -73,7 +84,7 @@ const MahzorDataComponent = (props) => {
                         <Col xs={12} md={4}>
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>סוג מחזור</div>
                             <FormGroup dir="rtl" >
-                                <Input type="select" name="mahzoriosh" value={props.mahzordata.mahzoriosh} onChange={props.handleChangeMahzorData}>
+                                <Input type="select" name="mahzoriosh" value={props.mahzordata.mahzoriosh} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}>
                                     <option value={""}>בחר סוג מחזור</option>
                                     {props.mahzoriosh.map((mahzoriosh, index) => (
                                         <option key={mahzoriosh._id} value={mahzoriosh._id}>{mahzoriosh.name}</option>
@@ -84,7 +95,7 @@ const MahzorDataComponent = (props) => {
                         <Col xs={12} md={4}>
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>כמות בחירות תפקיד (למועמד)</div>
                             <FormGroup dir="rtl" >
-                                <Input type="number" name="numberofjobpicks" value={props.mahzordata.numberofjobpicks} onChange={props.handleChangeMahzorData}></Input>
+                                <Input type="number" name="numberofjobpicks" value={props.mahzordata.numberofjobpicks} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
                             </FormGroup>
                         </Col>
                         <Col xs={12} md={4}>

@@ -17,14 +17,14 @@ import {
 } from "reactstrap";
 
 import axios from 'axios';
-import SortingTable from 'components/tafkidipedia/EshkolByMahzorSortingTable/SortingTable';
+import SortingTable from 'components/tafkidipedia/FinalEshkolByMahzorSortingTable/SortingTable';
 
-function DisplayMahzorEshkol({ match }) {
+function DisplayMahzorFinalEshkol({ match }) {
     const [count, setCount] = useState(0); //to refresh table...
 
-    async function CalculateMahzorEshkol() {
+    async function CalculateMahzorFinalEshkol() {
         //delete all eshkols of certain mahzor
-        let response1 = await axios.delete(`http://localhost:8000/api/eshkol/deletemahzoreshkol/${match.params.mahzorid}`)
+        let response1 = await axios.delete(`http://localhost:8000/api/finaleshkol/deletemahzorfinaleshkol/${match.params.mahzorid}`)
         let tempdata = response1.data;
         // console.log(tempdata)
 
@@ -36,7 +36,7 @@ function DisplayMahzorEshkol({ match }) {
         console.log(tempmahzorjobs)
 
         //get all candidatepreferences of mahzor
-        let response3 = await axios.get(`http://localhost:8000/api/candidatepreferencebymahzorid/${match.params.mahzorid}`)
+        let response3 = await axios.get(`http://localhost:8000/api/finalcandidatepreferencebymahzorid/${match.params.mahzorid}`)
         let tempcandidatespreferencesdata = response3.data;
         for (let i = 0; i < tempcandidatespreferencesdata.length; i++) {
             for (let j = 0; j < tempcandidatespreferencesdata[i].certjobpreferences.length; j++) {
@@ -55,7 +55,7 @@ function DisplayMahzorEshkol({ match }) {
         console.log(tempcandidatespreferencesdata)
 
         //get all unitpreferences of mahzor
-        let response4 = await axios.get(`http://localhost:8000/api/unitpreferencebymahzorid/${match.params.mahzorid}`)
+        let response4 = await axios.get(`http://localhost:8000/api/finalunitpreferencebymahzorid/${match.params.mahzorid}`)
         let tempunitspreferences = response4.data;
         console.log(tempunitspreferences)
 
@@ -116,7 +116,7 @@ function DisplayMahzorEshkol({ match }) {
 
         //post mahzor eshkols to db
         for (let i = 0; i < tempmahzoreshkol.length; i++) {
-            let response1 = await axios.post(`http://localhost:8000/api/eshkol`, tempmahzoreshkol[i])
+            let response1 = await axios.post(`http://localhost:8000/api/finaleshkol`, tempmahzoreshkol[i])
             // let tempdata = response1.data;
         }
         setCount(count + 1);
@@ -148,9 +148,9 @@ function DisplayMahzorEshkol({ match }) {
                 </Col>
             </Row>
             <SortingTable mahzorid={match.params.mahzorid} refresh={count} />
-            <Button onClick={() => CalculateMahzorEshkol()}>חשב אשכולות</Button>
+            <Button onClick={() => CalculateMahzorFinalEshkol()}>חשב אשכולות</Button>
         </Container>
     );
 }
 
-export default withRouter(DisplayMahzorEshkol);
+export default withRouter(DisplayMahzorFinalEshkol);

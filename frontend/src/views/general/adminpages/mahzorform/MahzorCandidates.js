@@ -49,19 +49,21 @@ const MahzorCandidates = (props) => {
             </CardHeader>
             <CardBody style={{ direction: 'rtl' }}>
                 <Container>
-                    <Row>
-                        <Col xs={12} md={12}>
-                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
-                            <FormGroup dir="rtl" >
-                                <Input type="select" onChange={props.handleChangeUsersToCandidate}>
-                                    <option value={"בחר מועמד"}>בחר מועמד</option>
-                                    {props.users.map((user, index) => (
-                                        <option key={index} value={index}>{user.name} {user.lastname}</option>
-                                    ))}
-                                </Input>
-                            </FormGroup>
-                        </Col>
-                    </Row>
+                    {props.mahzordata.status == 1 ?
+                        <Row>
+                            <Col xs={12} md={12}>
+                                <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
+                                <FormGroup dir="rtl" >
+                                    <Input type="select" onChange={props.handleChangeUsersToCandidate}>
+                                        <option value={"בחר מועמד"}>בחר מועמד</option>
+                                        {props.users.map((user, index) => (
+                                            <option key={index} value={index}>{user.name} {user.lastname}</option>
+                                        ))}
+                                    </Input>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        : null}
                     <Row style={{ direction: "rtl", paddingTop: '10px' }} >
                         {props.userstocandidate ? props.userstocandidate.map((user, index) => (
                             <Col xs={12} md={4} key={index}>
@@ -73,9 +75,10 @@ const MahzorCandidates = (props) => {
                                         <Col xs={12} md={7} style={{ alignSelf: 'center' }}>
                                             <h3 style={{ textAlign: "right", margin: '0px' }}>{user.name} {user.lastname}</h3>
                                         </Col>
-                                        <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                            <Button className="btn btn-danger" onClick={(e) => props.DeleteUserFromUsersToCandidate(user, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
-                                        </Col>
+                                        {props.mahzordata.status == 1 ?
+                                            <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                                                <Button className="btn btn-danger" onClick={(e) => props.DeleteUserFromUsersToCandidate(user, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
+                                            </Col> : null}
                                     </Row>
                                 </Card>
                             </Col>

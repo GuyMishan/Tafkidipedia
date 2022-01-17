@@ -18,7 +18,7 @@ const SortingTable = (props) => {
   }
 
   const getMahzorEshkol = async () => {
-    let response = await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${props.mahzorid}`)
+    let response = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${props.mahzorid}`)
     let tempeshkolbymahzorid = response.data;
     for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
       for (let j = 0; j < tempeshkolbymahzorid[i].candidatesineshkol.length; j++) {
@@ -88,7 +88,7 @@ const SortingTable = (props) => {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
                         }
                         if (cell.column.id == "_id") {
-                          return <td><Link to={`/editeshkol/${true}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
+                          return <td><Link to={`/editeshkol/${false}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
                         }
                         if (cell.column.id == "candidatesineshkol") {
                           return <> {cell.value.map((candidateineshkol, index) => (
@@ -111,9 +111,9 @@ const SortingTable = (props) => {
                                     {candidateineshkol.unitrank ? <p>דירוג יחידה:{candidateineshkol.unitrank}</p> : null}
                                   </td>
                                   : <td style={{ backgroundColor: 'blue' }}>
-                                    {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
-                                    <p>הוסף ע"י מנהל מערכת</p>
-                                  </td>
+                                  {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                                  <p>הוסף ע"י מנהל מערכת</p>
+                                </td>
                           ))}</>
                         }
                       })

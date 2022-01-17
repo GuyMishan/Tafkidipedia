@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { create, find, update, remove, findById,deleteMahzorFinalEshkol,finaleshkolbymahzorid,finaleshkolbymahzoridandunitid,finaleshkolbyjobid} = require('../../controllers/general/finaleshkol');
+const { create, find, update, remove, findById,deleteMahzorFinalEshkol,finaleshkolbymahzorid,finaleshkolbymahzoridandunitid,finaleshkolbyjobid,finaleshkolbyid} = require('../../controllers/general/finaleshkol');
 
 // find spec 
 router.get('/finaleshkol/:id', findById)
@@ -21,5 +21,7 @@ router.get('/finaleshkolbymahzorid/:mahzorid', finaleshkolbymahzorid)
 router.get('/finaleshkolbymahzoridandunitid/:mahzorid/:unitid', finaleshkolbymahzoridandunitid)
 
 router.get('/finaleshkolbyjobid/:jobid', finaleshkolbyjobid)
+
+router.get('/finaleshkolbyid/:id', finaleshkolbyid)
 
 module.exports = router;
