@@ -22,6 +22,22 @@ import SortingTable from 'components/tafkidipedia/EshkolByMahzorSortingTable/Sor
 function DisplayMahzorEshkol({ match }) {
     const [count, setCount] = useState(0); //to refresh table...
 
+    const [mahzorhaseshkols, setMahzorhaseshkols] = useState(false);
+
+    function init() {
+        getMahzorEshkol();
+    }
+
+    const getMahzorEshkol = async () => {
+        let response = await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${match.params.mahzorid}`)
+        let tempeshkolbymahzorid = response.data;
+        if (tempeshkolbymahzorid.length > 0)
+            setMahzorhaseshkols(true)
+        else {
+            setMahzorhaseshkols(false)
+        }
+    }
+
     async function CalculateMahzorEshkol() {
         //delete all eshkols of certain mahzor
         let response1 = await axios.delete(`http://localhost:8000/api/eshkol/deletemahzoreshkol/${match.params.mahzorid}`)
@@ -122,10 +138,6 @@ function DisplayMahzorEshkol({ match }) {
         setCount(count + 1);
     }
 
-    function init() {
-
-    }
-
     useEffect(() => {
         init();
     }, [])
@@ -148,7 +160,10 @@ function DisplayMahzorEshkol({ match }) {
                 </Col>
             </Row>
             <SortingTable mahzorid={match.params.mahzorid} refresh={count} />
-            <Button onClick={() => CalculateMahzorEshkol()}>חשב אשכולות</Button>
+
+            {mahzorhaseshkols ? null
+                : <Button onClick={() => CalculateMahzorEshkol()}>חשב אשכולות</Button>}
+
         </Container>
     );
 }

@@ -315,10 +315,12 @@ const CandidatePreferenceForm = ({ match }) => {
       //update candidate preference
       tempcandidatepreference.certjobpreferences = tempcandidatepreference_certjobpreferencesid;
       tempcandidatepreference.noncertjobpreferences = tempcandidatepreference_noncertjobpreferencesid;
+      let candidateidtochange=tempcandidatepreference._id;
+      delete tempcandidatepreference._id;
 
       if( mahzordata.status == 2)
       {
-      await axios.put(`http://localhost:8000/api/candidatepreference/${tempcandidatepreference._id}`, tempcandidatepreference)
+      await axios.put(`http://localhost:8000/api/candidatepreference/${candidateidtochange}`, tempcandidatepreference)
         .then(res => {
           toast.success("העדפה עודכנה בהצלחה")
           history.goBack();
@@ -326,7 +328,7 @@ const CandidatePreferenceForm = ({ match }) => {
       }
       else if( mahzordata.status == 4)
       {
-        await axios.put(`http://localhost:8000/api/finalcandidatepreference/${tempcandidatepreference._id}`, tempcandidatepreference)
+        await axios.put(`http://localhost:8000/api/finalcandidatepreference/${candidateidtochange}`, tempcandidatepreference)
         .then(res => {
           toast.success("העדפה עודכנה בהצלחה")
           history.goBack();

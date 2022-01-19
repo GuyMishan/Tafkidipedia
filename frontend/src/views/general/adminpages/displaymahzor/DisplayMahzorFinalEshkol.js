@@ -22,11 +22,27 @@ import SortingTable from 'components/tafkidipedia/FinalEshkolByMahzorSortingTabl
 function DisplayMahzorFinalEshkol({ match }) {
     const [count, setCount] = useState(0); //to refresh table...
 
+    const [mahzorhaseshkols, setMahzorhaseshkols] = useState(false);
+
+    function init() {
+        getMahzorEshkol();
+    }
+
+    const getMahzorEshkol = async () => {
+        let response = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${match.params.mahzorid}`)
+        let tempeshkolbymahzorid = response.data;
+        if (tempeshkolbymahzorid.length > 0)
+            setMahzorhaseshkols(true)
+        else {
+            setMahzorhaseshkols(false)
+        }
+    }
+
     async function CalculateMahzorFinalEshkol() {
-        //delete all eshkols of certain mahzor
-        let response1 = await axios.delete(`http://localhost:8000/api/finaleshkol/deletemahzorfinaleshkol/${match.params.mahzorid}`)
-        let tempdata = response1.data;
-        // console.log(tempdata)
+        // //delete all eshkols of certain mahzor
+        // let response1 = await axios.delete(`http://localhost:8000/api/finaleshkol/deletemahzorfinaleshkol/${match.params.mahzorid}`)
+        // let tempdata = response1.data;
+        // // console.log(tempdata)
 
         let tempmahzoreshkol = [];// final result
 
@@ -122,10 +138,6 @@ function DisplayMahzorFinalEshkol({ match }) {
         setCount(count + 1);
     }
 
-    function init() {
-
-    }
-
     useEffect(() => {
         init();
     }, [])
@@ -147,8 +159,11 @@ function DisplayMahzorFinalEshkol({ match }) {
                     <h5 style={{ color: 'blue' }}>&#9632; הוסף ע"י מנהל מערכת</h5>
                 </Col>
             </Row>
+
             <SortingTable mahzorid={match.params.mahzorid} refresh={count} />
-            <Button onClick={() => CalculateMahzorFinalEshkol()}>חשב אשכולות</Button>
+
+            {mahzorhaseshkols ? null
+                : <Button onClick={() => CalculateMahzorFinalEshkol()}>חשב אשכולות</Button>}
         </Container>
     );
 }

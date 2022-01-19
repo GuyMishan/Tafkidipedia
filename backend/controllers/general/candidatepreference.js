@@ -66,8 +66,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const candidatepreference = new Candidatepreference(req.body);
-  Candidatepreference.updateOne(candidatepreference)
+    Candidatepreference.findByIdAndUpdate(req.params.candidatepreferenceId, req.body)
     .then((candidatepreference) => res.json(candidatepreference))
     .catch((err) => res.status(400).json("Error: " + err));
 };
