@@ -93,14 +93,14 @@ const SortingTable = ({ match }) => {
                         // }
                         // else {
                         if (cell.column.id == "job.jobtype.jobname") {
-                          return <td>{cell.value}{"/"}{row.original.job.unit.name}</td>
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/displayjob/${row.original.job._id}`}>{cell.value}{"/"}{row.original.job.unit.name}</Link></td>
                         }
                         if (cell.column.id == "job.certain") {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
                         }
                         if (cell.column.id == "preferencerankings") {
                           return <> {cell.value.map((preferenceranking, index) => (
-                            <td>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname} ({preferenceranking.rank})</td>
+                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/profilepage/${preferenceranking.candidate.user._id}`}>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname}</Link> ({preferenceranking.rank})</td>
                           ))}</>
                         }
                       })

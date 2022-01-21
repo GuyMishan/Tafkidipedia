@@ -82,7 +82,8 @@ const SortingTable = (props) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "job") {
-                          return <td>{cell.value.jobtype.jobname}/{cell.value.unit.name}</td>
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/displayjob/${cell.value._id}`}> {cell.value.jobtype.jobname}/{cell.value.unit.name}</Link></td>
+
                         }
                         if (cell.column.id == "job.certain") {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
@@ -94,24 +95,24 @@ const SortingTable = (props) => {
                           return <> {cell.value.map((candidateineshkol, index) => (
                             (candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
                               <td style={{ backgroundColor: 'lime' }}>
-                                {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                                <Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                 {candidateineshkol.candidaterank ? <p>דירוג מתמודד:{candidateineshkol.candidaterank}</p> : null}
                                 {candidateineshkol.unitrank ? <p>דירוג יחידה:{candidateineshkol.unitrank}</p> : null}
                               </td>
                               :
                               (candidateineshkol.candidaterank && !candidateineshkol.unitrank) ?
                                 <td style={{ backgroundColor: 'red' }}>
-                                  {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                                  <Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                   {candidateineshkol.candidaterank ? <p>דירוג מתמודד:{candidateineshkol.candidaterank}</p> : null}
                                 </td>
                                 :
                                 (!candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
                                   <td style={{ backgroundColor: 'yellow' }}>
-                                    {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                                    <Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                     {candidateineshkol.unitrank ? <p>דירוג יחידה:{candidateineshkol.unitrank}</p> : null}
                                   </td>
                                   : <td style={{ backgroundColor: 'blue' }}>
-                                    {candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}
+                                    <Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                     <p>הוסף ע"י מנהל מערכת</p>
                                   </td>
                           ))}</>

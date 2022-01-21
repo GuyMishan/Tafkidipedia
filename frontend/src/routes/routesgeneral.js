@@ -29,6 +29,8 @@ import UnitPreferenceForm from "views/general/unitpages/unitpreferenceform/UnitP
 
 import EditEshkolForm from "views/general/adminpages/EditEshkol/EditEshkolForm";
 
+import ProfilePage from "views/general/generalpages/profilepage/ProfilePage";
+
 // import Exceluploadusers from "views/general/excelpages/ExcelUploadUsers"
 
 const routesgeneral =
@@ -43,6 +45,8 @@ const routesgeneral =
             <LoggedinRoute path="/jobsbymahzor/:mahzorid" exact component={JobsByMahzor} />
             <LoggedinRoute path="/jobsbymahzorandunit/:mahzorid/:unitid" exact component={JobsByMahzorAndUnit} />
             <LoggedinRoute path="/displayjob/:jobid" exact component={DisplayJob} />
+
+            <LoggedinRoute path="/profilepage/:userid" exact component={ProfilePage} />
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
             {/*///////////////////////////////////////////Form Routes/////////////////////////////////////////////////*/}

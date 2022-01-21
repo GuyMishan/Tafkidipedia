@@ -85,8 +85,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const finalunitpreference = new Finalunitpreference(req.body);
-  Finalunitpreference.updateOne(finalunitpreference)
+    Finalunitpreference.findByIdAndUpdate(req.params.finalunitpreferenceId,req.body)
     .then((finalunitpreference) => res.json(finalunitpreference))
     .catch((err) => res.status(400).json("Error: " + err));
 };

@@ -223,13 +223,13 @@ const EditEshkolForm = ({ match }) => {
                             <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                           </Col>
                           <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                            <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת מתמודד:{candidateineshkol.candidaterank}</h5>
+                            <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת מתמודד: {candidateineshkol.candidaterank}</h5>
                           </Col>
                           <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                            <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת יחידה:{candidateineshkol.unitrank}</h5>
+                            <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת יחידה: {candidateineshkol.unitrank}</h5>
                           </Col>
                           <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                            <Button className="btn" style={{ padding: '11px 20px 11px 20px' }} disabled>X</Button>
+                            <Button className="btn btn-danger" onClick={(e) => DeleteCandidateInEshkolFromEshkol(candidateineshkol, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
                           </Col>
                         </Row>
                       </Col> :
@@ -240,13 +240,13 @@ const EditEshkolForm = ({ match }) => {
                               <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                             </Col>
                             <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                              <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת מתמודד:{candidateineshkol.candidaterank}</h5>
+                              <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת מתמודד: {candidateineshkol.candidaterank}</h5>
                             </Col>
                             <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                              <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת יחידה:{candidateineshkol.unitrank}</h5>
+                              <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת יחידה: -</h5>
                             </Col>
                             <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                              <Button className="btn" style={{ padding: '11px 20px 11px 20px' }} disabled>X</Button>
+                              <Button className="btn btn-danger" onClick={(e) => DeleteCandidateInEshkolFromEshkol(candidateineshkol, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
                             </Col>
                           </Row>
                         </Col> : candidateineshkol.unitrank ?
@@ -256,13 +256,13 @@ const EditEshkolForm = ({ match }) => {
                                 <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                               </Col>
                               <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת מתמודד:{candidateineshkol.candidaterank}</h5>
+                                <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת מתמודד: -</h5>
                               </Col>
                               <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת יחידה:{candidateineshkol.unitrank}</h5>
+                                <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת יחידה: {candidateineshkol.unitrank}</h5>
                               </Col>
                               <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                <Button className="btn" style={{ padding: '11px 20px 11px 20px' }} disabled>X</Button>
+                                <Button className="btn btn-danger" onClick={(e) => DeleteCandidateInEshkolFromEshkol(candidateineshkol, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
                               </Col>
                             </Row>
                           </Col> :
@@ -271,11 +271,8 @@ const EditEshkolForm = ({ match }) => {
                               <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                                 <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                               </Col>
-                              <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת מתמודד:{candidateineshkol.candidaterank}</h5>
-                              </Col>
-                              <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                <h5 style={{ textAlign: "right", margin: '0px' }}>העדפת יחידה:{candidateineshkol.unitrank}</h5>
+                              <Col xs={12} md={6} style={{ alignSelf: 'center' }}>
+                                <h5 style={{ textAlign: "right", margin: '0px' }}>הוסף ע"י מנהל מערכת</h5>
                               </Col>
                               <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                                 <Button className="btn btn-danger" onClick={(e) => DeleteCandidateInEshkolFromEshkol(candidateineshkol, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
