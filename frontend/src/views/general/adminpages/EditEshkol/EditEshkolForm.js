@@ -61,6 +61,10 @@ const EditEshkolForm = ({ match }) => {
         let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${eshkoldata.candidatesineshkol[j].candidate}`);
         eshkoldata.candidatesineshkol[j].candidate = result1.data[0];
       }
+      if (eshkoldata.finalcandidate) {
+        let result2 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${eshkoldata.finalcandidate}`);
+        eshkoldata.finalcandidate = result2.data[0];
+      }
       setEshkolData(eshkoldata);
     }
     loadcandidates(eshkoldata.mahzor._id);
@@ -95,6 +99,14 @@ const EditEshkolForm = ({ match }) => {
     }
   }
 
+  const handleChangeFinalCandidateInEshkol = event => {
+    if (event.target.value != "בחר מועמד") {
+      let tempfinalcandidate = candidates[event.target.value];
+
+      setEshkolData({ ...eshkoldata, finalcandidate: tempfinalcandidate });
+    }
+  }
+
   async function DeleteCandidateInEshkolFromEshkol(candidateineshkol) {
     let tempcandidatesineshkol = await eshkoldata.candidatesineshkol;
     tempcandidatesineshkol = tempcandidatesineshkol.filter(function (item) {
@@ -103,8 +115,12 @@ const EditEshkolForm = ({ match }) => {
     setEshkolData({ ...eshkoldata, candidatesineshkol: tempcandidatesineshkol });
   }
 
+  async function DeleteFinalCandidateFromEshkol() {
+    setEshkolData({ ...eshkoldata, finalcandidate: null });
+  }
+
   const clickSubmit = async event => {
-    let tempeshkol=eshkoldata;
+    let tempeshkol = eshkoldata;
 
     let originalandnew = [];//to do nothing
     let originalandnotnew = [];//to delete
@@ -147,9 +163,9 @@ const EditEshkolForm = ({ match }) => {
     console.log(notoriginalandnew)
 
     //init eshkol
-    tempeshkol.candidatesineshkol=[];
-    tempeshkol.job=tempeshkol.job._id;
-    tempeshkol.mahzor=tempeshkol.mahzor._id;
+    tempeshkol.candidatesineshkol = [];
+    tempeshkol.job = tempeshkol.job._id;
+    tempeshkol.mahzor = tempeshkol.mahzor._id;
     delete tempeshkol._id;
 
     for (let i = 0; i < originalandnew.length; i++) {
@@ -158,7 +174,7 @@ const EditEshkolForm = ({ match }) => {
 
     for (let i = 0; i < notoriginalandnew.length; i++) { //add candidates thats no in db
       let tempcandidateineshkol = {};
-      tempcandidateineshkol.candidate=notoriginalandnew[i].candidate._id;
+      tempcandidateineshkol.candidate = notoriginalandnew[i].candidate._id;
       let response1 = await axios.post(`http://localhost:8000/api/candidateineshkol`, tempcandidateineshkol)
       let tempdata = response1.data;
       tempeshkol.candidatesineshkol.push(tempdata._id)
@@ -170,10 +186,16 @@ const EditEshkolForm = ({ match }) => {
 
     //post eshkol to db
     if (match.params.iseshkol == 'true') {
-     let response1 = await axios.put(`http://localhost:8000/api/eshkol/${match.params.eshkolid}`,tempeshkol)
+      let response1 = await axios.put(`http://localhost:8000/api/eshkol/${match.params.eshkolid}`, tempeshkol)
     }
-    else{
-      let response1 = await axios.put(`http://localhost:8000/api/finaleshkol/${match.params.eshkolid}`,tempeshkol)
+    else {
+      if(tempeshkol.finalcandidate!=null){
+        tempeshkol.finalcandidate=tempeshkol.finalcandidate._id
+      }
+      else{
+        delete tempeshkol.finalcandidate;
+      }
+      let response1 = await axios.put(`http://localhost:8000/api/finaleshkol/${match.params.eshkolid}`, tempeshkol)
     }
 
     console.log(tempeshkol)
@@ -218,7 +240,7 @@ const EditEshkolForm = ({ match }) => {
                   {eshkoldata && eshkoldata.candidatesineshkol ? eshkoldata.candidatesineshkol.map((candidateineshkol, index) => (
                     candidateineshkol.candidaterank && candidateineshkol.unitrank ?
                       <Col xs={12} md={6} key={index}>
-                        <Row style={{ backgroundColor: 'lime', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px' }}>
+                        <Row style={{ backgroundColor: 'rgb(190 255 184)', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit', margin: '0px' }}>
                           <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                             <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                           </Col>
@@ -235,7 +257,7 @@ const EditEshkolForm = ({ match }) => {
                       </Col> :
                       candidateineshkol.candidaterank ?
                         <Col xs={12} md={6} key={index}>
-                          <Row style={{ backgroundColor: 'red', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px' }}>
+                          <Row style={{ backgroundColor: 'rgb(255 204 204)', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit', margin: '0px' }}>
                             <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                               <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                             </Col>
@@ -251,7 +273,7 @@ const EditEshkolForm = ({ match }) => {
                           </Row>
                         </Col> : candidateineshkol.unitrank ?
                           <Col xs={12} md={6} key={index}>
-                            <Row style={{ backgroundColor: 'yellow', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit' }}>
+                            <Row style={{ backgroundColor: 'rgb(255 248 204)', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit', margin: '0px' }}>
                               <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                                 <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                               </Col>
@@ -267,7 +289,7 @@ const EditEshkolForm = ({ match }) => {
                             </Row>
                           </Col> :
                           <Col xs={12} md={6} key={index}>
-                            <Row style={{ backgroundColor: 'blue', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit' }}>
+                            <Row style={{ backgroundColor: 'rgb(208 204 255)', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit', margin: '0px' }}>
                               <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                                 <h5 style={{ textAlign: "right", margin: '0px' }}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</h5>
                               </Col>
@@ -281,9 +303,42 @@ const EditEshkolForm = ({ match }) => {
                           </Col>
                   )) : null}
                 </Row>
+
+                {match.params.iseshkol == 'false' ?
+                  <>
+                    <Row style={{ paddingTop: '20px' }}>
+                      <Col xs={12} md={12}>
+                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>בחר מועמד סופי</div>
+                        <FormGroup dir="rtl" >
+                          <Input type="select" onChange={handleChangeFinalCandidateInEshkol}>
+                            <option value={"בחר מועמד"}>בחר מועמד</option>
+                            {candidates.map((candidate, index) => (
+                              <option key={index} value={index}>{candidate.user.name} {candidate.user.lastname}</option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+
+                    {eshkoldata.finalcandidate ?
+                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center',paddingTop:'15px'}}>
+                      <Row style={{ backgroundColor: 'rgb(228 228 228)', direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: '50%', margin: '0px' }}>
+                        <Col xs={12} md={6} style={{ alignSelf: 'center' }}>
+                          <h5 style={{ textAlign: "right", margin: '0px' }}>{eshkoldata.finalcandidate.user.name} {eshkoldata.finalcandidate.user.lastname}</h5>
+                        </Col>
+                        <Col xs={12} md={6} style={{ alignSelf: 'center' }}>
+                          <Button className="btn btn-danger" onClick={(e) => DeleteFinalCandidateFromEshkol(e)} style={{ padding: '11px 20px 11px 20px' }} disabled>X</Button>
+                        </Col>
+                      </Row>
+                    </div>:null}
+
+                  </>
+                  : null}
+
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                   <button className="btn btn-primary" onClick={clickSubmit}>עדכן אשכול</button>
                 </div>
+
               </Container>
             </CardBody>
           </Card>

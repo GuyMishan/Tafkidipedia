@@ -16,6 +16,11 @@ export const COLUMNS = [
         Filter: ColumnFilter
     },
     {
+        Header: 'מועמד סופי',
+        accessor: 'finalcandidate',
+        Filter: ColumnFilter
+    },
+    {
         Header: '',
         accessor: 'candidatesineshkol',
         Filter: ColumnFilter

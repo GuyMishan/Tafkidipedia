@@ -25,6 +25,10 @@ const SortingTable = (props) => {
         let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkolbymahzorid[i].candidatesineshkol[j].candidate}`);
         tempeshkolbymahzorid[i].candidatesineshkol[j].candidate = result1.data[0];
       }
+      if (tempeshkolbymahzorid[i].finalcandidate) {
+        let result2 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkolbymahzorid[i].finalcandidate}`);
+        tempeshkolbymahzorid[i].finalcandidate = result2.data[0];
+      }
     }
     setData(tempeshkolbymahzorid)
   }
@@ -70,6 +74,7 @@ const SortingTable = (props) => {
               <th colSpan="1">תפקיד</th>
               <th colSpan="1">ודאי/לא ודאי</th>
               <th colSpan="1">ערוך</th>
+              <th colSpan="1">מועמד סופי</th>
               <th colSpan="100%">מועמדים</th>
             </tr>
           </thead>
@@ -90,27 +95,35 @@ const SortingTable = (props) => {
                         if (cell.column.id == "_id") {
                           return <td><Link to={`/editeshkol/${false}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
                         }
+                        if (cell.column.id == "finalcandidate") {
+                          if (cell.value) {
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value.user._id}`}>{cell.value.user.name} {cell.value.user.lastname}</Link></td>
+                          }
+                          else{
+                            return <td>-</td>
+                          }
+                        }
                         if (cell.column.id == "candidatesineshkol") {
                           return <> {cell.value.map((candidateineshkol, index) => (
                             (candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
-                              <td style={{ backgroundColor: 'lime' }}>
+                              <td style={{ backgroundColor: 'rgb(190 255 184)' }}>
                                 <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                 {candidateineshkol.candidaterank ? <p>דירוג מתמודד:{candidateineshkol.candidaterank}</p> : null}
                                 {candidateineshkol.unitrank ? <p>דירוג יחידה:{candidateineshkol.unitrank}</p> : null}
                               </td>
                               :
                               (candidateineshkol.candidaterank && !candidateineshkol.unitrank) ?
-                                <td style={{ backgroundColor: 'red' }}>
+                                <td style={{ backgroundColor: 'rgb(255 204 204)' }}>
                                   <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                   {candidateineshkol.candidaterank ? <p>דירוג מתמודד:{candidateineshkol.candidaterank}</p> : null}
                                 </td>
                                 :
                                 (!candidateineshkol.candidaterank && candidateineshkol.unitrank) ?
-                                  <td style={{ backgroundColor: 'yellow' }}>
+                                  <td style={{ backgroundColor: 'rgb(255 248 204)' }}>
                                     <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                     {candidateineshkol.unitrank ? <p>דירוג יחידה:{candidateineshkol.unitrank}</p> : null}
                                   </td>
-                                  : <td style={{ backgroundColor: 'blue' }}>
+                                  : <td style={{ backgroundColor: 'rgb(208 204 255)' }}>
                                     <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${candidateineshkol.candidate.user._id}`}>{candidateineshkol.candidate.user.name} {candidateineshkol.candidate.user.lastname}</Link>
                                     <p>הוסף ע"י מנהל מערכת</p>
                                   </td>

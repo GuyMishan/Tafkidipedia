@@ -147,18 +147,19 @@ function DisplayMahzorEshkol({ match }) {
             <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת אשכולות</h3>
             <Row style={{ direction: 'rtl', textAlign: 'center' }}>
                 <Col xs={12} md={3}>
-                    <h5 style={{ color: "red" }}>&#9632; בחירת מתמודד בלבד</h5>
+                    <h5 style={{ color: "rgb(255 97 97)" }}>&#9632; בחירת מתמודד בלבד</h5>
                 </Col>
                 <Col xs={12} md={3}>
-                    <h5 style={{ color: "yellow" }}>&#9632; בחירת יחידה בלבד</h5>
+                    <h5 style={{ color: "rgb(255 229 63)" }}>&#9632; בחירת יחידה בלבד</h5>
                 </Col>
                 <Col xs={12} md={3}>
-                    <h5 style={{ color: 'lime' }}>&#9632; בחירת מתמודד ויחידה</h5>
+                    <h5 style={{ color: 'rgb(106 255 92)' }}>&#9632; בחירת מתמודד ויחידה</h5>
                 </Col>
                 <Col xs={12} md={3}>
-                    <h5 style={{ color: 'blue' }}>&#9632; הוסף ע"י מנהל מערכת</h5>
+                    <h5 style={{ color: 'rgb(98 85 255)' }}>&#9632; הוסף ע"י מנהל מערכת</h5>
                 </Col>
             </Row>
+            
             <SortingTable mahzorid={match.params.mahzorid} refresh={count} />
 
             {mahzorhaseshkols ? null
