@@ -44,10 +44,10 @@ const MahzorDataComponent = (props) => {
     }, [])
 
     useEffect(() => {
-        if (props.mahzordata.status == 1||props.mahzordata.status == '1') {
+        if (props.mahzordata.status == 1 || props.mahzordata.status == '1') {
             setIsdisabledfield(false)
         }
-        else{
+        else {
             setIsdisabledfield(true)
         }
     }, [props.mahzordata.status])
@@ -126,7 +126,12 @@ const MahzorDataComponent = (props) => {
                                                         props.oldmahzordata.status == 5 ?
                                                             <>
                                                                 <option key={5} value={5}>שיבוצים סופיים</option>
-                                                            </> : null
+                                                                <option key={6} value={6}>מחזור סגור</option>
+                                                            </> :
+                                                            props.oldmahzordata.status == 6 ?
+                                                                <>
+                                                                    <option key={6} value={6}>מחזור סגור</option>
+                                                                </> : null
                                         :
                                         <>
                                             <option value={""}>בחר סטטוס מחזור</option>

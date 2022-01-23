@@ -14,22 +14,34 @@ const SortingTable = ({ match }) => {
   const [data, setData] = useState([])
 
   function init() {
-    getJobsByMahzor();
+    getMahzorCabdidateWithoutPreferences();
   }
 
-  const getJobsByMahzor = async () => {
-    try {
-      await axios.get(`http://localhost:8000/api/jobsbymahzorid/${match.params.mahzorid}`)
-        .then(response => {
-          setData(response.data)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }
-    catch {
+  const getMahzorCabdidateWithoutPreferences = async () => {
+    //get all mahzor candidates
+    let result = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`)
+    let tempallcandidates = result.data;
 
+    //get all candidates with a preference
+    let response = await axios.get(`http://localhost:8000/api/smartcandidatepreference`)
+    let tempdata = response.data;
+    let tempcandidateswithpreference = [];
+    for (let i = 0; i < tempdata.length; i++) {
+      if (tempdata[i].mahzor._id == match.params.mahzorid) {
+        tempcandidateswithpreference.push(tempdata[i].candidate)
+      }
     }
+
+    //takes the original candidates array and saves only those without a preference
+    for (let k = 0; k < tempallcandidates.length; k++) {
+      for (let l = 0; l < tempcandidateswithpreference.length; l++)
+        if (tempallcandidates[k]._id == tempcandidateswithpreference[l]._id)
+        {
+          tempallcandidates.splice(k,1);
+        }
+    }
+
+    setData(tempallcandidates)
   }
 
   useEffect(() => {
@@ -64,23 +76,13 @@ const SortingTable = ({ match }) => {
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th  >
-                    <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
-                    <div>{column.canFilter ? column.render('Filter') : null}</div>
-                    <div>
-                      {column.isSorted ? (column.isSortedDesc ? '🔽' : '⬆️') : ''}
-                    </div>
-                  </th>
-                ))}
-                <th>פרטים</th>
+          {data[0] ?
+            <thead style={{ backgroundColor: '#4fff64' }}>
+              <tr>
+                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
               </tr>
-            ))}
+            </thead> : null}
 
-          </thead>
           <tbody {...getTableBodyProps()}>
             {
               page.map(row => {
@@ -89,30 +91,11 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id != "certain") {
-                          return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                        }
-                        else {
-                          if (cell.column.id == "certain") {
-                            if (cell.value == true)
-                              return <td>ודאי</td>
-                            else
-                              return <td>לא ודאי</td>
-                          }
+                        if (cell.column.id == "user.name") {
+                          return <td style={{backgroundColor:'#FFCCCC'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
                         }
                       })
                     }
-                    {/* {console.log(row)} */}
-                    <td style={{ textAlign: "center" }}>
-                      <Link to={`/displayjob/${row.original._id}`}>
-                        <button
-                          className="btn btn-success"
-                          style={{ padding: "0.5rem" }}
-                        >
-                          לפרטים
-                        </button>
-                      </Link>
-                    </td>
                   </tr>
                 )
               })
@@ -162,7 +145,7 @@ const SortingTable = ({ match }) => {
           </select>
         </div>
         <div style={{ display: 'flex', paddingTop: '5px' }}>
-          <h4 style={{ fontWeight: 'bold' }}>מספר תפקידים: {data.length}</h4>
+          <h4 style={{ fontWeight: 'bold' }}>מספר מתמודדים: {data.length}</h4>
         </div>
       </div>
     </>

@@ -8,38 +8,46 @@ import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
-const SortingTable = (props) => {
+const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
   const [data, setData] = useState([])
 
   function init() {
-    getMahzorEshkol();
+    getMahzorCabdidateWithoutPreferences();
   }
 
-  const getMahzorEshkol = async () => {
-    try {
-      await axios.get(`http://localhost:8000/api/eshkolbymahzoridandunitid/${props.mahzorid}/${props.unitid}`)
-        .then(response => {
-          setData(response.data)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }
-    catch {
+  const getMahzorCabdidateWithoutPreferences = async () => {
+    //get all mahzor candidates
+    let result = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`)
+    let tempallcandidates = result.data;
 
+    //get all candidates with a preference
+    let response = await axios.get(`http://localhost:8000/api/smartfinalcandidatepreference`)
+    let tempdata = response.data;
+    let tempcandidateswithpreference = [];
+    for (let i = 0; i < tempdata.length; i++) {
+      if (tempdata[i].mahzor._id == match.params.mahzorid) {
+        tempcandidateswithpreference.push(tempdata[i].candidate)
+      }
     }
+
+    //takes the original candidates array and saves only those without a preference
+    for (let k = 0; k < tempallcandidates.length; k++) {
+      for (let l = 0; l < tempcandidateswithpreference.length; l++)
+        if (tempallcandidates[k]._id == tempcandidateswithpreference[l]._id)
+        {
+          tempallcandidates.splice(k,1);
+        }
+    }
+
+    setData(tempallcandidates)
   }
 
   useEffect(() => {
-    // init();
+    init();
     setPageSize(5);
   }, []);
-
-  useEffect(() => {
-    init()
-  }, [props.refresh]);
 
   const {
     getTableProps,
@@ -68,13 +76,13 @@ const SortingTable = (props) => {
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table {...getTableProps()}>
-          <thead style={{ backgroundColor: '#4fff64' }}>
-            <tr>
-            <th colSpan="1">תפקיד</th>
-            <th colSpan="1">ודאי/לא ודאי</th>
-            <th colSpan="100%">מועמדים</th>
-            </tr>
-          </thead>
+          {data[0] ?
+            <thead style={{ backgroundColor: '#4fff64' }}>
+              <tr>
+                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
+              </tr>
+            </thead> : null}
+
           <tbody {...getTableBodyProps()}>
             {
               page.map(row => {
@@ -83,20 +91,11 @@ const SortingTable = (props) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id == "job") {
-                          return <td>{cell.value.jobtype.jobname}/{cell.value.unit.name}</td>
-                        }
-                        if (cell.column.id == "job.certain") {
-                          return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
-                        }
-                        if (cell.column.id == "candidates") {
-                          return <> {cell.value.user.map((user, index) => (
-                            <td>{user.name} {user.lastname}</td>
-                          ))}</>
+                        if (cell.column.id == "user.name") {
+                          return <td style={{backgroundColor:'#FFCCCC'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
                         }
                       })
                     }
-                    {/* {console.log(row)} */}
                   </tr>
                 )
               })
@@ -144,6 +143,9 @@ const SortingTable = (props) => {
               </option>
             ))}
           </select>
+        </div>
+        <div style={{ display: 'flex', paddingTop: '5px' }}>
+          <h4 style={{ fontWeight: 'bold' }}>מספר מתמודדים: {data.length}</h4>
         </div>
       </div>
     </>

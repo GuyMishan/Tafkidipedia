@@ -89,15 +89,15 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id != "certain"){
+                        if (cell.column.id != "certain") {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
                           if (cell.column.id == "certain") {
-                            if(cell.value==true)
-                            return <td>ודאי</td>
+                            if (cell.value == true)
+                              return <td>ודאי</td>
                             else
-                            return <td>לא ודאי</td>
+                              return <td>לא ודאי</td>
                           }
                         }
                       })
@@ -160,6 +160,9 @@ const SortingTable = ({ match }) => {
               </option>
             ))}
           </select>
+        </div>
+        <div style={{ display: 'flex', paddingTop: '5px' }}>
+          <h4 style={{ fontWeight: 'bold' }}>מספר תפקידים : {data.length}</h4>
         </div>
       </div>
     </>

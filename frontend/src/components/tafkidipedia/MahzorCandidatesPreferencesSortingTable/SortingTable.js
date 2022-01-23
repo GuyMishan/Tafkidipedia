@@ -85,8 +85,8 @@ const SortingTable = ({ match }) => {
           {data[0] ?
             <thead style={{ backgroundColor: '#4fff64' }}>
               <tr>
-                <th colSpan="1" style={{borderLeft: "1px solid white"}}>שם מתמודד</th>
-                <th colSpan={data[0].mahzor.numberofjobpicks} style={{borderLeft: "1px solid white"}}>תפקידים ודאי</th>
+                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
+                <th colSpan={data[0].mahzor.numberofjobpicks} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
                 <th colSpan={data[0].mahzor.numberofjobpicks}>תפקידים לא ודאי</th>
               </tr>
             </thead> : null}
@@ -100,16 +100,16 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "candidate.user.name") {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
                         }
                         if (cell.column.id == "certjobpreferences") {
                           return <> {cell.value.map((jobpreference, index) => (
-                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
+                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
                           ))}</>
                         }
                         if (cell.column.id == "noncertjobpreferences") {
                           return <> {cell.value.map((jobpreference, index) => (
-                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
+                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
                           ))}</>
                         }
                       })
@@ -161,6 +161,9 @@ const SortingTable = ({ match }) => {
               </option>
             ))}
           </select>
+        </div>
+        <div style={{ display: 'flex', paddingTop: '5px' }}>
+          <h4 style={{ fontWeight: 'bold' }}>מספר העדפות: {data.length}</h4>
         </div>
       </div>
     </>

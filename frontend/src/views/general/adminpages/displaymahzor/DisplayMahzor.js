@@ -25,6 +25,8 @@ import MahzorUnitsPreferencesSortingTable from 'components/tafkidipedia/MahzorUn
 
 import MahzorFinalUnitsPreferencesSortingTable from 'components/tafkidipedia/MahzorFinalUnitsPreferencesSortingTable/SortingTable'
 import MahzorFinalCandidatesPreferencesSortingTable from 'components/tafkidipedia/MahzorFinalCandidatesPreferencesSortingTable/SortingTable'
+import MahzorCandidatesWithoutPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesWithoutPreferencesSortingTable/SortingTable'
+import MahzorCandidatesWithoutFinalPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesWithoutFinalPreferencesSortingTable/SortingTable'
 
 import DisplayMahzorEshkol from './DisplayMahzorEshkol';
 import DisplayMahzorFinalEshkol from './DisplayMahzorFinalEshkol';
@@ -98,6 +100,13 @@ function DisplayMahzor({ match }) {
             </CardBody>
           </Card>
 
+          <Card style={{ marginTop: '30px' }}>
+            <CardBody>
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שלא מילאו העדפה</h3>
+              <MahzorCandidatesWithoutPreferencesSortingTable />
+            </CardBody>
+          </Card>
+
           <Card>
             <CardBody>
               <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות יחידות</h3>
@@ -119,6 +128,13 @@ function DisplayMahzor({ match }) {
             <CardBody>
               <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות מועמדים - לאחר ראיונות</h3>
               <MahzorFinalCandidatesPreferencesSortingTable />
+            </CardBody>
+          </Card>
+
+          <Card style={{ marginTop: '30px' }}>
+            <CardBody>
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שלא מילאו העדפה</h3>
+              <MahzorCandidatesWithoutFinalPreferencesSortingTable />
             </CardBody>
           </Card>
 
