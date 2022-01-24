@@ -51,6 +51,7 @@ const mahzorioshRoutes = require("./routes/general/mahzoriosh");
 const unitRoutes = require("./routes/general/unit");
 const unitpreferenceRoutes = require("./routes/general/unitpreference");
 const unitpreferencerankingRoutes = require("./routes/general/unitpreferenceranking");
+const yearlyuserassesmentRoutes = require("./routes/general/yearlyuserassesment");
 
 app.use('/api',candidateRoutes)
 app.use('/api',candidateineshkolRoutes)
@@ -67,6 +68,7 @@ app.use('/api',mahzorioshRoutes)
 app.use('/api',unitRoutes)
 app.use('/api',unitpreferenceRoutes)
 app.use('/api',unitpreferencerankingRoutes)
+app.use('/api',yearlyuserassesmentRoutes)
 
 if(process.env.NODE_ENV === 'production'){
     //set static folder

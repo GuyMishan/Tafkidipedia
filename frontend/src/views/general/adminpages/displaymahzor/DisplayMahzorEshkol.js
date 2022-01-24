@@ -143,7 +143,7 @@ function DisplayMahzorEshkol({ match }) {
     }, [])
 
     return (
-        <Container>
+        <>
             <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת אשכולות</h3>
             <Row style={{ direction: 'rtl', textAlign: 'center' }}>
                 <Col xs={12} md={3}>
@@ -165,7 +165,7 @@ function DisplayMahzorEshkol({ match }) {
             {mahzorhaseshkols ? null
                 : <Button onClick={() => CalculateMahzorEshkol()}>חשב אשכולות</Button>}
 
-        </Container>
+        </>
     );
 }
 

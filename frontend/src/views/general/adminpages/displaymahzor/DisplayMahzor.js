@@ -58,7 +58,7 @@ function DisplayMahzor({ match }) {
   }, [])
 
   return (
-    <Container>
+    <div style={{width:'95%'}}>
       <PanelHeader size="sm" content={
         <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{(mahzordata.name)+ " - "}</h1>
@@ -81,6 +81,10 @@ function DisplayMahzor({ match }) {
                   mahzordata.status == 5 ?
                     <>
                        <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>שיבוצים סופיים</h1>
+                    </> : 
+                    mahzordata.status == 6 ?
+                    <>
+                       <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>מחזור סגור</h1>
                     </> : null}
         </Container>} />
 
@@ -118,11 +122,18 @@ function DisplayMahzor({ match }) {
       {mahzordata.status == 5 ?
         <Card style={{ marginTop: '30px' }}>
           <CardBody>
-            <DisplayMahzorFinalEshkol />
+            <DisplayMahzorFinalEshkol editable={true} mahzorid={match.params.mahzorid}/>
           </CardBody>
         </Card> : null}
 
-      {mahzordata.status == 4 || mahzordata.status == 5 ?
+        {mahzordata.status == 6 ?
+        <Card style={{ marginTop: '30px' }}>
+          <CardBody>
+            <DisplayMahzorFinalEshkol editable={false} mahzorid={match.params.mahzorid}/>
+          </CardBody>
+        </Card> : null}
+
+      {mahzordata.status == 4 || mahzordata.status == 5 || mahzordata.status == 6 ?
         <>
           <Card style={{ marginTop: '30px' }}>
             <CardBody>
@@ -147,7 +158,7 @@ function DisplayMahzor({ match }) {
         </> : null}
 
       <Link to={`/mahzorform/${mahzordata._id}`}><Button>ערוך מחזור</Button></Link>
-    </Container>
+    </div>
   );
 }
 

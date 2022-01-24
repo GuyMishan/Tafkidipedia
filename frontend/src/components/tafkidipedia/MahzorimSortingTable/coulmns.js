@@ -25,4 +25,9 @@ export const COLUMNS = [
         accessor: 'year',
         Filter: ColumnFilter
     },
+    {
+        Header: 'סטטוס מחזור',
+        accessor: 'status',
+        Filter: ColumnFilter
+    },
 ]

@@ -12128,7 +12128,7 @@ hr {
   background: #141E30;
   /* fallback for old browsers */
   background: -webkit-gradient(linear, left top, right top, from(#0c2646), color-stop(60%, #204065), to(#2a5788));
-  background: linear-gradient( #2ee544 0%, #4fff64 100%);
+  background: linear-gradient( #2eb2e5 0%, #5a4fff 100%);
   position: relative;
   overflow: hidden; }
   .panel-header .header .title {

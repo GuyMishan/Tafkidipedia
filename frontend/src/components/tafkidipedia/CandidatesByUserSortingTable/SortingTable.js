@@ -91,15 +91,23 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt")) {
+                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "mahzor.status")) {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
-                          if (cell.column.id == "createdAt") {
-                            return <td>{cell.value.slice(0, 10)}</td>
-                          }
-                          if (cell.column.id == "updatedAt") {
-                            return <td>{cell.value.slice(0, 10)}</td>
+                          if (cell.column.id == "mahzor.status") {
+                            if(cell.value==1)
+                            return <td>התחלת מחזור חדש</td>
+                            if(cell.value==2)
+                            return <td>התחלת סבב העדפות ראשון</td>
+                            if(cell.value==3)
+                            return <td>סיום סבב העדפות ראשון</td>
+                            if(cell.value==4)
+                            return <td>התחלת סבב העדפות שני (לאחר ראיונות)</td>
+                            if(cell.value==5)
+                            return <td>שיבוצים סופיים</td>
+                            if(cell.value==6)
+                            return <td>מחזור סגור</td>
                           }
                         }
                       })

@@ -19,7 +19,7 @@ import {
 import axios from 'axios';
 import SortingTable from 'components/tafkidipedia/FinalEshkolByMahzorSortingTable/SortingTable';
 
-function DisplayMahzorFinalEshkol({ match }) {
+function DisplayMahzorFinalEshkol(props) {
     const [count, setCount] = useState(0); //to refresh table...
 
     const [mahzorhaseshkols, setMahzorhaseshkols] = useState(false);
@@ -29,7 +29,7 @@ function DisplayMahzorFinalEshkol({ match }) {
     }
 
     const getMahzorEshkol = async () => {
-        let response = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${match.params.mahzorid}`)
+        let response = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${props.mahzorid}`)
         let tempeshkolbymahzorid = response.data;
         if (tempeshkolbymahzorid.length > 0)
             setMahzorhaseshkols(true)
@@ -40,19 +40,19 @@ function DisplayMahzorFinalEshkol({ match }) {
 
     async function CalculateMahzorFinalEshkol() {
         // //delete all eshkols of certain mahzor
-        // let response1 = await axios.delete(`http://localhost:8000/api/finaleshkol/deletemahzorfinaleshkol/${match.params.mahzorid}`)
+        // let response1 = await axios.delete(`http://localhost:8000/api/finaleshkol/deletemahzorfinaleshkol/${props.mahzorid}`)
         // let tempdata = response1.data;
         // // console.log(tempdata)
 
         let tempmahzoreshkol = [];// final result
 
         //get all jobs of mahzor
-        let response2 = await axios.get(`http://localhost:8000/api/jobsbymahzorid/${match.params.mahzorid}`)
+        let response2 = await axios.get(`http://localhost:8000/api/jobsbymahzorid/${props.mahzorid}`)
         let tempmahzorjobs = response2.data;
         console.log(tempmahzorjobs)
 
         //get all candidatepreferences of mahzor
-        let response3 = await axios.get(`http://localhost:8000/api/finalcandidatepreferencebymahzorid/${match.params.mahzorid}`)
+        let response3 = await axios.get(`http://localhost:8000/api/finalcandidatepreferencebymahzorid/${props.mahzorid}`)
         let tempcandidatespreferencesdata = response3.data;
         for (let i = 0; i < tempcandidatespreferencesdata.length; i++) {
             for (let j = 0; j < tempcandidatespreferencesdata[i].certjobpreferences.length; j++) {
@@ -71,13 +71,13 @@ function DisplayMahzorFinalEshkol({ match }) {
         console.log(tempcandidatespreferencesdata)
 
         //get all unitpreferences of mahzor
-        let response4 = await axios.get(`http://localhost:8000/api/finalunitpreferencebymahzorid/${match.params.mahzorid}`)
+        let response4 = await axios.get(`http://localhost:8000/api/finalunitpreferencebymahzorid/${props.mahzorid}`)
         let tempunitspreferences = response4.data;
         console.log(tempunitspreferences)
 
         //init eshkols
         for (let i = 0; i < tempmahzorjobs.length; i++) {
-            tempmahzoreshkol[i] = ({ mahzor: match.params.mahzorid, job: tempmahzorjobs[i]._id, finalconfirmation: false, candidatesineshkol: [] })
+            tempmahzoreshkol[i] = ({ mahzor: props.mahzorid, job: tempmahzorjobs[i]._id, finalconfirmation: false, candidatesineshkol: [] })
         }
 
         for (let i = 0; i < tempmahzoreshkol.length; i++) {
@@ -143,7 +143,7 @@ function DisplayMahzorFinalEshkol({ match }) {
     }, [])
 
     return (
-        <Container>
+        <>
             <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת אשכולות</h3>
             <Row style={{ direction: 'rtl', textAlign: 'center' }}>
                 <Col xs={12} md={3}>
@@ -160,11 +160,11 @@ function DisplayMahzorFinalEshkol({ match }) {
                 </Col>
             </Row>
 
-            <SortingTable mahzorid={match.params.mahzorid} refresh={count} />
+            <SortingTable mahzorid={props.mahzorid} refresh={count} editable={props.editable}/>
 
             {mahzorhaseshkols ? null
                 : <Button onClick={() => CalculateMahzorFinalEshkol()}>חשב אשכולות</Button>}
-        </Container>
+        </>
     );
 }
 

@@ -193,7 +193,7 @@ const EditEshkolForm = ({ match }) => {
         tempeshkol.finalcandidate=tempeshkol.finalcandidate._id
       }
       else{
-        delete tempeshkol.finalcandidate;
+        // delete tempeshkol.finalcandidate;
       }
       let response1 = await axios.put(`http://localhost:8000/api/finaleshkol/${match.params.eshkolid}`, tempeshkol)
     }
@@ -308,7 +308,7 @@ const EditEshkolForm = ({ match }) => {
                   <>
                     <Row style={{ paddingTop: '20px' }}>
                       <Col xs={12} md={12}>
-                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>בחר מועמד סופי</div>
+                        <div style={{ textAlign: 'center', paddingTop: '10px' }}>בחר שיבוץ סופי</div>
                         <FormGroup dir="rtl" >
                           <Input type="select" onChange={handleChangeFinalCandidateInEshkol}>
                             <option value={"בחר מועמד"}>בחר מועמד</option>
@@ -327,7 +327,7 @@ const EditEshkolForm = ({ match }) => {
                           <h5 style={{ textAlign: "right", margin: '0px' }}>{eshkoldata.finalcandidate.user.name} {eshkoldata.finalcandidate.user.lastname}</h5>
                         </Col>
                         <Col xs={12} md={6} style={{ alignSelf: 'center' }}>
-                          <Button className="btn btn-danger" onClick={(e) => DeleteFinalCandidateFromEshkol(e)} style={{ padding: '11px 20px 11px 20px' }} disabled>X</Button>
+                          <Button className="btn btn-danger" onClick={(e) => DeleteFinalCandidateFromEshkol(e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
                         </Col>
                       </Row>
                     </div>:null}

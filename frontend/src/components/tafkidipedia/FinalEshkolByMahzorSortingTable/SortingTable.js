@@ -73,8 +73,8 @@ const SortingTable = (props) => {
             <tr>
               <th colSpan="1">תפקיד</th>
               <th colSpan="1">ודאי/לא ודאי</th>
-              <th colSpan="1">ערוך</th>
-              <th colSpan="1">מועמד סופי</th>
+              {props.editable?<th colSpan="1">ערוך</th>:null}
+              <th colSpan="1">שיבוץ סופי</th>
               <th colSpan="100%">מועמדים</th>
             </tr>
           </thead>
@@ -93,6 +93,7 @@ const SortingTable = (props) => {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
                         }
                         if (cell.column.id == "_id") {
+                          if(props.editable)
                           return <td><Link to={`/editeshkol/${false}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
                         }
                         if (cell.column.id == "finalcandidate") {

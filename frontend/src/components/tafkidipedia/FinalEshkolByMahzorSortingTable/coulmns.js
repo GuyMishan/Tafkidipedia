@@ -16,7 +16,7 @@ export const COLUMNS = [
         Filter: ColumnFilter
     },
     {
-        Header: 'מועמד סופי',
+        Header: 'שיבוץ סופי',
         accessor: 'finalcandidate',
         Filter: ColumnFilter
     },

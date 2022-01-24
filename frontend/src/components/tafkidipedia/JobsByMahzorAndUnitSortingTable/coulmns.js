@@ -1,13 +1,23 @@
 import { ColumnFilter } from './ColumnFilter'
 export const COLUMNS = [
     {
-        Header: 'סוג תפקיד',
+        Header: 'תפקיד',
         accessor: 'jobtype.jobname',
         Filter: ColumnFilter
     },
     {
         Header: 'יחידה',
         accessor: 'unit.name',
+        Filter: ColumnFilter
+    },
+    {
+        Header: 'מגזר',
+        accessor: 'migzar',
+        Filter: ColumnFilter
+    },
+    {
+        Header: 'אופי התפקיד',
+        accessor: 'character',
         Filter: ColumnFilter
     },
     {
