@@ -67,7 +67,7 @@ const MahzorDataComponent = (props) => {
                                 <Input type="text" name="name" value={props.mahzordata.name} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
                             </FormGroup>
                         </Col>
-                        <Col xs={12} md={4}>
+                        {/* <Col xs={12} md={4}>
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>תאריך התחלה</div>
                             <FormGroup dir="rtl" >
                                 <Input type="date" name="startdate" value={props.mahzordata.startdate} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
@@ -77,6 +77,12 @@ const MahzorDataComponent = (props) => {
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>תאריך סיום</div>
                             <FormGroup dir="rtl" >
                                 <Input type="date" name="enddate" value={props.mahzordata.enddate} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
+                            </FormGroup>
+                        </Col> */}
+                        <Col xs={12} md={4}>
+                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>שנת איוש</div>
+                            <FormGroup dir="rtl" >
+                                <Input type="number" name="year" value={props.mahzordata.year} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
                             </FormGroup>
                         </Col>
                     </Row>

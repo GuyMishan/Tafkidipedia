@@ -185,8 +185,8 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
       .then(response => {
         let tempmahzor = response.data;
-        tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
-        tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
+        // tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
+        // tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
         setOldmahzorData(tempmahzor);
         setMahzorData(tempmahzor);
         loadcandidates(tempmahzor);
@@ -292,7 +292,7 @@ const MahzorForm = ({ match }) => { //onsubmit moves to different page!!!!!!! (d
     let flag = true;
     let error = "";
 
-    if (((mahzordata.name == undefined) || (mahzordata.name == "")) || ((mahzordata.startdate == undefined) || (mahzordata.startdate == "")) || ((mahzordata.enddate == undefined) || (mahzordata.enddate == "")) || ((mahzordata.mahzoriosh == undefined) || (mahzordata.mahzoriosh == "")) || ((mahzordata.status == undefined) || (mahzordata.status == "")) || ((mahzordata.numberofjobpicks == undefined) || (mahzordata.numberofjobpicks == ""))) {
+    if (((mahzordata.name == undefined) || (mahzordata.name == "")) || ((mahzordata.year == undefined) || (mahzordata.year == "")) /*|| ((mahzordata.startdate == undefined) || (mahzordata.startdate == "")) || ((mahzordata.enddate == undefined) || (mahzordata.enddate == "")) */|| ((mahzordata.mahzoriosh == undefined) || (mahzordata.mahzoriosh == "")) || ((mahzordata.status == undefined) || (mahzordata.status == "")) || ((mahzordata.numberofjobpicks == undefined) || (mahzordata.numberofjobpicks == ""))) {
       error += "פרטים כלליים שגויים"
       flag = false;
     }

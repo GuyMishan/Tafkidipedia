@@ -5,14 +5,24 @@ export const COLUMNS = [
         accessor: 'name',
         Filter: ColumnFilter
     },
+    // {
+    //     Header: 'תאריך התחלה',
+    //     accessor: 'startdate',
+    //     Filter: ColumnFilter
+    // },
+    // {
+    //     Header: 'תאריך סיום',
+    //     accessor: 'enddate',
+    //     Filter: ColumnFilter
+    // },
     {
-        Header: 'תאריך התחלה',
-        accessor: 'startdate',
+        Header: 'סוג מחזור',
+        accessor: 'mahzoriosh',
         Filter: ColumnFilter
     },
     {
-        Header: 'תאריך סיום',
-        accessor: 'enddate',
+        Header: 'שנת איוש',
+        accessor: 'year',
         Filter: ColumnFilter
     },
 ]

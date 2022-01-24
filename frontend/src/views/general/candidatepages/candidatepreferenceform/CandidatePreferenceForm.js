@@ -69,8 +69,8 @@ const CandidatePreferenceForm = ({ match }) => {
     await axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
       .then(response => {
         let tempmahzor = response.data;
-        tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
-        tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
+        // tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
+        // tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
         setMahzorData(tempmahzor);
       })
       .catch((error) => {

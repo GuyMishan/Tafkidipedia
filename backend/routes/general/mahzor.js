@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { create, find, update, remove, findById} = require('../../controllers/general/mahzor');
+const { create, find, update, remove, findById,smartmahzors} = require('../../controllers/general/mahzor');
 
 // find spec 
 router.get('/mahzor/:id', findById)
@@ -13,5 +13,7 @@ router.post('/mahzor',create); /**/
 router.put('/mahzor/:mahzorId', update)
 //delete 
 router.delete('/mahzor/:id', remove )
+
+router.get('/smartmahzors', smartmahzors)
 
 module.exports = router;

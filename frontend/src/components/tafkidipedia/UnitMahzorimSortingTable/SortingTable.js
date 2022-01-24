@@ -19,7 +19,7 @@ const SortingTable = ({ match }) => {
 
   const getMahzors = async () => {
     try {
-      await axios.get(`http://localhost:8000/api/mahzor`)
+      await axios.get(`http://localhost:8000/api/smartmahzors`)
         .then(response => {
           setData(response.data)
         })
@@ -89,15 +89,21 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt")) {
+                        if ((cell.column.id != "year") && (cell.column.id != "mahzoriosh")) {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
-                          if (cell.column.id == "createdAt") {
-                            return <td>{cell.value.slice(0, 10)}</td>
+                          // if (cell.column.id == "startdate") {
+                          //   return <td>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td>
+                          // }
+                          // if (cell.column.id == "enddate") {
+                          //   return <td>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td>
+                          // }
+                          if (cell.column.id == "year") {
+                            return <td>{cell.value}</td>
                           }
-                          if (cell.column.id == "updatedAt") {
-                            return <td>{cell.value.slice(0, 10)}</td>
+                          if (cell.column.id == "mahzoriosh") {
+                            return <td>{cell.value.name}</td>
                           }
                         }
                       })

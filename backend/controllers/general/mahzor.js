@@ -1,5 +1,19 @@
 const Mahzor = require("../../models/general/mahzor");
 
+let readtipul = [
+  {
+    $lookup: {
+      from: "mahzorioshes",
+      localField: "mahzoriosh",
+      foreignField: "_id",
+      as: "mahzoriosh"
+    }
+  },
+  {
+    $unwind: "$mahzoriosh"
+  },
+];
+
 exports.findById = async(req, res) => {
   const mahzor = await Mahzor.findOne().where({_id:req.params.id})
   
@@ -39,3 +53,16 @@ exports.remove = (req, res) => {
     .then((mahzor) => res.json(mahzor))
     .catch((err) => res.status(400).json("Error: " + err));
 };
+
+exports.smartmahzors = async (req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  Mahzor.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+}
