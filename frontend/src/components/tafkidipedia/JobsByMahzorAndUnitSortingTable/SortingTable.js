@@ -89,7 +89,7 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id != "certain") {
+                        if ((cell.column.id != "certain") && (cell.column.id != "_id")) {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
@@ -99,6 +99,9 @@ const SortingTable = ({ match }) => {
                             else
                               return <td>לא ודאי</td>
                           }
+                        }
+                        if (cell.column.id == "_id") {
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value}`}> {row.original.jobtype.jobname}</Link></td>
                         }
                       })
                     }
