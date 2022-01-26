@@ -31,7 +31,7 @@ import EditEshkolForm from "views/general/adminpages/EditEshkol/EditEshkolForm";
 
 import ProfilePage from "views/general/generalpages/profilepage/ProfilePage";
 
-// import Exceluploadusers from "views/general/excelpages/ExcelUploadUsers"
+import Exceluploadusers from "views/general/excelpages/ExcelUploadUsers"
 
 const routesgeneral =
     (
@@ -77,7 +77,7 @@ const routesgeneral =
             {/*////////////////////////////////////////Candidate User//////////////////////////////////////////////////*/}
 
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
-            {/* <Route path="/exceluploadusers" exact component={Exceluploadusers} /> */}
+            <Route path="/exceluploadusers" exact component={Exceluploadusers} />
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
         </>
     )

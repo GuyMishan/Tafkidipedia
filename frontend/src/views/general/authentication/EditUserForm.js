@@ -34,6 +34,10 @@ const EditUserForm = ({ match }) => {
     password: "",
     role: "",
     unitid: "",
+    migzar: "",
+    gender: "",
+    cellphone: "",
+    rank: "",
     error: false,
     successmsg: false,
     loading: false,
@@ -128,6 +132,10 @@ const EditUserForm = ({ match }) => {
       unitid: data.unitid,
       role: data.role,
       validated: data.validated,
+      migzar: data.migzar,
+      gender: data.gender,
+      cellphone: data.cellphone,
+      rank: data.rank,
     };
 
     axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
@@ -194,6 +202,26 @@ const EditUserForm = ({ match }) => {
                                         <FormGroup>
                                             <Input placeholder="סיסמא (אופציונלי)" type="password" name="password" value={data.password} onChange={handleChange} />
                                         </FormGroup>*/}
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מגזר</div>
+                    <FormGroup >
+                      <Input placeholder="מגזר" type="string" name="migzar" value={data.migzar} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מין</div>
+                    <FormGroup >
+                      <Input placeholder="מין" type="string" name="gender" value={data.gender} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון</div>
+                    <FormGroup >
+                      <Input placeholder="פלאפון" type="string" name="cellphone" value={data.cellphone} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגה</div>
+                    <FormGroup >
+                      <Input placeholder="דרגה" type="string" name="rank" value={data.rank} onChange={handleChange} />
+                    </FormGroup>
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>הרשאה</div>
                     <FormGroup dir="rtl" >

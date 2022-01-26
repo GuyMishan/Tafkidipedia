@@ -28,6 +28,10 @@ export default function SignUpForm() {
     password: "",
     role: "",
     unitid: "",
+    migzar: "",
+    gender: "",
+    cellphone: "",
+    rank: "",
     error: false,
     successmsg: false,
     loading: false,
@@ -122,6 +126,10 @@ export default function SignUpForm() {
       personalnumber: data.personalnumber,
       unitid: data.unitid,
       role: data.role,
+      migzar: data.migzar,
+      gender: data.gender,
+      cellphone: data.cellphone,
+      rank: data.rank,
     };
     axios
       .post(`http://localhost:8000/api/signup`, user)
@@ -221,6 +229,26 @@ export default function SignUpForm() {
                       onChange={handleChange}
                     />
                   </FormGroup>
+
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מגזר</div>
+                    <FormGroup >
+                      <Input placeholder="מגזר" type="string" name="migzar" value={data.migzar} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מין</div>
+                    <FormGroup >
+                      <Input placeholder="מין" type="string" name="gender" value={data.gender} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון</div>
+                    <FormGroup >
+                      <Input placeholder="פלאפון" type="string" name="cellphone" value={data.cellphone} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגה</div>
+                    <FormGroup >
+                      <Input placeholder="דרגה" type="string" name="rank" value={data.rank} onChange={handleChange} />
+                    </FormGroup>
 
                   <FormGroup dir="rtl">
                     <Input

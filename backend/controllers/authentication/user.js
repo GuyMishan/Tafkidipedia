@@ -23,27 +23,9 @@ exports.find = (req, res) => {
 }
 exports.update = async(req, res) => {
     
-    const user = await User.findByIdAndUpdate(
-        req.params.id,
-        {
-            name: req.body.name,
-            lastname:  req.body.lastname,
-            personalnumber:  req.body.personalnumber,
-            password:  req.body.password,
-            validated:  req.body.validated,
-            gdodid:  req.body.gdodid,
-            hativaid:  req.body.hativaid,
-            ogdaid:  req.body.ogdaid,
-            pikodid:  req.body.pikodid,
-            zminot: req.body.zminot,
-            adam: req.body.adam,
-            workplan: req.body.workplan,
-            kshirot: req.body.kshirot
-        },
-        {new: true}
-        )
+    const user = await User.findByIdAndUpdate(req.params.id,req.body,{new: true})
         if(!user) {
-            res.status(404).send({message:'גדוד הביצוע לא יכולה להיווצר'})
+            res.status(404).send({message:'שגיאה בעדכון'})
         } 
         res.status(200).send(user)
     
