@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination } from "react-table";
 import { withRouter, Redirect, Link } from "react-router-dom";
 import { COLUMNS } from "./coulmns";
@@ -8,7 +8,10 @@ import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
 const SortingTable = (props) => {
+
   const columns = useMemo(() => COLUMNS, []);
 
   const [data, setData] = useState([])
@@ -66,14 +69,23 @@ const SortingTable = (props) => {
 
   return (
     <>
+      <div style={{float:'right'}}>
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="btn-green"
+          table="table-to-xls"
+          filename="קובץ - אשכולות"
+          sheet="קובץ - אשכולות"
+          buttonText="הורד כקובץ אקסל" />
+      </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()}>
+        <table {...getTableProps()} id="table-to-xls">
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               <th colSpan="1">תפקיד</th>
               <th colSpan="1">ודאי/לא ודאי</th>
-              {props.editable?<th colSpan="1">ערוך</th>:null}
+              {props.editable ? <th colSpan="1">ערוך</th> : null}
               <th colSpan="1">שיבוץ סופי</th>
               <th colSpan="100%">מועמדים</th>
             </tr>
@@ -93,14 +105,14 @@ const SortingTable = (props) => {
                           return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
                         }
                         if (cell.column.id == "_id") {
-                          if(props.editable)
-                          return <td><Link to={`/editeshkol/${false}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
+                          if (props.editable)
+                            return <td><Link to={`/editeshkol/${false}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
                         }
                         if (cell.column.id == "finalcandidate") {
                           if (cell.value) {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value.user._id}`}>{cell.value.user.name} {cell.value.user.lastname}</Link></td>
+                            return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value.user._id}`}>{cell.value.user.name} {cell.value.user.lastname}</Link></td>
                           }
-                          else{
+                          else {
                             return <td>-</td>
                           }
                         }

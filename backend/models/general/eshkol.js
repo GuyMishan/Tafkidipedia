@@ -4,7 +4,7 @@ const {ObjectId} = mongoose.Schema
 
 const eshkolSchema = new mongoose.Schema({
     mahzor:{type:ObjectId,ref:'Mahzor'},
-    job:{type:ObjectId,ref:'Job'},
+    jobinmahzor:{type:ObjectId,ref:'Jobinmahzor'},
     candidatesineshkol:[{type:ObjectId,ref:'Candidateineshkol'}],
     finalconfirmation:{type:Boolean},
 });

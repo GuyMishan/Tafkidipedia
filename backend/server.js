@@ -45,14 +45,13 @@ const eshkolRoutes = require("./routes/general/eshkol");
 const finalcandidatepreferenceRoutes = require("./routes/general/finalcandidatepreference");
 const finaleshkolRoutes = require("./routes/general/finaleshkol");
 const finalunitpreferenceRoutes = require("./routes/general/finalunitpreference");
+const jobinmahzorRoutes = require("./routes/general/jobinmahzor");
 const jobRoutes = require("./routes/general/job");
-const jobtypeRoutes = require("./routes/general/jobtype");
 const mahzorRoutes = require("./routes/general/mahzor");
 const mahzorioshRoutes = require("./routes/general/mahzoriosh");
 const unitRoutes = require("./routes/general/unit");
 const unitpreferenceRoutes = require("./routes/general/unitpreference");
 const unitpreferencerankingRoutes = require("./routes/general/unitpreferenceranking");
-const yearlyuserassesmentRoutes = require("./routes/general/yearlyuserassesment");
 
 app.use('/api',candidateRoutes)
 app.use('/api',candidateineshkolRoutes)
@@ -62,14 +61,13 @@ app.use('/api',eshkolRoutes)
 app.use('/api',finalcandidatepreferenceRoutes)
 app.use('/api',finaleshkolRoutes)
 app.use('/api',finalunitpreferenceRoutes)
+app.use('/api',jobinmahzorRoutes)
 app.use('/api',jobRoutes)
-app.use('/api',jobtypeRoutes)
 app.use('/api',mahzorRoutes)
 app.use('/api',mahzorioshRoutes)
 app.use('/api',unitRoutes)
 app.use('/api',unitpreferenceRoutes)
 app.use('/api',unitpreferencerankingRoutes)
-app.use('/api',yearlyuserassesmentRoutes)
 
 if(process.env.NODE_ENV === 'production'){
     //set static folder

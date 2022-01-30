@@ -9,6 +9,8 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 import people from "assets/img/people.png";
 
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
@@ -62,9 +64,18 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <div style={{ float: 'right' }}>
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="btn-green"
+          table="table-to-xls"
+          filename="קובץ - התמודדויות"
+          sheet="קובץ - התמודדויות"
+          buttonText="הורד כקובץ אקסל" />
+      </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()}>
+        <table {...getTableProps()} id="table-to-xls">
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -96,18 +107,18 @@ const SortingTable = ({ match }) => {
                         }
                         else {
                           if (cell.column.id == "mahzor.status") {
-                            if(cell.value==1)
-                            return <td>התחלת מחזור חדש</td>
-                            if(cell.value==2)
-                            return <td>התחלת סבב העדפות ראשון</td>
-                            if(cell.value==3)
-                            return <td>סיום סבב העדפות ראשון</td>
-                            if(cell.value==4)
-                            return <td>התחלת סבב העדפות שני (לאחר ראיונות)</td>
-                            if(cell.value==5)
-                            return <td>שיבוצים סופיים</td>
-                            if(cell.value==6)
-                            return <td>מחזור סגור</td>
+                            if (cell.value == 1)
+                              return <td>התחלת מחזור חדש</td>
+                            if (cell.value == 2)
+                              return <td>התחלת סבב העדפות ראשון</td>
+                            if (cell.value == 3)
+                              return <td>סיום סבב העדפות ראשון</td>
+                            if (cell.value == 4)
+                              return <td>התחלת סבב העדפות שני (לאחר ראיונות)</td>
+                            if (cell.value == 5)
+                              return <td>שיבוצים סופיים</td>
+                            if (cell.value == 6)
+                              return <td>מחזור סגור</td>
                           }
                         }
                       })
@@ -119,7 +130,7 @@ const SortingTable = ({ match }) => {
                           className="btn btn-success"
                           style={{ padding: "0.5rem" }}
                         >
-                         לצפייה בתפקידים
+                          לצפייה בתפקידים
                         </button>
                       </Link>
                     </td>

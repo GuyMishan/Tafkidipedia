@@ -8,6 +8,8 @@ import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
@@ -35,9 +37,8 @@ const SortingTable = ({ match }) => {
     //takes the original candidates array and saves only those without a preference
     for (let k = 0; k < tempallcandidates.length; k++) {
       for (let l = 0; l < tempcandidateswithpreference.length; l++)
-        if (tempallcandidates[k]._id == tempcandidateswithpreference[l]._id)
-        {
-          tempallcandidates.splice(k,1);
+        if (tempallcandidates[k]._id == tempcandidateswithpreference[l]._id) {
+          tempallcandidates.splice(k, 1);
         }
     }
 
@@ -73,9 +74,18 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <div style={{ float: 'right' }}>
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="btn-green"
+          table="table-to-xls"
+          filename="קובץ - מועמדים"
+          sheet="קובץ - מועמדים"
+          buttonText="הורד כקובץ אקסל" />
+      </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()}>
+        <table {...getTableProps()} id="table-to-xls">
           {data[0] ?
             <thead style={{ backgroundColor: '#4fff64' }}>
               <tr>
@@ -92,7 +102,7 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "user.name") {
-                          return <td style={{backgroundColor:'#FFCCCC'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
+                          return <td style={{ backgroundColor: '#FFCCCC' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
                         }
                       })
                     }

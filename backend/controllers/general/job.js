@@ -4,28 +4,6 @@ const mongoose = require('mongoose');
 let readtipul = [
   {
     $lookup: {
-      from: "jobtypes",
-      localField: "jobtype",
-      foreignField: "_id",
-      as: "jobtype"
-    }
-  },
-  {
-    $unwind: "$jobtype"
-  },
-  {
-    $lookup: {
-      from: "mahzors",
-      localField: "mahzor",
-      foreignField: "_id",
-      as: "mahzor"
-    }
-  },
-  {
-    $unwind: "$mahzor"
-  },
-  {
-    $lookup: {
       from: "units",
       localField: "unit",
       foreignField: "_id",
@@ -78,38 +56,6 @@ exports.remove = (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
-exports.jobbyid = async(req, res) => {
-  let tipulfindquerry = readtipul.slice();
-  let finalquerry = tipulfindquerry;
-
-  let andquery = [];
-
-  //jobid
-  if (req.params.jobid != 'undefined') {
-    andquery.push({ "_id": mongoose.Types.ObjectId(req.params.jobid) });
-  }
-
-  if (andquery.length != 0) {
-    let matchquerry = {
-      "$match": {
-        "$and": andquery
-      }
-    };
-    finalquerry.push(matchquerry)
-  }
-
-  // console.log(matchquerry)
-  //console.log(andquery)
-
-  Job.aggregate(finalquerry)
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((error) => {
-      res.status(400).json('Error: ' + error);
-    });
- }
-
 exports.jobsbymahzorid = async(req, res) => {
   let tipulfindquerry = readtipul.slice();
   let finalquerry = tipulfindquerry;
@@ -119,42 +65,6 @@ exports.jobsbymahzorid = async(req, res) => {
   //mahzorid
   if (req.params.mahzorid != 'undefined') {
     andquery.push({ "mahzor._id": mongoose.Types.ObjectId(req.params.mahzorid) });
-  }
-
-  if (andquery.length != 0) {
-    let matchquerry = {
-      "$match": {
-        "$and": andquery
-      }
-    };
-    finalquerry.push(matchquerry)
-  }
-
-  // console.log(matchquerry)
-  //console.log(andquery)
-
-  Job.aggregate(finalquerry)
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((error) => {
-      res.status(400).json('Error: ' + error);
-    });
- }
-
- exports.jobsbymahzoridandunitid = async(req, res) => {
-  let tipulfindquerry = readtipul.slice();
-  let finalquerry = tipulfindquerry;
-
-  let andquery = [];
-
-  //mahzorid
-  if (req.params.mahzorid != 'undefined') {
-    andquery.push({ "mahzor._id": mongoose.Types.ObjectId(req.params.mahzorid) });
-  }
-
-  if (req.params.unitid != 'undefined') {
-    andquery.push({ "unit._id": mongoose.Types.ObjectId(req.params.unitid) });
   }
 
   if (andquery.length != 0) {

@@ -57,7 +57,7 @@ function ExcelUploadUsers() {
     fileInput.current.click();
   }
 
-  async function CalculateMahzorEshkol() {
+  async function SubmitUsers() {
     //if table isnt empty..
     if (state.rows != null) {
       let tableheaders = state.rows[0];
@@ -136,7 +136,7 @@ function ExcelUploadUsers() {
             </Card>
           </div>}
 
-        <Button onClick={() => CalculateMahzorEshkol()}>חשב אשכולות</Button>
+        <Button onClick={() => SubmitUsers()}>הכנס משתמשים למסד הנתונים</Button>
       </Container>
     </div>
   );

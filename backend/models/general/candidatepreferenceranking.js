@@ -3,7 +3,7 @@ const {ObjectId} = mongoose.Schema
 
 
 const candidatepreferenceranking = new mongoose.Schema({
-    job:{type:ObjectId,ref:'Job'},
+    jobinmahzor:{type:ObjectId,ref:'Jobinmahzor'},
     rank:{type:Number},
 });
 

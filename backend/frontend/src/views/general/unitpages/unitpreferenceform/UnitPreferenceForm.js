@@ -305,6 +305,9 @@ const UnitPreferenceForm = ({ match }) => {
                           <option value={"1"}>1</option>
                           <option value={"2"}>2</option>
                           <option value={"3"}>3</option>
+                          <option value={"4"}>4</option>
+                          <option value={"5"}>5</option>
+                          <option value={"6"}>6</option>
                         </Input>
                       </Col>
                       <Col xs={12} md={3} style={{ alignSelf: 'center' }}>

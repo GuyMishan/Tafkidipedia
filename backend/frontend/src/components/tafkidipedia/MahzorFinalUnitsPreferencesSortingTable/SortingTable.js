@@ -8,6 +8,8 @@ import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
@@ -70,9 +72,18 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <div style={{ float: 'right' }}>
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="btn-green"
+          table="table-to-xls"
+          filename="קובץ - העדפות"
+          sheet="קובץ - העדפות"
+          buttonText="הורד כקובץ אקסל" />
+      </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()}>
+        <table {...getTableProps()} id="table-to-xls">
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               <th colSpan="1">תפקיד</th>

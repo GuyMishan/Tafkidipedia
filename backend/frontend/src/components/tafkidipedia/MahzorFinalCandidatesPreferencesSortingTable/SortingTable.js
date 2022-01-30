@@ -8,6 +8,8 @@ import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
@@ -79,14 +81,23 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <div style={{ float: 'right' }}>
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="btn-green"
+          table="table-to-xls"
+          filename="קובץ - העדפות"
+          sheet="קובץ - העדפות"
+          buttonText="הורד כקובץ אקסל" />
+      </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()}>
+        <table {...getTableProps()} id="table-to-xls">
           {data[0] ?
             <thead style={{ backgroundColor: '#4fff64' }}>
               <tr>
-                <th colSpan="1" style={{borderLeft: "1px solid white"}}>שם מתמודד</th>
-                <th colSpan={data[0].mahzor.numberofjobpicks} style={{borderLeft: "1px solid white"}}>תפקידים ודאי</th>
+                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
+                <th colSpan={data[0].mahzor.numberofjobpicks} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
                 <th colSpan={data[0].mahzor.numberofjobpicks}>תפקידים לא ודאי</th>
               </tr>
             </thead> : null}
@@ -100,16 +111,16 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "candidate.user.name") {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
                         }
                         if (cell.column.id == "certjobpreferences") {
                           return <> {cell.value.map((jobpreference, index) => (
-                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
+                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
                           ))}</>
                         }
                         if (cell.column.id == "noncertjobpreferences") {
                           return <> {cell.value.map((jobpreference, index) => (
-                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit',fontWeight:'inherit'}} to ={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
+                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
                           ))}</>
                         }
                       })

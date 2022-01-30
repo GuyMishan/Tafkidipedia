@@ -18,7 +18,7 @@ import MahzorimPage from "views/general/adminpages/mahzorimpage/MahzorimPage";
 import UnitDashboard from "views/general/unitpages/unitdashboard/UnitDashboard";
 import CandidateDashboard from "views/general/candidatepages/candidatedashboard/CandidateDashboard";
 import CandidatePreferenceForm from "views/general/candidatepages/candidatepreferenceform/CandidatePreferenceForm";
-import MahzorForm from "views/general/adminpages/mahzorform/MahzorForm";
+import MahzorForm from "views/general/adminpages/mahzorform/MahzorForm2";
 import Usermahzorimpage from "views/general/candidatepages/usermahzorimpage/Usermahzorimpage";
 import JobsByMahzor from "views/general/JobsByMahzor";
 import JobsByMahzorAndUnit from "views/general/JobsByMahzorAndUnit";
@@ -32,6 +32,7 @@ import EditEshkolForm from "views/general/adminpages/EditEshkol/EditEshkolForm";
 import ProfilePage from "views/general/generalpages/profilepage/ProfilePage";
 
 import Exceluploadusers from "views/general/excelpages/ExcelUploadUsers"
+import Exceluploadjobs from "views/general/excelpages/ExcelUploadJobs"
 
 const routesgeneral =
     (
@@ -78,6 +79,7 @@ const routesgeneral =
 
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
             <Route path="/exceluploadusers" exact component={Exceluploadusers} />
+            <Route path="/exceluploadjobs" exact component={Exceluploadjobs} />
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
         </>
     )

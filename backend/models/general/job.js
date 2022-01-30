@@ -3,18 +3,35 @@ const {ObjectId} = mongoose.Schema
 
 
 const jobSchema = new mongoose.Schema({
-    mahzor:{type:ObjectId,ref:'Mahzor'},
-    jobtype:{type:ObjectId,ref:'JobType'},
-    unit:{type:ObjectId,ref:'Unit'},
+    jobname:{type:String},
+    jobcode:{type:Number},
+    unit:{type:ObjectId , ref:'Unit'},
     mahlaka:{type:String},
-    thom:{type:String},
-    location:{type:String},
-    peilut:{type:String},
-    damah:{type:Boolean},
-    sivug:{type:String},
-    certain:{type:Boolean},
     migzar:{type:String},
-    description:{type:String}
+    certain:{type:String},
+    commander:{type:String},
+    commander_phone:{type:String},
+    meaish:{type:String},
+    meaish_phone:{type:String},
+    rank:{type:String},
+    jobremarks:{type:String},
+    damah:{type:String},
+    pikodi_or_mikzoi:{type:String},
+    saf1:{type:String},
+    saf2:{type:String},
+    saf3:{type:String},
+    saf4:{type:String},
+    location:{type:String},
+    ptoha_or_sgora:{type:String},
+    peilut_level:{type:String},
+    description:{type:String},
+    job_contribution:{type:String},
+    thinking_ability:{type:String},
+    realtionship_ability:{type:String},
+    management_ability:{type:String},
+    leadership_ability:{type:String},
+
+    sivug:{type:String},
 });
 
 const Job = mongoose.model('Job', jobSchema);

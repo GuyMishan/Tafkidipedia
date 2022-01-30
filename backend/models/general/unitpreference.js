@@ -4,7 +4,7 @@ const {ObjectId} = mongoose.Schema
 
 const unitpreferenceSchema = new mongoose.Schema({
     mahzor:{type:ObjectId , ref:'Mahzor'},
-    job:{type:ObjectId,ref:'Job'},
+    jobinmahzor:{type:ObjectId,ref:'Jobinmahzor'},
     preferencerankings:[{type:ObjectId,ref:'Preferenceranking'}],
 });
 
