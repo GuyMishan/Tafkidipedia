@@ -86,7 +86,7 @@ const UnitPreferenceForm = ({ match }) => {
     setMahzorCandidates(tempmahzorcandidates);
 
     //jobs
-    let result2 = await axios.get(`http://localhost:8000/api/jobbyid/${match.params.jobid}`)
+    let result2 = await axios.get(`http://localhost:8000/api/jobinmahzorbyid/${match.params.jobid}`)
     let job = result2.data[0];
     setJob(job);
 
@@ -111,12 +111,12 @@ const UnitPreferenceForm = ({ match }) => {
     let tempunitpreference;
     if(mahzordata.status==2)
     {
-      let result1 = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
+      let result1 = await axios.get(`http://localhost:8000/api/unitpreferencebyjobinmahzorid/${match.params.jobid}`)
       tempunitpreference = result1.data[0];
     }
     else if(mahzordata.status==4)
     {
-      let result1 = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobid/${match.params.jobid}`)
+      let result1 = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobinmahzorid/${match.params.jobid}`)
       tempunitpreference = result1.data[0];
     }
 
@@ -129,26 +129,26 @@ const UnitPreferenceForm = ({ match }) => {
         delete tempunitpreference.preferencerankings[i]._id;
         delete tempunitpreference.preferencerankings[i].candidate.__v;
       }
-      tempunitpreference.job = match.params.jobid;
+      tempunitpreference.jobinmahzor = match.params.jobid;
       tempunitpreference.mahzor = match.params.mahzorid;
       setUnitPreference(tempunitpreference);
 
       let tempoldunitpreferencedata; //if has existing preference save the old one
       if(mahzordata.status==2)
       {
-        let oldresult = await axios.get(`http://localhost:8000/api/unitpreferencebyjobid/${match.params.jobid}`)
+        let oldresult = await axios.get(`http://localhost:8000/api/unitpreferencebyjobinmahzorid/${match.params.jobid}`)
         tempoldunitpreferencedata = oldresult.data[0];
         setOldunitPreference(tempoldunitpreferencedata)
       }
       else if(mahzordata.status==4)
       {
-        let oldresult = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobid/${match.params.jobid}`)
+        let oldresult = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobinmahzorid/${match.params.jobid}`)
         tempoldunitpreferencedata = oldresult.data[0];
         setOldunitPreference(tempoldunitpreferencedata)
       }
     }
     else { //doesnt has unitprefernce to the job
-      setUnitPreference({ preferencerankings: [], job: match.params.jobid, mahzor: match.params.mahzorid })
+      setUnitPreference({ preferencerankings: [], jobinmahzor: match.params.jobid, mahzor: match.params.mahzorid })
     }
   }
 
@@ -271,7 +271,7 @@ const UnitPreferenceForm = ({ match }) => {
       <Row>
         <Card>
           <CardHeader style={{ direction: 'rtl' }}>
-            <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס העדפות יחידה: {job.jobtype ? job.jobtype.jobname : null}</CardTitle>{/*headline*/}
+            <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס העדפות יחידה: {job.job ? job.job.jobname : null}</CardTitle>{/*headline*/}
           </CardHeader>
 
           <CardBody style={{ direction: 'rtl' }}>

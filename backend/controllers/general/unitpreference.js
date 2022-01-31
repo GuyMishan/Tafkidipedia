@@ -15,36 +15,36 @@ let readtipul = [
   },
   {
     $lookup: {
-      from: "jobs",
-      localField: "job",
+      from: "jobinmahzors",
+      localField: "jobinmahzor",
       foreignField: "_id",
-      as: "job"
+      as: "jobinmahzor"
     }
   },
   {
-    $unwind: "$job"
+    $unwind: "$jobinmahzor"
   },
   {
     $lookup: {
-      from: "jobtypes",
-      localField: "job.jobtype",
+      from: "jobs",
+      localField: "jobinmahzor.job",
       foreignField: "_id",
-      as: "job.jobtype"
+      as: "jobinmahzor.job"
     }
   },
   {
-    $unwind: "$job.jobtype"
+    $unwind: "$jobinmahzor.job"
   },
   {
     $lookup: {
       from: "units",
-      localField: "job.unit",
+      localField: "jobinmahzor.job.unit",
       foreignField: "_id",
-      as: "job.unit"
+      as: "jobinmahzor.job.unit"
     }
   },
   {
-    $unwind: "$job.unit"
+    $unwind: "$jobinmahzor.job.unit"
   },
   {
     $lookup: {
@@ -96,7 +96,7 @@ exports.remove = (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
-exports.unitpreferencebyjobid = (req, res) => {
+exports.unitpreferencebyjobinmahzorid = (req, res) => {
   let tipulfindquerry = readtipul.slice();
   let finalquerry = tipulfindquerry;
 
@@ -104,7 +104,7 @@ exports.unitpreferencebyjobid = (req, res) => {
 
   //jobid
   if (req.params.jobid != 'undefined') {
-    andquery.push({ "job._id": mongoose.Types.ObjectId(req.params.jobid) });
+    andquery.push({ "jobinmahzor._id": mongoose.Types.ObjectId(req.params.jobid) });
   }
 
   if (andquery.length != 0) {
@@ -132,19 +132,19 @@ exports.smartunitpreference = (req, res) => {
   let tipulfindquerry = readtipul.slice();
   let finalquerry = tipulfindquerry;
 
-  // let andquery = [];
+  let andquery = [];
 
-  // if (andquery.length != 0) {
-  //   let matchquerry = {
-  //     "$match": {
-  //       "$and": andquery
-  //     }
-  //   };
-  //   finalquerry.push(matchquerry)
-  // }
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
 
   // console.log(matchquerry)
-  //console.log(andquery)
+  // console.log(andquery)
 
   Unitpreference.aggregate(finalquerry)
     .then((result) => {

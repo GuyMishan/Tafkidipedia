@@ -31,7 +31,7 @@ const MahzorJobs = (props) => {
                 <Container>
                     {props.mahzordata.status == 1 ?
                         <div>
-                            {/* <form>
+                            <form>
                                 <FormGroup row>
                                     <Col xs={4} sm={8} lg={10}>
                                         <InputGroup>
@@ -49,7 +49,7 @@ const MahzorJobs = (props) => {
                                     </Col>
                                     <Label for="exampleFile" xs={6} sm={4} lg={2} size="lg">העלאת תפקידים</Label>
                                 </FormGroup>
-                            </form> */}
+                            </form>
 
                             <Row>
                                 <Col xs={12} md={12}>
@@ -58,7 +58,7 @@ const MahzorJobs = (props) => {
                                         <Input type="select" onChange={props.AddJobToJobsToAdd}>
                                             <option value={"בחר תפקיד"}>בחר תפקיד</option>
                                             {props.jobs.map((job, index) => (
-                                                <option key={index} value={index}>{job.jobname}/{job.unit}/{job.jobcode}</option>
+                                                <option key={index} value={index}>{job.jobname} / {job.unit.name} / {job.jobcode}</option>
                                             ))}
                                         </Input>
                                     </FormGroup>
@@ -77,54 +77,50 @@ const MahzorJobs = (props) => {
                                 buttonText="הורד כקובץ אקסל" />
                         </div>
                         <table>
-                        <thead>
-                            <tr>
-                                <th>סוג תפקיד</th>
-                                <th>יחידה</th>
-                                <th>מחלקה</th>
-                                <th>תחום</th>
-                                {/* <th>תיאור</th> */}
-                                <th>מיקום</th>
-                                <th>פעילות</th>
-                                <th>דמ"ח</th>
-                                <th>סיווג</th>
-                                <th>ודאי/לא ודאי</th>
-                                {/* <th>ערוך</th> */}
-                                {props.mahzordata.status == 1 ?
-                                    <th>מחק</th> : null}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {props.jobstoadd ? props.jobstoadd.map((job, index) => (
+                            <thead>
                                 <tr>
-                                    <td style={{ textAlign: "center" }}>{job.jobname}</td>
-                                    <td style={{ textAlign: "center" }}>{job.unit}</td>
-                                    <td style={{ textAlign: "center" }}>{job.mahlaka}</td>
-                                    <td style={{ textAlign: "center" }}>{job.thom}</td>
-                                    <td style={{ textAlign: "center" }}>{job.location}</td>
-                                    <td style={{ textAlign: "center" }}>{job.peilut}</td>
-                                    <td style={{ textAlign: "center" }}>{job.damah.toString() /* == true ? "אין" : "יש"*/}</td>
-                                    <td style={{ textAlign: "center" }}>{job.sivug}</td>
-                                    <td style={{ textAlign: "center" }}>{job.certain.toString() /* == true ? "לא ודאי" : "ודאי"*/}</td>
+                                    <th>סוג תפקיד</th>
+                                    <th>יחידה</th>
+                                    <th>מחלקה</th>
+                                    <th>מגזר</th>
+                                    <th>מאייש</th>
+                                    <th>מיקום</th>
+                                    <th>סיווג</th>
+                                    <th>ודאי/לא ודאי</th>
                                     {props.mahzordata.status == 1 ?
-                                        <td style={{ textAlign: "center" }}>
-                                            <button
-                                                className="btn btn-danger"
-                                                style={{ padding: "0.5rem" }}
-                                                onClick={() => props.DeleteJobFromJobsToAdd(job)}
-                                            >
-                                                <img
-                                                    src={deletepic}
-                                                    alt="bookmark"
-                                                    style={{ height: "2rem" }}
-                                                />
-                                            </button>
-                                        </td>
-                                        : null}
+                                        <th>מחק</th> : null}
                                 </tr>
-                            )) : null}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {props.jobstoadd ? props.jobstoadd.map((job, index) => (
+                                    <tr>
+                                        <td style={{ textAlign: "center" }}>{job.jobname}</td>
+                                        <td style={{ textAlign: "center" }}>{job.unit.name}</td>
+                                        <td style={{ textAlign: "center" }}>{job.mahlaka}</td>
+                                        <td style={{ textAlign: "center" }}>{job.migzar}</td>
+                                        <td style={{ textAlign: "center" }}>{job.meaish}</td>
+                                        <td style={{ textAlign: "center" }}>{job.location}</td>
+                                        <td style={{ textAlign: "center" }}>{job.sivug}</td>
+                                        <td style={{ textAlign: "center" }}>{job.certain}</td>
+                                        {props.mahzordata.status == 1 ?
+                                            <td style={{ textAlign: "center" }}>
+                                                <button
+                                                    className="btn btn-danger"
+                                                    style={{ padding: "0.5rem" }}
+                                                    onClick={() => props.DeleteJobFromJobsToAdd(job)}
+                                                >
+                                                    <img
+                                                        src={deletepic}
+                                                        alt="bookmark"
+                                                        style={{ height: "2rem" }}
+                                                    />
+                                                </button>
+                                            </td>
+                                            : null}
+                                    </tr>
+                                )) : null}
+                            </tbody>
+                        </table>
                     </Row>
                 </Container>
             </CardBody>

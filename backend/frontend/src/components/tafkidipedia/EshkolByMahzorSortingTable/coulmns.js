@@ -2,12 +2,12 @@ import { ColumnFilter } from './ColumnFilter'
 export const COLUMNS = [
     {
         Header: 'תפקיד',
-        accessor: 'job',
+        accessor: 'jobinmahzor',
         Filter: ColumnFilter
     },
     {
         Header: 'ודאי/לא ודאי',
-        accessor: 'job.certain',
+        accessor: 'jobinmahzor.job.certain',
         Filter: ColumnFilter
     },
     {

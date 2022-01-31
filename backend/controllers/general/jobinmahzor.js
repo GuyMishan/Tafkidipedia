@@ -4,17 +4,6 @@ const mongoose = require('mongoose');
 let readtipul = [
   {
     $lookup: {
-      from: "jobtypes",
-      localField: "jobtype",
-      foreignField: "_id",
-      as: "jobtype"
-    }
-  },
-  {
-    $unwind: "$jobtype"
-  },
-  {
-    $lookup: {
       from: "mahzors",
       localField: "mahzor",
       foreignField: "_id",
@@ -26,14 +15,25 @@ let readtipul = [
   },
   {
     $lookup: {
-      from: "units",
-      localField: "unit",
+      from: "jobs",
+      localField: "job",
       foreignField: "_id",
-      as: "unit"
+      as: "job"
     }
   },
   {
-    $unwind: "$unit"
+    $unwind: "$job"
+  },
+  {
+    $lookup: {
+      from: "units",
+      localField: "job.unit",
+      foreignField: "_id",
+      as: "job.unit"
+    }
+  },
+  {
+    $unwind: "$job.unit"
   },
 ];
 
@@ -154,7 +154,7 @@ exports.jobinmahzorsbymahzorid = async(req, res) => {
   }
 
   if (req.params.unitid != 'undefined') {
-    andquery.push({ "unit._id": mongoose.Types.ObjectId(req.params.unitid) });
+    andquery.push({ "job.unit._id": mongoose.Types.ObjectId(req.params.unitid) });
   }
 
   if (andquery.length != 0) {

@@ -21,7 +21,7 @@ const SortingTable = ({ match }) => {
 
   const getJobsByMahzor = async () => {
     try {
-      await axios.get(`http://localhost:8000/api/jobsbymahzorid/${match.params.mahzorid}`)
+      await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`)
         .then(response => {
           setData(response.data)
         })
@@ -100,11 +100,11 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id != "certain") {
+                        if (cell.column.id != "unit") {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
-                          if (cell.column.id == "certain") {
+                          if (cell.column.id == "unit") {
                             if (cell.value == true)
                               return <td>ודאי</td>
                             else

@@ -81,7 +81,8 @@ const MahzorCandidates2 = (props) => {
                                     <th>מספר אישי</th>
                                     <th>שם פרטי</th>
                                     <th>שם משפחה</th>
-                                    <th>מחק</th>
+                                    {props.mahzordata.status == 1 ?
+                                        <th>מחק</th> : null}
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,11 +91,12 @@ const MahzorCandidates2 = (props) => {
                                         <td style={{ textAlign: "center" }}>{user.personalnumber}</td>
                                         <td style={{ textAlign: "center" }}>{user.name}</td>
                                         <td style={{ textAlign: "center" }}>{user.lastname}</td>
-                                        <td style={{ textAlign: "center" }}>
-                                            <button className="btn btn-danger" style={{ padding: "0.5rem" }} onClick={() => props.DeleteUserFromUsersToCandidate(user)}>
-                                                <img src={deletepic} alt="bookmark" style={{ height: "2rem" }} />
-                                            </button>
-                                        </td>
+                                        {props.mahzordata.status == 1 ?
+                                            <td style={{ textAlign: "center" }}>
+                                                <button className="btn btn-danger" style={{ padding: "0.5rem" }} onClick={() => props.DeleteUserFromUsersToCandidate(user)}>
+                                                    <img src={deletepic} alt="bookmark" style={{ height: "2rem" }} />
+                                                </button>
+                                            </td> : null}
                                     </tr>
                                 )) : null}
                             </tbody>

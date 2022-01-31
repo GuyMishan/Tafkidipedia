@@ -47,7 +47,7 @@ function DisplayMahzorEshkol({ match }) {
         let tempmahzoreshkol = [];// final result
 
         //get all jobs of mahzor
-        let response2 = await axios.get(`http://localhost:8000/api/jobsbymahzorid/${match.params.mahzorid}`)
+        let response2 = await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`)
         let tempmahzorjobs = response2.data;
         console.log(tempmahzorjobs)
 
@@ -77,7 +77,7 @@ function DisplayMahzorEshkol({ match }) {
 
         //init eshkols
         for (let i = 0; i < tempmahzorjobs.length; i++) {
-            tempmahzoreshkol[i] = ({ mahzor: match.params.mahzorid, job: tempmahzorjobs[i]._id, finalconfirmation: false, candidatesineshkol: [] })
+            tempmahzoreshkol[i] = ({ mahzor: match.params.mahzorid, jobinmahzor: tempmahzorjobs[i]._id, finalconfirmation: false, candidatesineshkol: [] })
         }
 
         for (let i = 0; i < tempmahzoreshkol.length; i++) {
@@ -85,12 +85,12 @@ function DisplayMahzorEshkol({ match }) {
             //calculate eshkols candidate preferences 
             for (let j = 0; j < tempcandidatespreferencesdata.length; j++) {
                 for (let k = 0; k < tempcandidatespreferencesdata[j].certjobpreferences.length; k++) {
-                    if (tempcandidatespreferencesdata[j].certjobpreferences[k].job == tempmahzoreshkol[i].job) {
+                    if (tempcandidatespreferencesdata[j].certjobpreferences[k].jobinmahzor == tempmahzoreshkol[i].jobinmahzor) {
                         tempmahzoreshkol[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].certjobpreferences[k].rank })
                     }
                 }
                 for (let k = 0; k < tempcandidatespreferencesdata[j].noncertjobpreferences.length; k++) {
-                    if (tempcandidatespreferencesdata[j].noncertjobpreferences[k].job == tempmahzoreshkol[i].job) {
+                    if (tempcandidatespreferencesdata[j].noncertjobpreferences[k].jobinmahzor == tempmahzoreshkol[i].jobinmahzor) {
                         tempmahzoreshkol[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].noncertjobpreferences[k].rank })
                     }
                 }
@@ -98,7 +98,7 @@ function DisplayMahzorEshkol({ match }) {
 
             //calculate eshkols unit preferences 
             for (let l = 0; l < tempunitspreferences.length; l++) {
-                if (tempunitspreferences[l].job._id == tempmahzoreshkol[i].job) {
+                if (tempunitspreferences[l].jobinmahzor._id == tempmahzoreshkol[i].jobinmahzor) {
                     for (let m = 0; m < tempunitspreferences[l].preferencerankings.length; m++) {
                         let flag = false;  //flag = is candidate exists in certain eshkol 
                         for (let n = 0; n < tempmahzoreshkol[i].candidatesineshkol.length; n++) {

@@ -31,16 +31,16 @@ const SortingTable = ({ match }) => {
               tempdata[i].certjobpreferences[j] = result1.data;
               delete tempdata[i].certjobpreferences[j].__v;
               delete tempdata[i].certjobpreferences[j]._id;
-              let result2 = await axios.get(`http://localhost:8000/api/jobbyid/${tempdata[i].certjobpreferences[j].job}`);
-              tempdata[i].certjobpreferences[j].job = result2.data[0];
+              let result2 = await axios.get(`http://localhost:8000/api/jobinmahzorbyid/${tempdata[i].certjobpreferences[j].jobinmahzor}`);
+              tempdata[i].certjobpreferences[j].jobinmahzor = result2.data[0];
             }
             for (let j = 0; j < tempdata[i].noncertjobpreferences.length; j++) {
               let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempdata[i].noncertjobpreferences[j]}`);
               tempdata[i].noncertjobpreferences[j] = result1.data;
               delete tempdata[i].noncertjobpreferences[j].__v;
               delete tempdata[i].noncertjobpreferences[j]._id;
-              let result2 = await axios.get(`http://localhost:8000/api/jobbyid/${tempdata[i].noncertjobpreferences[j].job}`);
-              tempdata[i].noncertjobpreferences[j].job = result2.data[0];
+              let result2 = await axios.get(`http://localhost:8000/api/jobinmahzorbyid/${tempdata[i].noncertjobpreferences[j].jobinmahzor}`);
+              tempdata[i].noncertjobpreferences[j].jobinmahzor = result2.data[0];
             }
             tempcandidatepreferences.push(tempdata[i])
           }
@@ -115,12 +115,12 @@ const SortingTable = ({ match }) => {
                         }
                         if (cell.column.id == "certjobpreferences") {
                           return <> {cell.value.map((jobpreference, index) => (
-                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
+                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
                           ))}</>
                         }
                         if (cell.column.id == "noncertjobpreferences") {
                           return <> {cell.value.map((jobpreference, index) => (
-                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.job._id}`}> {jobpreference.job.jobtype.jobname}/{jobpreference.job.unit.name}</Link>({jobpreference.rank})</td>
+                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
                           ))}</>
                         }
                       })

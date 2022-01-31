@@ -23,36 +23,36 @@ let readtipul = [
   },
   {
     $lookup: {
-      from: "jobs",
-      localField: "job",
+      from: "jobinmahzors",
+      localField: "jobinmahzor",
       foreignField: "_id",
-      as: "job"
+      as: "jobinmahzor"
     }
   },
   {
-    $unwind: "$job"
+    $unwind: "$jobinmahzor"
   },
   {
     $lookup: {
-      from: "jobtypes",
-      localField: "job.jobtype",
+      from: "jobs",
+      localField: "jobinmahzor.job",
       foreignField: "_id",
-      as: "job.jobtype"
+      as: "jobinmahzor.job"
     }
   },
   {
-    $unwind: "$job.jobtype"
+    $unwind: "$jobinmahzor.job"
   },
   {
     $lookup: {
       from: "units",
-      localField: "job.unit",
+      localField: "jobinmahzor.job.unit",
       foreignField: "_id",
-      as: "job.unit"
+      as: "jobinmahzor.job.unit"
     }
   },
   {
-    $unwind: "$job.unit"
+    $unwind: "$jobinmahzor.job.unit"
   },
 ];
 

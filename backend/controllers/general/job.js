@@ -56,6 +56,19 @@ exports.remove = (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
+exports.smartjobs = async(req, res) => {
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  Job.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+ }
+
 exports.jobsbymahzorid = async(req, res) => {
   let tipulfindquerry = readtipul.slice();
   let finalquerry = tipulfindquerry;

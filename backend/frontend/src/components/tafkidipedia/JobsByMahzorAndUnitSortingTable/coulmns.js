@@ -2,27 +2,27 @@ import { ColumnFilter } from './ColumnFilter'
 export const COLUMNS = [
     {
         Header: 'תפקיד',
-        accessor: '_id',
+        accessor: 'job.jobname',
         Filter: ColumnFilter
     },
     {
         Header: 'יחידה',
-        accessor: 'unit.name',
+        accessor: 'job.unit.name',
         Filter: ColumnFilter
     },
     {
         Header: 'מגזר',
-        accessor: 'migzar',
+        accessor: 'job.migzar',
         Filter: ColumnFilter
     },
     {
         Header: 'אופי התפקיד',
-        accessor: 'character',
+        accessor: 'job.pikodi_or_mikzoi',
         Filter: ColumnFilter
     },
     {
         Header: 'ודאי/לא ודאי',
-        accessor: 'certain',
+        accessor: 'job.certain',
         Filter: ColumnFilter
     },
 ]

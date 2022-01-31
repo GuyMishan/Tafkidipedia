@@ -92,12 +92,11 @@ const SortingTable = (props) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id == "job") {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value._id}`}> {cell.value.jobtype.jobname}/{cell.value.unit.name}</Link></td>
-
+                        if (cell.column.id == "jobinmahzor") {
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value._id}`}> {cell.value.job.jobname}/{cell.value.job.unit.name}</Link></td>
                         }
-                        if (cell.column.id == "job.certain") {
-                          return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
+                        if (cell.column.id == "jobinmahzor.job.certain") {
+                          return <td>{cell.value}</td>
                         }
                         if (cell.column.id == "_id") {
                           return <td><Link to={`/editeshkol/${true}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>

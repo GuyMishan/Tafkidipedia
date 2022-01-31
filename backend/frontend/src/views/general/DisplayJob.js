@@ -26,10 +26,10 @@ function DisplayJob({ match }) {
   //job
 
   const loadjob = () => {
-    axios.get(`http://localhost:8000/api/jobbyid/${match.params.jobid}`)
+    axios.get(`http://localhost:8000/api/jobinmahzorbyid/${match.params.jobid}`)
       .then(response => {
         let tempjob = response.data[0];
-        setJobData(tempjob);
+        setJobData(tempjob.job);
       })
       .catch((error) => {
         console.log(error);
@@ -48,7 +48,7 @@ function DisplayJob({ match }) {
     <Container>
       <PanelHeader size="sm" content={
         <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{jobdata.jobtype ? jobdata.jobtype.jobname : null} - {jobdata.certain == true ? "ודאי" : "לא ודאי"}</h1>
+          <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{jobdata ? jobdata.jobname : null} - {jobdata.certain}</h1>
         </Container>} />
 
       <Row>
