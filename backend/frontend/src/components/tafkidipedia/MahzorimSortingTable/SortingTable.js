@@ -145,21 +145,37 @@ const SortingTable = ({ match }) => {
                         </button>
                       </Link>
                     </td>
-                    <td style={{ textAlign: "center" }}>
-                      <Link to={`/displaymahzor/${row.original._id}`}>
-                        <button
-                          className="btn btn-success"
-                          style={{ padding: "0.5rem" }}
-                        // onClick={() => props.DeleteJobFromJobsToAdd(job)}
-                        >
-                          <img
-                            src={editpic}
-                            alt="bookmark"
-                            style={{ height: "2rem" }}
-                          />
-                        </button>
-                      </Link>
-                    </td>
+                    {
+                      row.original.status == 1 ? <td style={{ textAlign: "center" }}>
+                        <Link to={`/mahzorform/${row.original._id}`}>
+                          <button
+                            className="btn btn-success"
+                            style={{ padding: "0.5rem" }}
+                          >
+                            <img
+                              src={editpic}
+                              alt="bookmark"
+                              style={{ height: "2rem" }}
+                            />
+                          </button>
+                        </Link>
+                      </td> :
+                        <td style={{ textAlign: "center" }}>
+                          <Link to={`/displaymahzor/${row.original._id}`}>
+                            <button
+                              className="btn btn-success"
+                              style={{ padding: "0.5rem" }}
+                            >
+                              <img
+                                src={editpic}
+                                alt="bookmark"
+                                style={{ height: "2rem" }}
+                              />
+                            </button>
+                          </Link>
+                        </td>
+                    }
+
                   </tr>
                 )
               })

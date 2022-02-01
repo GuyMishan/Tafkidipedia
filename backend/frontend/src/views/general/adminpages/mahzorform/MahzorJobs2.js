@@ -86,7 +86,7 @@ const MahzorJobs = (props) => {
                                     <th>מאייש</th>
                                     <th>מיקום</th>
                                     <th>סיווג</th>
-                                    <th>ודאי/לא ודאי</th>
+                                    <th>ודאי/אופציה</th>
                                     {props.mahzordata.status == 1 ?
                                         <th>מחק</th> : null}
                                 </tr>

@@ -21,7 +21,7 @@ export const COLUMNS = [
         Filter: ColumnFilter
     },
     {
-        Header: 'ודאי/לא ודאי',
+        Header: 'ודאי/אופציה',
         accessor: 'job.certain',
         Filter: ColumnFilter
     },

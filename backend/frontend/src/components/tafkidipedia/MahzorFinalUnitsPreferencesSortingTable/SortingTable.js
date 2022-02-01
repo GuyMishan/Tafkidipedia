@@ -87,7 +87,7 @@ const SortingTable = ({ match }) => {
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               <th colSpan="1">תפקיד</th>
-              <th colSpan="1">ודאי/לא ודאי</th>
+              <th colSpan="1">ודאי/אופציה</th>
               <th colSpan="100%">מועמדים</th>
             </tr>
           </thead>
@@ -99,16 +99,12 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        // if (cell.column.id != "candidate.user.name") {
-                        //   return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                        // }
-                        // else {
-                        if (cell.column.id == "job.jobtype.jobname") {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.job._id}`}>{cell.value}{"/"}{row.original.job.unit.name}</Link></td>
-                        }
-                        if (cell.column.id == "job.certain") {
-                          return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
-                        }
+                          if (cell.column.id == "jobinmahzor.job.jobname") {
+                            return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
+                          }
+                          if (cell.column.id == "jobinmahzor.job.certain") {
+                            return <td>{cell.value}</td>
+                          }
                         if (cell.column.id == "preferencerankings") {
                           return <> {cell.value.map((preferenceranking, index) => (
                             <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${preferenceranking.candidate.user._id}`}>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname}</Link> ({preferenceranking.rank})</td>

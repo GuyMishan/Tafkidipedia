@@ -4,56 +4,41 @@ import { withRouter, Redirect, Link } from "react-router-dom";
 import { COLUMNS } from "./coulmns";
 import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
-import style from 'components/Table.css'
-import editpic from "assets/img/edit.png";
-import deletepic from "assets/img/delete.png";
-
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
   const [data, setData] = useState([])
 
-  function init() {
-    getMahzorCabdidateWithoutPreferences();
-  }
+  // useEffect(() => {
+  //   (async () => {
+  //     const result = await axios.get("http://localhost:8000/api/usersvalidated");
+  //     setData(result.data);
+  //   })();
+  // }, []);
 
-  const getMahzorCabdidateWithoutPreferences = async () => {
-    let tempcandidateswithoutpreferences = [];
+  // const UserDelete = UserId => {
+  //   axios.post(`http://localhost:8000/api/user/remove/${UserId}`)
+  //     .then(response => {
+  //       loadUsers()
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     })
+  // }
 
-    //get all mahzor candidates
-    let result = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`)
-    let tempallcandidates = result.data;
-
-    //get all candidates with a preference
-    let response = await axios.get(`http://localhost:8000/api/smartfinalcandidatepreference`)
-    let tempdata = response.data;
-    let tempcandidateswithpreference = [];
-    for (let i = 0; i < tempdata.length; i++) {
-      if (tempdata[i].mahzor._id == match.params.mahzorid) {
-        tempcandidateswithpreference.push(tempdata[i].candidate)
-      }
-    }
-
-    //aves only candiidates without a preference
-    for (let k = 0; k < tempallcandidates.length; k++) {
-      let flag = false;
-      for (let l = 0; l < tempcandidateswithpreference.length; l++)
-        if (tempallcandidates[k]._id == tempcandidateswithpreference[l]._id) {
-          flag = true;
-        }
-      if (flag == false) {
-        tempcandidateswithoutpreferences.push(tempallcandidates[k]);
-      }
-    }
-
-    setData(tempcandidateswithoutpreferences)
+  const loadUsers = () => {
+    axios.get("http://localhost:8000/api/smartjobs")
+      .then(response => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   useEffect(() => {
-    init();
-    setPageSize(5);
+    loadUsers()
   }, []);
 
   const {
@@ -80,25 +65,27 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
-      <div style={{ float: 'right' }}>
-        <ReactHTMLTableToExcel
-          id="test-table-xls-button"
-          className="btn-green"
-          table="table-to-xls"
-          filename="קובץ - מועמדים"
-          sheet="קובץ - מועמדים"
-          buttonText="הורד כקובץ אקסל" />
-      </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()} id="table-to-xls">
-          {data[0] ?
-            <thead style={{ backgroundColor: '#4fff64' }}>
-              <tr>
-                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th  >
+                    <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
+                    <div>{column.canFilter ? column.render('Filter') : null}</div>
+                    <div>
+                      {column.isSorted ? (column.isSortedDesc ? '🔽' : '⬆️') : ''}
+                    </div>
+                  </th>
+                ))}
+                <th>עדכן</th>
+                <th>מחק</th>
               </tr>
-            </thead> : null}
+            ))}
 
+          </thead>
           <tbody {...getTableBodyProps()}>
             {
               page.map(row => {
@@ -107,11 +94,12 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id == "user.name") {
-                          return <td style={{ backgroundColor: '#FFCCCC' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
-                        }
+                          return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                       })
                     }
+                    {console.log(row.original._id)}
+                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <Link to={`/edituser/${row.original._id}`}><button className="btn btn-success">עדכן</button></Link> </div> </td>
+                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <button className="btn btn-danger" /*onClick={() => UserDelete(row.original._id)}*/>מחק</button></div></td> 
                   </tr>
                 )
               })
@@ -153,15 +141,12 @@ const SortingTable = ({ match }) => {
               setPageSize(Number(e.target.value))
             }}
           >
-            {[5, 10, 15, 20, 25].map(pageSize => (
+            {[10, 20, 30, 40, 50].map(pageSize => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
               </option>
             ))}
           </select>
-        </div>
-        <div style={{ display: 'flex', paddingTop: '5px' }}>
-          <h4 style={{ fontWeight: 'bold' }}>מספר מתמודדים: {data.length}</h4>
         </div>
       </div>
     </>

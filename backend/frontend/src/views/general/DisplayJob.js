@@ -74,9 +74,9 @@ function DisplayJob({ match }) {
               <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>תחום:</h5> {jobdata.thom}</Row>
               <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>מיקום:</h5> {jobdata.location}</Row>
               <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>רמת פעילות:</h5> {jobdata.peilut}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>דמ"ח:</h5> {jobdata.damah == true ? "יש" : "אין"}</Row>
+              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>דמ"ח:</h5> {jobdata.damah}</Row>
               <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>סיווג:</h5> {jobdata.sivug}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ודאי/לא ודאי:</h5> {jobdata.certain == true ? "ודאי" : "לא ודאי"}</Row>
+              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ודאי/אופציה:</h5> {jobdata.certain}</Row>
               </Container>
             </CardBody>
           </Card>

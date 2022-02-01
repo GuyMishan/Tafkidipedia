@@ -79,7 +79,7 @@ const SortingTable = (props) => {
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               <th colSpan="1">תפקיד</th>
-              <th colSpan="1">ודאי/לא ודאי</th>
+              <th colSpan="1">ודאי/אופציה</th>
               <th colSpan="1">ערוך</th>
               <th colSpan="100%">מועמדים</th>
             </tr>

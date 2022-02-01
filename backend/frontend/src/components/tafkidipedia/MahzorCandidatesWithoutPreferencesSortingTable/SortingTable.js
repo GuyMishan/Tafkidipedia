@@ -20,6 +20,8 @@ const SortingTable = ({ match }) => {
   }
 
   const getMahzorCabdidateWithoutPreferences = async () => {
+    let tempcandidateswithoutpreferences = [];
+
     //get all mahzor candidates
     let result = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`)
     let tempallcandidates = result.data;
@@ -34,15 +36,20 @@ const SortingTable = ({ match }) => {
       }
     }
 
-    //takes the original candidates array and saves only those without a preference
+    //aves only candiidates without a preference
     for (let k = 0; k < tempallcandidates.length; k++) {
+      let flag=false;
       for (let l = 0; l < tempcandidateswithpreference.length; l++)
         if (tempallcandidates[k]._id == tempcandidateswithpreference[l]._id) {
-          tempallcandidates.splice(k, 1);
+          flag=true;
+        }
+        if(flag==false)
+        {
+          tempcandidateswithoutpreferences.push(tempallcandidates[k]);
         }
     }
 
-    setData(tempallcandidates)
+    setData(tempcandidateswithoutpreferences)
   }
 
   useEffect(() => {

@@ -87,7 +87,7 @@ const SortingTable = ({ match }) => {
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               <th colSpan="1">תפקיד</th>
-              <th colSpan="1">ודאי/לא ודאי</th>
+              <th colSpan="1">ודאי/אופציה</th>
               <th colSpan="100%">מועמדים</th>
             </tr>
           </thead>
@@ -100,7 +100,7 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "jobinmahzor.job.jobname") {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor.job._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
                         }
                         if (cell.column.id == "jobinmahzor.job.certain") {
                           return <td>{cell.value}</td>

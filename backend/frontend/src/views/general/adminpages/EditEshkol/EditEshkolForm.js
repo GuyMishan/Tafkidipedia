@@ -164,7 +164,7 @@ const EditEshkolForm = ({ match }) => {
 
     //init eshkol
     tempeshkol.candidatesineshkol = [];
-    tempeshkol.job = tempeshkol.job._id;
+    tempeshkol.jobinmahzor = tempeshkol.jobinmahzor._id;
     tempeshkol.mahzor = tempeshkol.mahzor._id;
     delete tempeshkol._id;
 
@@ -212,12 +212,12 @@ const EditEshkolForm = ({ match }) => {
   }, [])
 
   return (
-    eshkoldata.job && candidates.length > 0 ?
+    eshkoldata.jobinmahzor && candidates.length > 0 ?
       <div style={{ paddingTop: '80px', direction: 'rtl', width: '90%' }}>
         <Row>
           <Card>
             <CardHeader style={{ direction: 'rtl' }}>
-              <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס עריכת אשכול: {eshkoldata.job.jobtype ? eshkoldata.job.jobtype.jobname : null}</CardTitle>{/*headline*/}
+              <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס עריכת אשכול: {eshkoldata.jobinmahzor ? eshkoldata.jobinmahzor.job.jobname : null}/{eshkoldata.jobinmahzor ? eshkoldata.jobinmahzor.job.unit.name : null}</CardTitle>{/*headline*/}
             </CardHeader>
 
             <CardBody style={{ direction: 'rtl' }}>

@@ -84,7 +84,7 @@ const SortingTable = (props) => {
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               <th colSpan="1">תפקיד</th>
-              <th colSpan="1">ודאי/לא ודאי</th>
+              <th colSpan="1">ודאי/אופציה</th>
               {props.editable ? <th colSpan="1">ערוך</th> : null}
               <th colSpan="1">שיבוץ סופי</th>
               <th colSpan="100%">מועמדים</th>
@@ -98,15 +98,15 @@ const SortingTable = (props) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id == "job") {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value._id}`}> {cell.value.jobtype.jobname}/{cell.value.unit.name}</Link></td>
+                        if (cell.column.id == "jobinmahzor") {
+                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value._id}`}> {cell.value.job.jobname}/{cell.value.job.unit.name}</Link></td>
                         }
-                        if (cell.column.id == "job.certain") {
-                          return <td>{cell.value == true ? "ודאי" : "לא ודאי"}</td>
+                        if (cell.column.id == "jobinmahzor.job.certain") {
+                          return <td>{cell.value}</td>
                         }
                         if (cell.column.id == "_id") {
                           if (props.editable)
-                            return <td><Link to={`/editeshkol/${false}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
+                          return <td><Link to={`/editeshkol/${false}/${cell.value}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>
                         }
                         if (cell.column.id == "finalcandidate") {
                           if (cell.value) {

@@ -144,7 +144,7 @@ const CandidatePreferenceForm = ({ match }) => {
         let tempjob = jobs[i];
         tempcertjobs.push(tempjob)
       }
-      else {// תפקיד לא ודאי
+      else {// תפקיד אופציה
         let tempjob = jobs[i];
         tempnoncertjobs.push(tempjob)
       }
@@ -176,7 +176,7 @@ const CandidatePreferenceForm = ({ match }) => {
       certjobsemptyflag = false;
     }
 
-    if (candidatepreference.noncertjobpreferences.length != mahzordata.numberofjobpicks) //לא ודאי-בדיקה
+    if (candidatepreference.noncertjobpreferences.length != mahzordata.numberofjobpicks) //אופציה-בדיקה
     {
       noncertjobsemptyflag = false;
     }
@@ -201,7 +201,7 @@ const CandidatePreferenceForm = ({ match }) => {
         }
     }
 
-    //לא ודאי- בדיקה
+    //אופציה- בדיקה
     for (let i = 0; i < candidatepreference.noncertjobpreferences.length - 1; i++) {
       if (candidatepreference.noncertjobpreferences[i] == null || candidatepreference.noncertjobpreferences[i] == undefined) {
         noncertjobsemptyflag = false;
@@ -217,7 +217,7 @@ const CandidatePreferenceForm = ({ match }) => {
       //   }
       // }
       if (countInArray(candidatepreference.noncertjobpreferences,candidatepreference.noncertjobpreferences[i])!=1) {
-        certjobsflag = false;
+        noncertjobsflag = false;
       }
     }
     
@@ -229,9 +229,9 @@ const CandidatePreferenceForm = ({ match }) => {
       error.push('אין להזין אותו תפקיד פעמיים - ודאי')
 
     if (noncertjobsemptyflag == false)
-      error.push('יש להזין את כל ההעדפות - לא ודאי')
+      error.push('יש להזין את כל ההעדפות - אופציה')
     if (noncertjobsflag == false)
-      error.push('אין להזין אותו תפקיד פעמיים - לא ודאי')
+      error.push('אין להזין אותו תפקיד פעמיים - אופציה')
     //
 
     if (error.length != 0) {
@@ -384,7 +384,7 @@ const CandidatePreferenceForm = ({ match }) => {
                     </Row>
 
 
-                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
+                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - אופציה (1- גבוה ביותר)</h5>
                     <Row>
                       {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
                         <Col xs={12} md={4}>
@@ -422,7 +422,7 @@ const CandidatePreferenceForm = ({ match }) => {
                     </Row>
 
 
-                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - לא ודאי (1- גבוה ביותר)</h5>
+                    <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>העדפות תפקידים - אופציה (1- גבוה ביותר)</h5>
                     <Row>
                       {[...Array(mahzordata.numberofjobpicks)].map((x, i) =>
                         <Col xs={12} md={4}>

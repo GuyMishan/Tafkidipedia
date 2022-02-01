@@ -39,10 +39,10 @@ function DisplayMahzorEshkol({ match }) {
     }
 
     async function CalculateMahzorEshkol() {
-        //delete all eshkols of certain mahzor
-        let response1 = await axios.delete(`http://localhost:8000/api/eshkol/deletemahzoreshkol/${match.params.mahzorid}`)
-        let tempdata = response1.data;
-        // console.log(tempdata)
+        // //delete all eshkols of certain mahzor
+        // let response1 = await axios.delete(`http://localhost:8000/api/eshkol/deletemahzoreshkol/${match.params.mahzorid}`)
+        // let tempdata = response1.data;
+        // // console.log(tempdata)
 
         let tempmahzoreshkol = [];// final result
 

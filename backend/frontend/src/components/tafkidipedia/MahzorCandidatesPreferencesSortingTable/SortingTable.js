@@ -98,7 +98,7 @@ const SortingTable = ({ match }) => {
               <tr>
                 <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
                 <th colSpan={data[0].mahzor.numberofjobpicks} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
-                <th colSpan={data[0].mahzor.numberofjobpicks}>תפקידים לא ודאי</th>
+                <th colSpan={data[0].mahzor.numberofjobpicks}>תפקידים אופציה</th>
               </tr>
             </thead> : null}
 

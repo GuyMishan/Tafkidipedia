@@ -108,7 +108,7 @@ const SortingTable = ({ match }) => {
                       //       if (cell.value == true)
                       //         return <td>ודאי</td>
                       //       else
-                      //         return <td>לא ודאי</td>
+                      //         return <td>אופציה</td>
                       //     }
                       //   }
                       //   if (cell.column.id == "_id") {
@@ -124,7 +124,7 @@ const SortingTable = ({ match }) => {
                             if (cell.value == true)
                               return <td>ודאי</td>
                             else
-                              return <td>לא ודאי</td>
+                              return <td>אופציה</td>
                           }
                         }
                       })

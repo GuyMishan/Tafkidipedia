@@ -10,8 +10,11 @@ import UnitRoute from "auth/UnitRoute";
 
 import SignIn from "views/general/authentication/SignInForm";
 import SignUp from "views/general/authentication/SignUpForm";
+
 import ManageUsers from "views/general/authentication/manageusers/ManageUsers";
 import EditUser from "views/general/authentication/EditUserForm";
+import ManageJobs from "views/general/adminpages/managejobs/ManageJobs";
+import EditJob from "views/general/adminpages/managejobs/EditJobForm";
 
 import AdminDashboard from "views/general/adminpages/admindashboard/AdminDashboard";
 import MahzorimPage from "views/general/adminpages/mahzorimpage/MahzorimPage";
@@ -57,6 +60,9 @@ const routesgeneral =
             {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
             <AdminRoute path="/manageusers" exact component={ManageUsers} />
             <AdminRoute path="/edituser/:userid" exact component={EditUser} />
+
+            <AdminRoute path="/managejobs" exact component={ManageJobs} />
+            <AdminRoute path="/editjob/:jobid" exact component={EditJob} />
 
             <AdminRoute path="/dashboard" exact component={AdminDashboard} />
             <AdminRoute path="/mahzorimpage" exact component={MahzorimPage} />
