@@ -51,3 +51,18 @@ table {
       color: white;
   }
 
+ .redcell{
+    background-color: rgb(197, 36, 36);
+}
+
+.yellowcell{
+  background-color: rgb(226 200 39);
+}
+
+.greencell{
+  background-color: rgb(90 205 79);
+}
+
+.bluecell{
+  background-color: rgb(109 96 254);
+}

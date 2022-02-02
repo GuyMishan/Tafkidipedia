@@ -51,42 +51,18 @@
       color: black;
   }
 
-  .btn-green {
-    display: inline-block;
-    font-weight: 600;
-    color: #525f7f;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: 11px 40px;
-    font-size: 0.875rem;
-    line-height: 1.35em;
-    border-radius: 0.25rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    color: #ffffff;
-    background-color: #32a852;
-    border-color: #32a852;
-    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); }
-    .btn-green:hover {
-      color: #ffffff;
-      background-color: #51c270;
-      border-color: #51c270; }
-    .btn-green:focus, .btn-green.focus {
-      color: #ffffff;
-      background-color: #51c270;
-      border-color: #51c270;
-      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0 rgba(38, 244, 204, 0.5); }
-    .btn-green.disabled, .btn-green:disabled {
-      color: #ffffff;
-      background-color: #32a852;
-      border-color: #32a852; }
-    .btn-green:not(:disabled):not(.disabled):active, .btn-green:not(:disabled):not(.disabled).active,
-    .show > .btn-green.dropdown-toggle {
-      color: #ffffff;
-      background-color: #51c270;
-      border-color: #51c270; }
-      .btn-green:not(:disabled):not(.disabled):active:focus, .btn-green:not(:disabled):not(.disabled).active:focus,
-      .show > .btn-success.dropdown-toggle:focus {
-        box-shadow: 0 0 0 0 rgba(38, 244, 204, 0.5); }
+  .white-content .redcell{
+    background-color: rgb(255 204 204);
+}
+
+.white-content .yellowcell{
+  background-color: rgb(255 248 204);
+}
+
+.white-content .greencell{
+  background-color: rgb(190 255 184);
+}
+
+.white-content .bluecell{
+  background-color: rgb(208 204 255);
+}

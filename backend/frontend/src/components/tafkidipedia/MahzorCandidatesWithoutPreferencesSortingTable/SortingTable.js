@@ -109,7 +109,7 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "user.name") {
-                          return <td style={{ backgroundColor: '#FFCCCC' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
+                          return <td className="redcell"><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
                         }
                       })
                     }
