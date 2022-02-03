@@ -27,28 +27,12 @@ import history from 'history.js'
 import { toast } from "react-toastify";
 
 const EditJobForm = ({ match }) => {
-  const [data, setData] = useState({
-    name: "",
-    lastname: "",
-    personalnumber: "",
-    password: "",
-    role: "",
-    unitid: "",
-    migzar: "",
-    gender: "",
-    cellphone: "",
-    rank: "",
-    error: false,
-    successmsg: false,
-    loading: false,
-    redirectToReferrer: false,
-  });
+  const [job, setJob] = useState(undefined);
 
-  const [units, setUnits] = useState([]);
+  const [units, setUnits] = useState(undefined);
 
   const loadUnits = () => {
-    axios
-      .get("http://localhost:8000/api/unit")
+    axios.get("http://localhost:8000/api/unit")
       .then((response) => {
         setUnits(response.data);
       })
@@ -57,92 +41,57 @@ const EditJobForm = ({ match }) => {
       });
   };
 
+  const loadJob = () => {
+    var jobid = match.params.jobid;
+    axios.get(`http://localhost:8000/api/job/${jobid}`)
+      .then(response => {
+        setJob(response.data[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
   function handleChange(evt) {
     const value = evt.target.value;
-    setData({ ...data, [evt.target.name]: value });
+    setJob({ ...job, [evt.target.name]: value });
   }
 
   const clickSubmit = (event) => {
-    CheckSignUpForm(event);
+    CheckJob(event);
   };
 
-  const CheckSignUpForm = (event) => {
+  const CheckJob = (event) => {
     event.preventDefault();
     var flag = true;
     var ErrorReason = "";
-    if (data.name == "") {
+    if (job.jobname == "") {
       flag = false;
-      ErrorReason += "שם ריק \n";
+      ErrorReason += "שם תפקיד ריק \n";
     }
-    if (data.lastname == "") {
+    if (job.jobcode == "") {
       flag = false;
-      ErrorReason += "שם משפחה ריק \n";
+      ErrorReason += "קוד תפקיד ריק \n";
     }
-    if (data.personalnumber == "") {
+    if (job.unit == "") {
       flag = false;
-      ErrorReason += "מס אישי ריק \n";
-    }
-    if (data.password == "") {
-      flag = false;
-      ErrorReason += "סיסמא ריקה \n";
-    }
-    if (data.role == "") {
-      flag = false;
-      ErrorReason += "הרשאה ריקה \n";
-    } else {
-      if (data.role === "0") {
-
-      }
-      if (data.role === "1") {
-        if (data.unitid === "") {
-          flag = false;
-          ErrorReason += "יחידה ריקה \n";
-        }
-      }
+      ErrorReason += "יחידה ריקה \n";
     }
 
     if (flag == true) {
-      FixUser(event);
+      UpdateJob(event);
     } else {
       toast.error(ErrorReason);
     }
   };
 
-  const FixUser = (event) => {
-    event.preventDefault();
-    if (data.role === "0") {
-      delete data.unitid;
-    }
-    if (data.role === "1") {
-
-    }
-    if (data.role === "2") {
-      delete data.unitid;
-    }
-    UpdateUser(event);
-  };
-
-  const UpdateUser = () => {
-    var userid = match.params.userid;
-    const user = {
-      name: data.name,
-      lastname: data.lastname,
-      password: data.password,
-      personalnumber: data.personalnumber,
-      unitid: data.unitid,
-      role: data.role,
-      validated: data.validated,
-      migzar: data.migzar,
-      gender: data.gender,
-      cellphone: data.cellphone,
-      rank: data.rank,
-    };
-
-    axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
+  const UpdateJob = () => {
+    var jobid = match.params.jobid;
+    axios.put(`http://localhost:8000/api/job/update/${jobid}`, job)
       .then(response => {
         console.log(response);
         toast.success(`המשתמש עודכן בהצלחה`);
-        history.push(`/manageusers`);
+        history.push(`/managejobs`);
       })
       .catch((error) => {
         console.log(error);
@@ -150,119 +99,127 @@ const EditJobForm = ({ match }) => {
   }
 
   const init = () => {
-    var userid = match.params.userid;
-    axios.post("http://localhost:8000/api/getuserbyid", { userid })
-      .then(response => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    loadJob();
+    loadUnits();
   }
 
   useEffect(() => {
     init();
-    loadUnits();
   }, [])
 
-  useEffect(() => {
-    setData({ ...data, password: data.personalnumber });
-  }, [data.personalnumber])
-
   return (
-    <div className="">
+    job ?
       <Container>
         <Row>
           <Col>
             <Card>
               <CardHeader style={{ direction: 'rtl' }}>
-                <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'right' }}>ערוך משתמש: {data.name} {data.lastname}</CardTitle>{/*headline*/}
+                <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'right' }}>ערוך תפקיד: {job.jobname} {job.unit.name}</CardTitle>{/*headline*/}
               </CardHeader>
 
               <CardBody >
                 <Container>
                   <Form role="form" style={{ direction: 'rtl' }}>
 
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם פרטי</div>
-                    <FormGroup>
-                      <Input placeholder="שם פרטי" type="string" name="name" value={data.name} onChange={handleChange} />
-                    </FormGroup>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תפקיד</div>
+                    <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} />
 
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם משפחה</div>
-                    <FormGroup>
-                      <Input placeholder="שם משפחה" type="string" name="lastname" value={data.lastname} onChange={handleChange} />
-                    </FormGroup>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>קוד תפקיד</div>
+                    <Input placeholder="קוד תפקיד" type="string" name="jobcode" value={job.jobcode} onChange={handleChange} />
 
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר אישי</div>
-                    <FormGroup >
-                      <Input placeholder="מספר אישי" type="string" name="personalnumber" value={data.personalnumber} onChange={handleChange} />
-                    </FormGroup>
-
-                    {/*<div style={{ textAlign: 'right', paddingTop: '10px' }}>סיסמא</div>
-                                        <FormGroup>
-                                            <Input placeholder="סיסמא (אופציונלי)" type="password" name="password" value={data.password} onChange={handleChange} />
-                                        </FormGroup>*/}
-
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מגזר</div>
-                    <FormGroup >
-                      <Input placeholder="מגזר" type="string" name="migzar" value={data.migzar} onChange={handleChange} />
-                    </FormGroup>
-
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מין</div>
-                    <FormGroup >
-                      <Input placeholder="מין" type="string" name="gender" value={data.gender} onChange={handleChange} />
-                    </FormGroup>
-
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון</div>
-                    <FormGroup >
-                      <Input placeholder="פלאפון" type="string" name="cellphone" value={data.cellphone} onChange={handleChange} />
-                    </FormGroup>
-
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגה</div>
-                    <FormGroup >
-                      <Input placeholder="דרגה" type="string" name="rank" value={data.rank} onChange={handleChange} />
-                    </FormGroup>
-
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>הרשאה</div>
-                    <FormGroup dir="rtl" >
-                      <Input type="select" name="role" value={data.role} onChange={handleChange}>
-                        <option value="">הרשאה</option>
-                        <option value="0">מנהל מערכת</option>
-                        <option value="1">הרשאת יחידה</option>
-                        <option value="2">הרשאת מתמודד</option>
-                      </Input>
-                    </FormGroup>
-
-                    {data.role === "0" ? (
-                      <div>מנהל מערכת</div>
-                    ) : data.role === "1" ? (
+                    {units ?
                       <>
-                        <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                          יחידה
-                      </div>
+                        <div style={{ textAlign: "right", paddingTop: "10px" }}>יחידה</div>
                         <FormGroup dir="rtl">
                           <Input
                             type="select"
-                            name="unitid"
-                            value={data.unitid}
-                            onChange={handleChange}
-                          >
-                            <option value={""}>יחידה</option>
-                            {units.map((unit, index) => (
+                            name="unit"
+                            value={job.unit}
+                            onChange={handleChange}>
+                            {units ? units.map((unit, index) => (
                               <option value={unit._id}>{unit.name}</option>
-                            ))}
+                            )) : null}
                           </Input>
                         </FormGroup>
-                      </>
-                    ) : null}
+                        </> : null}
 
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מאושר/לא מאושר מערכת</div>
-                    <FormGroup>
-                      <Input type="select" name="validated" value={data.validated} onChange={handleChange}>
-                        <option value={true}>מאושר</option>
-                        <option value={false}>לא מאושר</option>
-                      </Input>
-                    </FormGroup>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מחלקה</div>
+                    <Input placeholder="מחלקה" type="string" name="mahlaka" value={job.mahlaka} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מגזר</div>
+                    <Input placeholder="מגזר" type="string" name="migzar" value={job.migzar} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>ודאי/אופציה</div>
+                    <Input placeholder="ודאי/אופציה" type="string" name="certain" value={job.certain} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מפקד</div>
+                    <Input placeholder="שם מפקד" type="string" name="commander" value={job.commander} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון מפקד</div>
+                    <Input placeholder="פלאפון מפקד" type="string" name="commander_phone" value={job.commander_phone} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מאייש</div>
+                    <Input placeholder="שם מאייש" type="string" name="meaish" value={job.meaish} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון מאייש</div>
+                    <Input placeholder="פלאפון מאייש" type="string" name="meaish_phone" value={job.meaish_phone} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגה</div>
+                    <Input placeholder="דרגה" type="string" name="rank" value={job.rank} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>הערות תפקיד</div>
+                    <Input placeholder="הערות תפקיד" type="string" name="jobremarks" value={job.jobremarks} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תפקיד מדומ"ח</div>
+                    <Input placeholder='תפקיד מדומ"ח' type="string" name="damah" value={job.damah} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תפקיד פיקודי/מקצועי</div>
+                    <Input placeholder="תפקיד פיקודי/מקצועי" type="string" name="pikodi_or_mikzoi" value={job.pikodi_or_mikzoi} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מחלקה</div>
+                    <Input placeholder="מחלקה" type="string" name="mahlaka" value={job.mahlaka} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תנאי סף 1</div>
+                    <Input placeholder="תנאי סף 1" type="string" name="saf1" value={job.saf1} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תנאי סף 2</div>
+                    <Input placeholder="תנאי סף 2" type="string" name="saf2" value={job.saf2} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תנאי סף 3</div>
+                    <Input placeholder="תנאי סף 3" type="string" name="saf3" value={job.saf3} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תנאי סף 4</div>
+                    <Input placeholder="תנאי סף 4" type="string" name="saf4" value={job.saf4} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום</div>
+                    <Input placeholder="מיקום" type="string" name="location" value={job.location} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>יחידה פתוחה/סגורה</div>
+                    <Input placeholder="יחידה פתוחה/סגורה" type="string" name="ptoha_or_sgora" value={job.ptoha_or_sgora} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>רמת פעילות</div>
+                    <Input placeholder="רמת פעילות" type="string" name="peilut_level" value={job.peilut_level} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תיאור תפקיד</div>
+                    <Input placeholder="תיאור תפקיד" type="string" name="description" value={job.description} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תרומת התפקיד לפרט</div>
+                    <Input placeholder="תרומת התפקיד לפרט" type="string" name="job_contribution" value={job.job_contribution} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>יכולת חשיבה ותכנון</div>
+                    <Input placeholder="יכולת חשיבה ותכנון" type="string" name="thinking_ability" value={job.thinking_ability} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>יחסים בינאישיים</div>
+                    <Input placeholder="יחסים בינאישיים" type="string" name="realtionship_ability" value={job.realtionship_ability} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>יכולת ניהול וארגון</div>
+                    <Input placeholder="יכולת ניהול וארגון" type="string" name="management_ability" value={job.management_ability} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>יכולת מנהיגות ופיקוד</div>
+                    <Input placeholder="יכולת מנהיגות ופיקוד" type="string" name="leadership_ability" value={job.leadership_ability} onChange={handleChange} />
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>סיווג</div>
+                    <Input placeholder="סיווג" type="string" name="sivug" value={job.sivug} onChange={handleChange} />
 
                     <div className="text-center">
                       <button onClick={clickSubmit} className="btn btn-primary">עדכן</button>
@@ -274,7 +231,7 @@ const EditJobForm = ({ match }) => {
           </Col>
         </Row>
       </Container>
-    </div>
+      : null
   );
 }
 export default withRouter(EditJobForm);;

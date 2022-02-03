@@ -16,13 +16,35 @@ let readtipul = [
 ];
 
 exports.findById = async(req, res) => {
-  const job = await Job.findOne().where({_id:req.params.id})
-  
-  if(!job){
-      res.status(500).json({success: false})
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //id
+  if (req.params.id != 'undefined') {
+    andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
   }
-  res.send(job)
-  
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Job.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
  }
 
 exports.find = (req, res) => {

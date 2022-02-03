@@ -10,24 +10,17 @@ const SortingTable = ({ match }) => {
 
   const [data, setData] = useState([])
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const result = await axios.get("http://localhost:8000/api/usersvalidated");
-  //     setData(result.data);
-  //   })();
-  // }, []);
-
-  // const UserDelete = UserId => {
-  //   axios.post(`http://localhost:8000/api/user/remove/${UserId}`)
+  // const JobDelete = JobId => {
+  //   axios.delete(`http://localhost:8000/api/job/${JobId}`)
   //     .then(response => {
-  //       loadUsers()
+  //       loadJobs()
   //     })
   //     .catch((error) => {
   //       console.log(error);
   //     })
   // }
 
-  const loadUsers = () => {
+  const loadJobs = () => {
     axios.get("http://localhost:8000/api/smartjobs")
       .then(response => {
         setData(response.data);
@@ -38,7 +31,7 @@ const SortingTable = ({ match }) => {
   }
 
   useEffect(() => {
-    loadUsers()
+    loadJobs()
   }, []);
 
   const {
@@ -81,7 +74,7 @@ const SortingTable = ({ match }) => {
                   </th>
                 ))}
                 <th>עדכן</th>
-                <th>מחק</th>
+                {/* <th>מחק</th> */}
               </tr>
             ))}
 
@@ -98,8 +91,8 @@ const SortingTable = ({ match }) => {
                       })
                     }
                     {console.log(row.original._id)}
-                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <Link to={`/edituser/${row.original._id}`}><button className="btn btn-success">עדכן</button></Link> </div> </td>
-                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <button className="btn btn-danger" /*onClick={() => UserDelete(row.original._id)}*/>מחק</button></div></td> 
+                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <Link to={`/editjob/${row.original._id}`}><button className="btn btn-success">עדכן</button></Link> </div> </td>
+                    {/* <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <button className="btn btn-danger" onClick={() => JobDelete(row.original._id)}>מחק</button></div></td>  */}
                   </tr>
                 )
               })
