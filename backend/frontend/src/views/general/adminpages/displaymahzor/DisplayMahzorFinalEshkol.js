@@ -17,7 +17,7 @@ import {
 } from "reactstrap";
 
 import axios from 'axios';
-import SortingTable from 'components/tafkidipedia/FinalEshkolByMahzorSortingTable/SortingTable';
+import SortingTable from 'components/tafkidipedia/FinalEshkolByMahzorSortingTable2/SortingTable';
 
 function DisplayMahzorFinalEshkol(props) {
     const [count, setCount] = useState(0); //to refresh table...

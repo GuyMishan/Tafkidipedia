@@ -66,8 +66,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const job = new Job(req.body);
-  Job.updateOne(job)
+  Job.findByIdAndUpdate(req.params.jobId,req.body)
     .then((job) => res.json(job))
     .catch((err) => res.status(400).json("Error: " + err));
 };
