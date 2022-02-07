@@ -140,14 +140,21 @@ const EditJobForm = ({ match }) => {
               <Container>
                 <Form role="form" style={{ direction: 'rtl' }}>
 
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תפקיד</div>
-                  <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} />
-
-                  {match.params.jobid != '0' ?
+                  {match.params.jobid == '0' ?
                     <>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תפקיד</div>
+                      <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} />
+
                       <div style={{ textAlign: 'right', paddingTop: '10px' }}>קוד תפקיד</div>
                       <Input placeholder="קוד תפקיד" type="number" name="jobcode" value={job.jobcode} onChange={handleChange} />
-                    </> : null}
+                    </> : 
+                    <>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תפקיד</div>
+                    <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} disabled/>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>קוד תפקיד</div>
+                    <Input placeholder="קוד תפקיד" type="number" name="jobcode" value={job.jobcode} onChange={handleChange} disabled/>
+                  </>}
 
                   {units != undefined && match.params.jobid == '0' ? <>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>יחידה</div>
@@ -185,7 +192,13 @@ const EditJobForm = ({ match }) => {
                   <Input placeholder="מחלקה" type="string" name="mahlaka" value={job.mahlaka} onChange={handleChange} />
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>מגזר</div>
-                  <Input placeholder="מגזר" type="string" name="migzar" value={job.migzar} onChange={handleChange} />
+                  <Input placeholder="מגזר" type="select" name="migzar" value={job.migzar} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={"מכונות"}>מכונות</option>
+                    <option value={'תו"ן'}>תו"ן</option>
+                    <option value={"חשמל"}>חשמל</option>
+                    <option value={'ורסטילי'}>ורסטילי</option>
+                  </Input>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>ודאי/אופציה</div>
                   <Input placeholder="ודאי/אופציה" type="select" name="certain" value={job.certain} onChange={handleChange}>
@@ -206,20 +219,33 @@ const EditJobForm = ({ match }) => {
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון מאייש</div>
                   <Input placeholder="פלאפון מאייש" type="string" name="meaish_phone" value={job.meaish_phone} onChange={handleChange} />
 
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגה</div>
-                  <Input placeholder="דרגה" type="string" name="rank" value={job.rank} onChange={handleChange} />
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגת תקן</div>
+                  <Input placeholder='דרגת תקן' type="select" name="rank" value={job.rank} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={'סג"ם'}>סג"ם</option>
+                    <option value={'סג"ן'}>סג"ן</option>
+                    <option value={'סר"ן'}>סר"ן</option>
+                    <option value={'רס"ן'}>רס"ן</option>
+                    <option value={'סא"ל'}>סא"ל</option>
+                    <option value={'נגדים'}>נגדים</option>
+                  </Input>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>הערות תפקיד</div>
                   <Input placeholder="הערות תפקיד" type="string" name="jobremarks" value={job.jobremarks} onChange={handleChange} />
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>תפקיד מדומ"ח</div>
-                  <Input placeholder='תפקיד מדומ"ח' type="string" name="damah" value={job.damah} onChange={handleChange} />
+                  <Input placeholder='תפקיד מדומ"ח' type="select" name="damah" value={job.damah} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={'מדומ"ח'}>מדומ"ח</option>
+                    <option value={'לא מדומ"ח'}>לא מדומ"ח</option>
+                  </Input>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>תפקיד פיקודי/מקצועי</div>
-                  <Input placeholder="תפקיד פיקודי/מקצועי" type="string" name="pikodi_or_mikzoi" value={job.pikodi_or_mikzoi} onChange={handleChange} />
-
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מחלקה</div>
-                  <Input placeholder="מחלקה" type="string" name="mahlaka" value={job.mahlaka} onChange={handleChange} />
+                  <Input placeholder='תפקיד פיקודי/מקצועי' type="select" name="pikodi_or_mikzoi" value={job.pikodi_or_mikzoi} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={'פיקודי'}>פיקודי</option>
+                    <option value={'מקצועי'}>מקצועי</option>
+                  </Input>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>תנאי סף 1</div>
                   <Input placeholder="תנאי סף 1" type="string" name="saf1" value={job.saf1} onChange={handleChange} />
@@ -237,7 +263,11 @@ const EditJobForm = ({ match }) => {
                   <Input placeholder="מיקום" type="string" name="location" value={job.location} onChange={handleChange} />
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>יחידה פתוחה/סגורה</div>
-                  <Input placeholder="יחידה פתוחה/סגורה" type="string" name="ptoha_or_sgora" value={job.ptoha_or_sgora} onChange={handleChange} />
+                  <Input placeholder='יחידה פתוחה/סגורה' type="select" name="ptoha_or_sgora" value={job.ptoha_or_sgora} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={'פתוחה'}>פתוחה</option>
+                    <option value={'סגורה'}>סגורה</option>
+                  </Input>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>רמת פעילות</div>
                   <Input placeholder="רמת פעילות" type="string" name="peilut_level" value={job.peilut_level} onChange={handleChange} />
@@ -260,8 +290,8 @@ const EditJobForm = ({ match }) => {
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>יכולת מנהיגות ופיקוד</div>
                   <Input placeholder="יכולת מנהיגות ופיקוד" type="string" name="leadership_ability" value={job.leadership_ability} onChange={handleChange} />
 
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>סיווג</div>
-                  <Input placeholder="סיווג" type="string" name="sivug" value={job.sivug} onChange={handleChange} />
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>רמת סיווג</div>
+                  <Input placeholder="רמת סיווג" type="string" name="sivug" value={job.sivug} onChange={handleChange} />
 
                   <div className="text-center">
                     <button onClick={clickSubmit} className="btn btn-primary">עדכן</button>

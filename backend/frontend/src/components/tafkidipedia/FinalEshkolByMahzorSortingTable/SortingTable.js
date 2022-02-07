@@ -43,7 +43,7 @@ const SortingTable = (props) => {
 
   useEffect(() => {
     init()
-  }, [props.refresh]);
+  }, []);
 
   const {
     getTableProps,

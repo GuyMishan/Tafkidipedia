@@ -20,8 +20,6 @@ import axios from 'axios';
 import SortingTable from 'components/tafkidipedia/EshkolByMahzorSortingTable2/SortingTable';
 
 function DisplayMahzorEshkol({ match }) {
-    const [count, setCount] = useState(0); //to refresh table...
-
     const [mahzorhaseshkols, setMahzorhaseshkols] = useState(false);
 
     function init() {
@@ -135,7 +133,7 @@ function DisplayMahzorEshkol({ match }) {
             let response1 = await axios.post(`http://localhost:8000/api/eshkol`, tempmahzoreshkol[i])
             // let tempdata = response1.data;
         }
-        setCount(count + 1);
+        window.location.reload();
     }
 
     useEffect(() => {
@@ -160,9 +158,9 @@ function DisplayMahzorEshkol({ match }) {
                 </Col>
             </Row>
             
-            <SortingTable mahzorid={match.params.mahzorid} refresh={count} />
+            <SortingTable mahzorid={match.params.mahzorid}/>
 
-            {mahzorhaseshkols ? null
+            {mahzorhaseshkols? null
                 : <Button onClick={() => CalculateMahzorEshkol()}>חשב אשכולות</Button>}
 
         </>

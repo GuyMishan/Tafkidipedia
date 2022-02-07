@@ -7,21 +7,56 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import MigzarFilter from 'components/tafkidipedia/Filters/MigzarFilter';
+import CertainFilter from 'components/tafkidipedia/Filters/CertainFilter';
+import UnitFilter from 'components/tafkidipedia/Filters/UnitFilter';
 
 const SortingTable = (props) => {
-
   const [data, setData] = useState([])
-
   const [highestnumber, setHighestnumber] = useState(0)
+
+  const [migzarfilter, setMigzarfilter] = useState(undefined)
+  const [unitfilter, setUnitfilter] = useState(undefined)
+  const [certainfilter, setCertainfilter] = useState(undefined)
 
   function init() {
     getMahzorEshkol();
   }
 
   const getMahzorEshkol = async () => {
-    let temhighestnumber = highestnumber;
+    let temhighestnumber = 0;
     let response = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${props.mahzorid}`)
-    let tempeshkolbymahzorid = response.data;
+    let tempeshkolbymahzorid_beforefilters = response.data;
+    let tempeshkolbymahzorid;
+
+    //to filter eshkols
+    if (migzarfilter != undefined) {
+      if (unitfilter != undefined) {
+        if (certainfilter != undefined) {
+          tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
+            return el.jobinmahzor.job.migzar == migzarfilter &&
+              el.jobinmahzor.job.certain == certainfilter &&
+              el.jobinmahzor.job.unit.name == unitfilter;
+          });
+        }
+        else {
+          tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
+            return el.jobinmahzor.job.migzar == migzarfilter &&
+              el.jobinmahzor.job.unit.name == unitfilter;
+          });
+        }
+      }
+      else {
+        tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
+          return el.jobinmahzor.job.migzar == migzarfilter;
+        });
+      }
+    }
+    else {
+      tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters
+    }
+
+    //to get candidates data + calc highest num of candidates per job
     for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
       if (tempeshkolbymahzorid[i].candidatesineshkol.length >= temhighestnumber) {
         temhighestnumber = tempeshkolbymahzorid[i].candidatesineshkol.length;
@@ -41,23 +76,19 @@ const SortingTable = (props) => {
 
   useEffect(() => {
     init()
-  }, [props.refresh]);
+  }, [migzarfilter, certainfilter]);
 
   return (
     <>
-      <div style={{ float: 'right' }}>
-        <ReactHTMLTableToExcel
-          id="test-table-xls-button"
-          className="btn-green"
-          table="table-to-xls"
-          filename="קובץ - אשכולות"
-          sheet="קובץ - אשכולות"
-          buttonText="הורד כקובץ אקסל" />
-      </div>
+      <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
+      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} />
+      <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter} />
+
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table id="table-to-xls">
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
+            <th></th>
               {data.map(eshkol => {
                 return (
                   <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${eshkol.jobinmahzor._id}`}> {eshkol.jobinmahzor.job.jobname}/{eshkol.jobinmahzor.job.unit.name}/{eshkol.jobinmahzor.job.certain}</Link></th>
@@ -68,6 +99,16 @@ const SortingTable = (props) => {
           </thead>
           <tbody>
             <tr>
+              <th>מתמודד סופי</th>
+              {data.map(eshkol => {
+                return (
+                  eshkol.finalcandidate ?
+                    <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.finalcandidate.user._id}`}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</Link></td>
+                    : null)
+              })}
+            </tr>
+            <tr>
+            <th></th>
               {data.map(eshkol => {
                 if (props.editable)
                   return (
@@ -76,6 +117,7 @@ const SortingTable = (props) => {
             </tr>
             {[...Array(highestnumber)].map((x, i) => {
               return (<tr>
+                 <th></th>
                 {data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
@@ -104,6 +146,15 @@ const SortingTable = (props) => {
         </table>
         <div style={{ display: 'flex', paddingTop: '5px' }}>
           <h4 style={{ fontWeight: 'bold' }}>מספר אשכולות : {data.length}</h4>
+        </div>
+        <div style={{ float: 'right' }}>
+          <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="btn-green"
+            table="table-to-xls"
+            filename="קובץ - אשכולות"
+            sheet="קובץ - אשכולות"
+            buttonText="הורד כקובץ אקסל" />
         </div>
       </div>
     </>
