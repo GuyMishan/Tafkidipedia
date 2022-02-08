@@ -81,17 +81,17 @@ const SortingTable = (props) => {
   return (
     <>
       <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
-      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} />
+      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter} />
       <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter} />
 
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table id="table-to-xls">
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
-            <th></th>
+              {data.length > 0 ? <th></th> : null}
               {data.map(eshkol => {
                 return (
-                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${eshkol.jobinmahzor._id}`}> {eshkol.jobinmahzor.job.jobname}/{eshkol.jobinmahzor.job.unit.name}/{eshkol.jobinmahzor.job.certain}</Link></th>
+                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit',margin:'0px'}}>{eshkol.jobinmahzor.job.certain}</h5></th>
                 )
               }
               )}
@@ -99,25 +99,25 @@ const SortingTable = (props) => {
           </thead>
           <tbody>
             <tr>
-              <th>מתמודד סופי</th>
+              {data.length > 0 ? <th>שיבוץ סופי</th> : null}
               {data.map(eshkol => {
                 return (
                   eshkol.finalcandidate ?
                     <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.finalcandidate.user._id}`}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</Link></td>
-                    : null)
+                    : <td></td>)
               })}
             </tr>
-            <tr>
-            <th></th>
+            {/* <tr>
+              {data.length > 0 ? <th></th> : null}
               {data.map(eshkol => {
                 if (props.editable)
                   return (
                     <td><Link to={`/editeshkol/${false}/${eshkol._id}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>)
               })}
-            </tr>
+            </tr> */}
             {[...Array(highestnumber)].map((x, i) => {
               return (<tr>
-                 <th></th>
+                {data.length > 0 ? <th></th> : null}
                 {data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
@@ -144,6 +144,9 @@ const SortingTable = (props) => {
             })}
           </tbody>
         </table>
+        <div style={{ display: 'flex', justifyContent:'center',textAlign:'center' }}>
+        {data.length == 0 ? <h2 style={{ fontWeight: 'bold' }}>אין נתונים בטבלה</h2> : null}
+        </div>
         <div style={{ display: 'flex', paddingTop: '5px' }}>
           <h4 style={{ fontWeight: 'bold' }}>מספר אשכולות : {data.length}</h4>
         </div>

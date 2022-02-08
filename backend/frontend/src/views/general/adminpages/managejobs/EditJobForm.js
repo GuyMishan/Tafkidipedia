@@ -291,7 +291,12 @@ const EditJobForm = ({ match }) => {
                   <Input placeholder="יכולת מנהיגות ופיקוד" type="string" name="leadership_ability" value={job.leadership_ability} onChange={handleChange} />
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>רמת סיווג</div>
-                  <Input placeholder="רמת סיווג" type="string" name="sivug" value={job.sivug} onChange={handleChange} />
+                  <Input placeholder='רמת סיווג' type="select" name="sivug" value={job.sivug} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={'בלמ"ס'}>בלמ"ס</option>
+                    <option value={'סודי'}>סודי</option>
+                    <option value={'סודי ביותר'}>סודי ביותר</option>
+                  </Input>
 
                   <div className="text-center">
                     <button onClick={clickSubmit} className="btn btn-primary">עדכן</button>

@@ -61,6 +61,15 @@ function DisplayJob({ match }) {
               {jobdata.description}
             </CardBody>
           </Card>
+
+          <Card style={{ marginTop: '30px' }}>
+            <CardHeader>
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>תרומת התפקיד לפרט</h3>
+            </CardHeader>
+            <CardBody style={{ textAlign: 'right' }}>
+              {jobdata.job_contribution}
+            </CardBody>
+          </Card>
         </Col>
 
         <Col>
@@ -70,19 +79,114 @@ function DisplayJob({ match }) {
             </CardHeader>
             <CardBody>
               <Container>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>מחלקה:</h5> {jobdata.mahlaka}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>תחום:</h5> {jobdata.thom}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>מיקום:</h5> {jobdata.location}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>רמת פעילות:</h5> {jobdata.peilut}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>דמ"ח:</h5> {jobdata.damah}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>סיווג:</h5> {jobdata.sivug}</Row>
-              <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ודאי/אופציה:</h5> {jobdata.certain}</Row>
+                {jobdata.unit ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>יחידה: </h5> <h5> {jobdata.unit.name}</h5></Row> : null}
+                {jobdata.rank ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>דרגת תקן: </h5> <h5> {jobdata.rank}</h5></Row> : null}
+                {jobdata.sivug ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>סיווג תפקיד: </h5> <h5> {jobdata.sivug}</h5></Row> : null}
+                {jobdata.damah ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>תפקיד מדומ"ח: </h5> <h5> {jobdata.damah}</h5></Row> : null}
+                {jobdata.pikodi_or_mikzoi ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>פיקוד/מקצועי: </h5> <h5> {jobdata.pikodi_or_mikzoi}</h5></Row> : null}
+              </Container>
+            </CardBody>
+          </Card>
+
+          <Card style={{ marginTop: '30px' }}>
+            <CardHeader>
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>נתוני סף (תנאי להתמודדות)</h3>
+            </CardHeader>
+            <CardBody>
+              <Container>
+                {jobdata.saf1 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>א: </h5> <h5> {jobdata.saf1}</h5></Row> : null}
+                {jobdata.saf2 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ב: </h5> <h5> {jobdata.saf2}</h5></Row> : null}
+                {jobdata.saf3 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ג: </h5> <h5> {jobdata.saf3}</h5></Row> : null}
+                {jobdata.saf4 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ד: </h5> <h5> {jobdata.saf4}</h5></Row> : null}
               </Container>
             </CardBody>
           </Card>
         </Col>
       </Row>
 
+      <Row>
+        <Col>
+          <h3 style={{ textAlign: 'center', fontWeight: 'bold' }}>כישורים נדרשים לתפקיד</h3>
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יכולת חשיבה ותכנון:</h4>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.thinking_ability}
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יחסים בינאישיים:</h4>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.realtionship_ability}
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יכולות ניהול וארגון:</h4>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.management_ability}
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.leadership_ability}
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+
+        <Col style={{alignItems:'center'}}>
+          <Row style={{alignItems:'center'}}>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.leadership_ability}
+                </CardBody>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.leadership_ability}
+                </CardBody>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.leadership_ability}
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     </Container>
   );
 }

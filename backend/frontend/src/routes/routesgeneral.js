@@ -30,7 +30,8 @@ import DisplayJob from "views/general/DisplayJob";
 import Unitmahzorimpage from "views/general/unitpages/unitmahzorimpage/Unitmahzorimpage";
 import UnitPreferenceForm from "views/general/unitpages/unitpreferenceform/UnitPreferenceForm";
 
-import EditEshkolForm from "views/general/adminpages/EditEshkol/EditEshkolForm";
+import EditEshkolForm from "views/general/adminpages/editeshkol/EditEshkolForm";
+import DisplayMahzorEshkols from "views/general/adminpages/displaymahzoreshkols/DisplayMahzorEshkols";
 
 import ProfilePage from "views/general/generalpages/profilepage/ProfilePage";
 
@@ -69,6 +70,7 @@ const routesgeneral =
             <AdminRoute path="/displaymahzor/:mahzorid" exact component={DisplayMahzor} />
 
             <AdminRoute path="/editeshkol/:iseshkol/:eshkolid" exact component={EditEshkolForm} />
+            <Route path="/displaymahzoreshkols/:iseshkols/:mahzorid" exact component={DisplayMahzorEshkols} />
             {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
 
             {/*////////////////////////////////////////Unit User//////////////////////////////////////////////////*/}

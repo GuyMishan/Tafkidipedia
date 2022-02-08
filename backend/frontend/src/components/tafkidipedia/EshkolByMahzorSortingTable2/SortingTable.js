@@ -79,7 +79,7 @@ const SortingTable = (props) => {
   return (
     <>
       <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
-      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} />
+      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter}/>
       <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter}/>
 
       <div className="table-responsive" style={{ overflow: 'auto' }}>
@@ -88,19 +88,19 @@ const SortingTable = (props) => {
             <tr>
               {data.map(eshkol => {
                 return (
-                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${eshkol.jobinmahzor._id}`}> {eshkol.jobinmahzor.job.jobname}/{eshkol.jobinmahzor.job.migzar}/{eshkol.jobinmahzor.job.unit.name}/{eshkol.jobinmahzor.job.certain}</Link></th>
+                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${true}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit',margin:'0px'}}>{eshkol.jobinmahzor.job.certain}</h5></th>
                 )
               }
               )}
             </tr>
           </thead>
           <tbody>
-            <tr>
+            {/* <tr>
               {data.map(eshkol => {
                 return (
                   <td><Link to={`/editeshkol/${true}/${eshkol._id}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>)
               })}
-            </tr>
+            </tr> */}
             {[...Array(highestnumber)].map((x, i) => {
               return (<tr>
                 {data.map(eshkol => {

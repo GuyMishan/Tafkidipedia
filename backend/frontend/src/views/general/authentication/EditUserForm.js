@@ -59,7 +59,8 @@ const EditUserForm = ({ match }) => {
 
   function handleChange(evt) {
     const value = evt.target.value;
-    setData({ ...data, [evt.target.name]: value });
+    if (value != "בחר")
+      setData({ ...data, [evt.target.name]: value });
   }
 
   const clickSubmit = (event) => {
@@ -193,7 +194,7 @@ const EditUserForm = ({ match }) => {
                       <Input placeholder="שם משפחה" type="string" name="lastname" value={data.lastname} onChange={handleChange} />
                     </FormGroup>
 
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר אישי</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר אישי (כולל - s)</div>
                     <FormGroup >
                       <Input placeholder="מספר אישי" type="string" name="personalnumber" value={data.personalnumber} onChange={handleChange} />
                     </FormGroup>
@@ -205,12 +206,22 @@ const EditUserForm = ({ match }) => {
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>מגזר</div>
                     <FormGroup >
-                      <Input placeholder="מגזר" type="string" name="migzar" value={data.migzar} onChange={handleChange} />
+                      <Input placeholder="מגזר" type="select" name="migzar" value={data.migzar} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={"מכונות"}>מכונות</option>
+                        <option value={'תו"ן'}>תו"ן</option>
+                        <option value={"חשמל"}>חשמל</option>
+                        <option value={'ורסטילי'}>ורסטילי</option>
+                      </Input>
                     </FormGroup>
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>מין</div>
                     <FormGroup >
-                      <Input placeholder="מין" type="string" name="gender" value={data.gender} onChange={handleChange} />
+                      <Input placeholder='מין' type="select" name="gender" value={data.gender} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={'זכר'}>זכר</option>
+                        <option value={'נקבה'}>נקבה</option>
+                      </Input>
                     </FormGroup>
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון</div>
@@ -220,13 +231,21 @@ const EditUserForm = ({ match }) => {
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגה</div>
                     <FormGroup >
-                      <Input placeholder="דרגה" type="string" name="rank" value={data.rank} onChange={handleChange} />
+                      <Input placeholder='דרגה' type="select" name="rank" value={data.rank} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={'סג"ם'}>סג"ם</option>
+                        <option value={'סג"ן'}>סג"ן</option>
+                        <option value={'סר"ן'}>סר"ן</option>
+                        <option value={'רס"ן'}>רס"ן</option>
+                        <option value={'סא"ל'}>סא"ל</option>
+                        <option value={'נגדים'}>נגדים</option>
+                      </Input>
                     </FormGroup>
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>הרשאה</div>
                     <FormGroup dir="rtl" >
                       <Input type="select" name="role" value={data.role} onChange={handleChange}>
-                        <option value="">הרשאה</option>
+                        <option value={"בחר"}>בחר</option>
                         <option value="0">מנהל מערכת</option>
                         <option value="1">הרשאת יחידה</option>
                         <option value="2">הרשאת מתמודד</option>
@@ -239,7 +258,7 @@ const EditUserForm = ({ match }) => {
                       <>
                         <div style={{ textAlign: "right", paddingTop: "10px" }}>
                           יחידה
-                      </div>
+                        </div>
                         <FormGroup dir="rtl">
                           <Input
                             type="select"

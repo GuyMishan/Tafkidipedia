@@ -51,7 +51,7 @@ const UnitFilter = (props) => {
     }, [props.migzarfilter]);
 
     useEffect(() => {
-        if (props.migzarfilter != undefined)
+        if ((props.migzarfilter != undefined)&&(props.certainfilter == undefined))
             calculateUnitsAccordingToData(props.data)
     }, [props.data]);
 

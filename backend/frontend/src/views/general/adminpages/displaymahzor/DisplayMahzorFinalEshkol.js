@@ -142,7 +142,15 @@ function DisplayMahzorFinalEshkol(props) {
 
     return (
         <>
-            <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת אשכולות</h3>
+            <Row>
+                <Col>
+                    <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת אשכולות</h3>
+                </Col>
+                <Col>
+                    <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', float: 'left' }} to={`/displaymahzoreshkols/${false}/${props.mahzorid}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>פתח במסך מלא</button></Link>
+                </Col>
+            </Row>
+
             <Row style={{ direction: 'rtl', textAlign: 'center' }}>
                 <Col xs={12} md={3}>
                     <h5 style={{ color: "rgb(255 97 97)" }}>&#9632; בחירת מתמודד בלבד</h5>
@@ -158,7 +166,7 @@ function DisplayMahzorFinalEshkol(props) {
                 </Col>
             </Row>
 
-            <SortingTable mahzorid={props.mahzorid} editable={props.editable}/>
+            <SortingTable mahzorid={props.mahzorid} editable={props.editable} />
 
             {mahzorhaseshkols ? null
                 : <Button onClick={() => CalculateMahzorFinalEshkol()}>חשב אשכולות</Button>}

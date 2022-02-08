@@ -232,12 +232,22 @@ export default function SignUpForm() {
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>מגזר</div>
                     <FormGroup >
-                      <Input placeholder="מגזר" type="string" name="migzar" value={data.migzar} onChange={handleChange} />
+                      <Input placeholder="מגזר" type="select" name="migzar" value={data.migzar} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={"מכונות"}>מכונות</option>
+                        <option value={'תו"ן'}>תו"ן</option>
+                        <option value={"חשמל"}>חשמל</option>
+                        <option value={'ורסטילי'}>ורסטילי</option>
+                      </Input>
                     </FormGroup>
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>מין</div>
                     <FormGroup >
-                      <Input placeholder="מין" type="string" name="gender" value={data.gender} onChange={handleChange} />
+                      <Input placeholder='מין' type="select" name="gender" value={data.gender} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={'זכר'}>זכר</option>
+                        <option value={'נקבה'}>נקבה</option>
+                      </Input>
                     </FormGroup>
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון</div>
@@ -247,7 +257,15 @@ export default function SignUpForm() {
 
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגה</div>
                     <FormGroup >
-                      <Input placeholder="דרגה" type="string" name="rank" value={data.rank} onChange={handleChange} />
+                      <Input placeholder='דרגה' type="select" name="rank" value={data.rank} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={'סג"ם'}>סג"ם</option>
+                        <option value={'סג"ן'}>סג"ן</option>
+                        <option value={'סר"ן'}>סר"ן</option>
+                        <option value={'רס"ן'}>רס"ן</option>
+                        <option value={'סא"ל'}>סא"ל</option>
+                        <option value={'נגדים'}>נגדים</option>
+                      </Input>
                     </FormGroup>
 
                   <FormGroup dir="rtl">
