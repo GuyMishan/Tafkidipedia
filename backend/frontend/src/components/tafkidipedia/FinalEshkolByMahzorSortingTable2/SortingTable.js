@@ -13,6 +13,8 @@ import UnitFilter from 'components/tafkidipedia/Filters/UnitFilter';
 
 const SortingTable = (props) => {
   const [data, setData] = useState([])
+  const [originaldata, setOriginaldata] = useState([])
+  const [candidatesinmahzor, setCandidatesinmahzor] = useState([])
   const [highestnumber, setHighestnumber] = useState(0)
 
   const [migzarfilter, setMigzarfilter] = useState(undefined)
@@ -20,14 +22,50 @@ const SortingTable = (props) => {
   const [certainfilter, setCertainfilter] = useState(undefined)
 
   function init() {
-    getMahzorEshkol();
+    getCandidatesinmahzor();
+  }
+
+  const getCandidatesinmahzor = async () => {
+    let response = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${props.mahzorid}`)
+    let tempcandidatesinmahzor = response.data;
+
+    setCandidatesinmahzor(tempcandidatesinmahzor)
   }
 
   const getMahzorEshkol = async () => {
     let temhighestnumber = 0;
     let response = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${props.mahzorid}`)
-    let tempeshkolbymahzorid_beforefilters = response.data;
-    let tempeshkolbymahzorid;
+    let tempeshkolbymahzorid = response.data;
+
+    for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
+      if (tempeshkolbymahzorid[i].candidatesineshkol.length >= temhighestnumber) {
+        temhighestnumber = tempeshkolbymahzorid[i].candidatesineshkol.length;
+      }
+      for (let j = 0; j < tempeshkolbymahzorid[i].candidatesineshkol.length; j++) {
+        for (let k = 0; k < candidatesinmahzor.length; k++) {
+          if (tempeshkolbymahzorid[i].candidatesineshkol[j].candidate == candidatesinmahzor[k]._id) {
+            tempeshkolbymahzorid[i].candidatesineshkol[j].candidate = candidatesinmahzor[k];
+          }
+        }
+      }
+      if (tempeshkolbymahzorid[i].finalcandidate) {
+        for (let k = 0; k < candidatesinmahzor.length; k++) {
+          if (tempeshkolbymahzorid[i].finalcandidate == candidatesinmahzor[k]._id) {
+            tempeshkolbymahzorid[i].finalcandidate = candidatesinmahzor[k];
+          }
+        }
+      }
+    }
+
+    setOriginaldata(tempeshkolbymahzorid)
+    setData(tempeshkolbymahzorid)
+    setHighestnumber(temhighestnumber)
+  }
+
+  const FilterEshkols = async () => {
+    let temhighestnumber = 0;
+    let tempeshkolbymahzorid = [];
+    let tempeshkolbymahzorid_beforefilters = originaldata;
 
     //to filter eshkols
     if (migzarfilter != undefined) {
@@ -48,35 +86,35 @@ const SortingTable = (props) => {
       }
       else {
         tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
-          return el.jobinmahzor.job.migzar == migzarfilter;
+          return el.jobinmahzor.job.migzar == migzarfilter
         });
       }
     }
     else {
-      tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters
+      tempeshkolbymahzorid = originaldata
     }
 
-    //to get candidates data + calc highest num of candidates per job
     for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
       if (tempeshkolbymahzorid[i].candidatesineshkol.length >= temhighestnumber) {
         temhighestnumber = tempeshkolbymahzorid[i].candidatesineshkol.length;
       }
-      for (let j = 0; j < tempeshkolbymahzorid[i].candidatesineshkol.length; j++) {
-        let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkolbymahzorid[i].candidatesineshkol[j].candidate}`);
-        tempeshkolbymahzorid[i].candidatesineshkol[j].candidate = result1.data[0];
-      }
-      if (tempeshkolbymahzorid[i].finalcandidate) {
-        let result2 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkolbymahzorid[i].finalcandidate}`);
-        tempeshkolbymahzorid[i].finalcandidate = result2.data[0];
-      }
     }
+
     setData(tempeshkolbymahzorid)
     setHighestnumber(temhighestnumber)
   }
 
   useEffect(() => {
+    getMahzorEshkol()
+  }, [candidatesinmahzor]);
+
+  useEffect(() => {
+    FilterEshkols()
+  }, [migzarfilter, unitfilter, certainfilter]);
+
+  useEffect(() => {
     init()
-  }, [migzarfilter, certainfilter]);
+  }, []);
 
   return (
     <>
@@ -91,7 +129,7 @@ const SortingTable = (props) => {
               {data.length > 0 ? <th></th> : null}
               {data.map(eshkol => {
                 return (
-                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit',margin:'0px'}}>{eshkol.jobinmahzor.job.certain}</h5></th>
+                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.job.certain}</h5></th>
                 )
               }
               )}
@@ -102,39 +140,31 @@ const SortingTable = (props) => {
               {data.length > 0 ? <th>שיבוץ סופי</th> : null}
               {data.map(eshkol => {
                 return (
-                  eshkol.finalcandidate ?
+                  eshkol.finalcandidate && eshkol.finalcandidate.user ?
                     <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.finalcandidate.user._id}`}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</Link></td>
                     : <td></td>)
               })}
             </tr>
-            {/* <tr>
-              {data.length > 0 ? <th></th> : null}
-              {data.map(eshkol => {
-                if (props.editable)
-                  return (
-                    <td><Link to={`/editeshkol/${false}/${eshkol._id}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>ערוך אשכול</button></Link></td>)
-              })}
-            </tr> */}
             {[...Array(highestnumber)].map((x, i) => {
               return (<tr>
                 {data.length > 0 ? <th></th> : null}
                 {data.map(eshkol => {
                   return (
-                    eshkol.candidatesineshkol[i] && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
+                    eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
                       <td className="greencell">
                         <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
                         {eshkol.candidatesineshkol[i].candidaterank ? <p>דירוג מתמודד:{eshkol.candidatesineshkol[i].candidaterank}</p> : null}
                         {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                       </td>
-                      : eshkol.candidatesineshkol[i] && (eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
+                      : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
                         <td className="redcell">
                           <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
                           {eshkol.candidatesineshkol[i].candidaterank ? <p>דירוג מתמודד:{eshkol.candidatesineshkol[i].candidaterank}</p> : null}
-                        </td> : eshkol.candidatesineshkol[i] && (!eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
+                        </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
                           <td className="yellowcell">
                             <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
                             {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
-                          </td> : eshkol.candidatesineshkol[i] && (!eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
+                          </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
                             <td className="bluecell">
                               <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
                               <p>הוסף ע"י מנהל מערכת</p>
@@ -144,8 +174,8 @@ const SortingTable = (props) => {
             })}
           </tbody>
         </table>
-        <div style={{ display: 'flex', justifyContent:'center',textAlign:'center' }}>
-        {data.length == 0 ? <h2 style={{ fontWeight: 'bold' }}>אין נתונים בטבלה</h2> : null}
+        <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
+          {data.length == 0 ? <h2 style={{ fontWeight: 'bold' }}>אין נתונים בטבלה</h2> : null}
         </div>
         <div style={{ display: 'flex', paddingTop: '5px' }}>
           <h4 style={{ fontWeight: 'bold' }}>מספר אשכולות : {data.length}</h4>

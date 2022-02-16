@@ -48,12 +48,13 @@ const UnitFilter = (props) => {
 
     useEffect(() => {
         props.setUnitfilter(undefined)
+        calculateUnitsAccordingToData(props.data)
     }, [props.migzarfilter]);
 
-    useEffect(() => {
-        if ((props.migzarfilter != undefined)&&(props.certainfilter == undefined))
-            calculateUnitsAccordingToData(props.data)
-    }, [props.data]);
+    // useEffect(() => {
+    //     if ((props.migzarfilter != undefined))
+    //     calculateUnitsAccordingToData(props.data)
+    // }, [props.data]);
 
     return (
         props.migzarfilter != undefined ?
