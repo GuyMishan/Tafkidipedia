@@ -87,12 +87,19 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
+                        if (cell.column.id != "commander" && cell.column.id != "meaish") {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                        }
+                        else {
+                          if (cell.column.id == "commander")
+                            return <td>{cell.value.name} {cell.value.lastname}</td>
+                          if (cell.column.id == "meaish")
+                          return <td>{cell.value.name} {cell.value.lastname}</td>
+                        }
                       })
                     }
-                    {console.log(row.original._id)}
+                    {/* {console.log(row)} */}
                     <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <Link to={`/editjob/${row.original._id}`}><button className="btn btn-success">עדכן</button></Link> </div> </td>
-                    {/* <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <button className="btn btn-danger" onClick={() => JobDelete(row.original._id)}>מחק</button></div></td>  */}
                   </tr>
                 )
               })

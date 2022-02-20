@@ -100,22 +100,12 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id != "unit") {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                        }
-                        else {
-                          if (cell.column.id == "unit") {
-                            if (cell.value == true)
-                              return <td>ודאי</td>
-                            else
-                              return <td>אופציה</td>
-                          }
-                        }
                       })
                     }
                     {/* {console.log(row)} */}
                     <td style={{ textAlign: "center" }}>
-                      <Link to={`/displayjob/${row.original._id}`}>
+                      <Link to={`/displayjob/${row.original.job._id}`}>
                         <button
                           className="btn btn-success"
                           style={{ padding: "0.5rem" }}

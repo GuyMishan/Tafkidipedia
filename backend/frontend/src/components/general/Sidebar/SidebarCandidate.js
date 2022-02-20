@@ -89,7 +89,7 @@ function SidebarCandidate() {
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4>
-                  מועמדויות שלי
+                  דיוני איוש
                 </h4>
               </Col>
             </Row>

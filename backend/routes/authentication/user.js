@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { find,getuserbyid,update,remove,findvalidated,findnotvalidated,usersbyrole } = require("../../controllers/authentication/user");
+const { find,getuserbyid,update,remove,findvalidated,findnotvalidated,usersbyrole,usersbyroleandpopulation} = require("../../controllers/authentication/user");
 
 router.post('/getuserbyid',getuserbyid)
 
@@ -16,5 +16,7 @@ router.get('/usersvalidated', findvalidated)
 router.get('/usersnotvalidated', findnotvalidated)
 
 router.get('/usersbyrole/:role', usersbyrole)
+
+router.get('/usersbyroleandpopulation/:role/:population', usersbyroleandpopulation)
 
 module.exports = router;

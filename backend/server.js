@@ -48,7 +48,8 @@ const finalunitpreferenceRoutes = require("./routes/general/finalunitpreference"
 const jobinmahzorRoutes = require("./routes/general/jobinmahzor");
 const jobRoutes = require("./routes/general/job");
 const mahzorRoutes = require("./routes/general/mahzor");
-const mahzorioshRoutes = require("./routes/general/mahzoriosh");
+const movementRoutes = require("./routes/general/movement");
+const populationRoutes = require("./routes/general/population");
 const unitRoutes = require("./routes/general/unit");
 const unitpreferenceRoutes = require("./routes/general/unitpreference");
 const unitpreferencerankingRoutes = require("./routes/general/unitpreferenceranking");
@@ -64,7 +65,8 @@ app.use('/api',finalunitpreferenceRoutes)
 app.use('/api',jobinmahzorRoutes)
 app.use('/api',jobRoutes)
 app.use('/api',mahzorRoutes)
-app.use('/api',mahzorioshRoutes)
+app.use('/api',movementRoutes)
+app.use('/api',populationRoutes)
 app.use('/api',unitRoutes)
 app.use('/api',unitpreferenceRoutes)
 app.use('/api',unitpreferencerankingRoutes)

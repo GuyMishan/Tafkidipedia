@@ -3,14 +3,14 @@ const Mahzor = require("../../models/general/mahzor");
 let readtipul = [
   {
     $lookup: {
-      from: "mahzorioshes",
-      localField: "mahzoriosh",
+      from: "populations",
+      localField: "population",
       foreignField: "_id",
-      as: "mahzoriosh"
+      as: "population"
     }
   },
   {
-    $unwind: "$mahzoriosh"
+    $unwind: "$population"
   },
 ];
 

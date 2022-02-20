@@ -26,10 +26,10 @@ function DisplayJob({ match }) {
   //job
 
   const loadjob = () => {
-    axios.get(`http://localhost:8000/api/jobinmahzorbyid/${match.params.jobid}`)
+    axios.get(`http://localhost:8000/api/smartjobbyid/${match.params.jobid}`)
       .then(response => {
         let tempjob = response.data[0];
-        setJobData(tempjob.job);
+        setJobData(tempjob);
       })
       .catch((error) => {
         console.log(error);
@@ -48,7 +48,7 @@ function DisplayJob({ match }) {
     <Container>
       <PanelHeader size="sm" content={
         <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{jobdata ? jobdata.jobname : null} - {jobdata.certain}</h1>
+          <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{jobdata ? jobdata.jobname : null}</h1>
         </Container>} />
 
       <Row>
@@ -154,33 +154,37 @@ function DisplayJob({ match }) {
           </Row>
         </Col>
 
-        <Col style={{alignItems:'center'}}>
-          <Row style={{alignItems:'center'}}>
+        <Col style={{ alignItems: 'center' }}>
+          <Row style={{ alignItems: 'center' }}>
             <Col>
               <Card>
                 <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מפקד נוכחי:</h4>
                 </CardHeader>
                 <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.leadership_ability}
+                  {jobdata.commander ? <h5>{jobdata.commander.name} {jobdata.commander.lastname}</h5> : null}
+                  {jobdata.commander ? <h5>{jobdata.commander.cellphone}</h5> : null}
                 </CardBody>
               </Card>
               <Card>
                 <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מאייש נוכחי:</h4>
                 </CardHeader>
                 <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.leadership_ability}
+                  {jobdata.meaish ? <h5>{jobdata.meaish.name} {jobdata.meaish.lastname}</h5> : null}
+                  {jobdata.meaish ? <h5>{jobdata.meaish.cellphone}</h5> : null}
                 </CardBody>
               </Card>
             </Col>
             <Col>
               <Card>
                 <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>תנאי שירות:</h4>
                 </CardHeader>
                 <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.leadership_ability}
+                  <h5>מיקום:{jobdata.location}</h5>
+                  <h5>יחידה פתוחה/סגורה:{jobdata.ptoha_or_sgora}</h5>
+                  <h5>רמת פעילות:{jobdata.peilut_level}</h5>
                 </CardBody>
               </Card>
             </Col>

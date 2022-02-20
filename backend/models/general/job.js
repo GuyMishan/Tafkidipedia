@@ -8,11 +8,13 @@ const jobSchema = new mongoose.Schema({
     unit:{type:ObjectId , ref:'Unit'},
     mahlaka:{type:String},
     migzar:{type:String},
-    certain:{type:String},
-    commander:{type:String},
-    commander_phone:{type:String},
-    meaish:{type:String},
-    meaish_phone:{type:String},
+    // certain:{type:String},
+    commander: {type:ObjectId,ref:'User'},
+    // commander:{type:String},
+    // commander_phone:{type:String},
+    meaish: {type:ObjectId,ref:'User'},
+    // meaish:{type:String},
+    // meaish_phone:{type:String},
     rank:{type:String},
     jobremarks:{type:String},
     damah:{type:String},
@@ -30,7 +32,6 @@ const jobSchema = new mongoose.Schema({
     realtionship_ability:{type:String},
     management_ability:{type:String},
     leadership_ability:{type:String},
-
     sivug:{type:String},
 });
 

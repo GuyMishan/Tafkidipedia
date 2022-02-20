@@ -21,7 +21,7 @@ import MahzorimPage from "views/general/adminpages/mahzorimpage/MahzorimPage";
 import UnitDashboard from "views/general/unitpages/unitdashboard/UnitDashboard";
 import CandidateDashboard from "views/general/candidatepages/candidatedashboard/CandidateDashboard";
 import CandidatePreferenceForm from "views/general/candidatepages/candidatepreferenceform/CandidatePreferenceForm";
-import MahzorForm from "views/general/adminpages/mahzorform/MahzorForm2";
+import MahzorForm from "views/general/adminpages/mahzorform/MahzorForm3";
 import Usermahzorimpage from "views/general/candidatepages/usermahzorimpage/Usermahzorimpage";
 import JobsByMahzor from "views/general/JobsByMahzor";
 import JobsByMahzorAndUnit from "views/general/JobsByMahzorAndUnit";

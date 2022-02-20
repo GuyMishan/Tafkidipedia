@@ -31,7 +31,7 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 import SettingModal from "../../../../components/general/modal/SettingModal";
 
-const MahzorDataComponent = (props) => {
+const MahzorDataComponent3 = (props) => {
 
     const [isdisabledfield, setIsdisabledfield] = useState(true)
 
@@ -55,57 +55,39 @@ const MahzorDataComponent = (props) => {
     return (
         <Card>
             <CardHeader style={{ direction: 'rtl' }}>
-                <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס מחזור</CardTitle>{/*headline*/}
+                <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס דש"ב</CardTitle>{/*headline*/}
             </CardHeader>
             <CardBody style={{ direction: 'rtl' }}>
                 <Container>
                     <h5 style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>פרטים כלליים</h5>
                     <Row>
-                        <Col xs={12} md={4}>
-                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>שם</div>
+                        <Col xs={12} md={6}>
+                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>אוכלוסייה</div>
                             <FormGroup dir="rtl" >
-                                <Input type="text" name="name" value={props.mahzordata.name} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
-                            </FormGroup>
-                        </Col>
-                        {/* <Col xs={12} md={4}>
-                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>תאריך התחלה</div>
-                            <FormGroup dir="rtl" >
-                                <Input type="date" name="startdate" value={props.mahzordata.startdate} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
-                            </FormGroup>
-                        </Col>
-                        <Col xs={12} md={4}>
-                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>תאריך סיום</div>
-                            <FormGroup dir="rtl" >
-                                <Input type="date" name="enddate" value={props.mahzordata.enddate} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
-                            </FormGroup>
-                        </Col> */}
-                        <Col xs={12} md={4}>
-                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>שנת איוש</div>
-                            <FormGroup dir="rtl" >
-                                <Input type="number" name="year" value={props.mahzordata.year} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={12} md={4}>
-                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>סוג מחזור</div>
-                            <FormGroup dir="rtl" >
-                                <Input type="select" name="mahzoriosh" value={props.mahzordata.mahzoriosh} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}>
-                                    <option value={""}>בחר סוג מחזור</option>
-                                    {props.mahzoriosh.map((mahzoriosh, index) => (
-                                        <option key={mahzoriosh._id} value={mahzoriosh._id}>{mahzoriosh.name}</option>
+                                <Input type="select" name="population" value={props.mahzordata.population} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}>
+                                    <option value={"בחר"}>{"בחר"}</option>
+                                    {props.population.map((population, index) => (
+                                        <option key={index} value={population._id}>{population.name}</option>
                                     ))}
                                 </Input>
                             </FormGroup>
                         </Col>
-                        <Col xs={12} md={4}>
+                        <Col xs={12} md={6}>
+                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>עונת איוש</div>
+                            <FormGroup dir="rtl" >
+                                <Input type="month" name="season" value={props.mahzordata.season} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
+                            </FormGroup>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12} md={6}>
                             <div style={{ textAlign: 'center', paddingTop: '10px' }}>כמות בחירות תפקיד (למועמד)</div>
                             <FormGroup dir="rtl" >
                                 <Input type="number" name="numberofjobpicks" value={props.mahzordata.numberofjobpicks} onChange={props.handleChangeMahzorData} disabled={isdisabledfield}></Input>
                             </FormGroup>
                         </Col>
-                        <Col xs={12} md={4}>
-                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>סטטוס מחזור (אין לחזור אחורה בסטטוס)</div>
+                        <Col xs={12} md={6}>
+                            <div style={{ textAlign: 'center', paddingTop: '10px' }}>שלב (אין לחזור לשלב קודם)</div>
                             <FormGroup dir="rtl" >
                                 <Input type="select" name="status" value={props.mahzordata.status} onChange={props.handleChangeMahzorData}>
                                     {props.oldmahzordata ?
@@ -152,4 +134,4 @@ const MahzorDataComponent = (props) => {
         </Card>
     );
 }
-export default withRouter(MahzorDataComponent);;
+export default withRouter(MahzorDataComponent3);;

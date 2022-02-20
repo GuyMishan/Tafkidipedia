@@ -24,6 +24,17 @@ let readtipul = [
   {
     $unwind: "$mahzor"
   },
+  {
+    $lookup: {
+      from: "populations",
+      localField: "mahzor.population",
+      foreignField: "_id",
+      as: "mahzor.population"
+    }
+  },
+  {
+    $unwind: "$mahzor.population"
+  },
 ];
 
 exports.findById = async (req, res) => {
@@ -55,8 +66,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const candidate = new Candidate(req.body);
-  Candidate.updateOne(candidate)
+  Candidate.findByIdAndUpdate(req.params.candidateId, req.body)
     .then((candidate) => res.json(candidate))
     .catch((err) => res.status(400).json("Error: " + err));
 };

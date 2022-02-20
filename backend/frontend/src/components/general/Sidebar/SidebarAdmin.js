@@ -89,7 +89,21 @@ function SidebarAdmin() {
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
               <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
-                  מחזורים
+                  דיוני איוש
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/fml" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+            <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
+                <img src={people} style={{ height: "20px" }}></img>
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+              <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
+                  תפקידיפדיה
                 </h4>
               </Col>
             </Row>

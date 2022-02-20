@@ -1,4 +1,4 @@
-const Job = require("../../models/general/jobinmahzor");
+const Jobinmahzor = require("../../models/general/jobinmahzor");
 const mongoose = require('mongoose');
 
 let readtipul = [
@@ -38,7 +38,7 @@ let readtipul = [
 ];
 
 exports.findById = async(req, res) => {
-  const jobinmahzor = await Job.findOne().where({_id:req.params.id})
+  const jobinmahzor = await Jobinmahzor.findOne().where({_id:req.params.id})
   
   if(!jobinmahzor){
       res.status(500).json({success: false})
@@ -48,13 +48,13 @@ exports.findById = async(req, res) => {
  }
 
 exports.find = (req, res) => {
-    Job.find()
+    Jobinmahzor.find()
     .then((jobinmahzor) => res.json(jobinmahzor))
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.create = (req, res) => {
-  const jobinmahzor = new Job(req.body);
+  const jobinmahzor = new Jobinmahzor(req.body);
   jobinmahzor.save((err, data) => {
     if (err) {
       return res.status(400).json({
@@ -66,14 +66,14 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const jobinmahzor = new Job(req.body);
-  Job.updateOne(jobinmahzor)
+  const jobinmahzor = new Jobinmahzor(req.body);
+  Jobinmahzor.updateOne(jobinmahzor)
     .then((jobinmahzor) => res.json(jobinmahzor))
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.remove = (req, res) => {
-    Job.deleteOne({ _id: req.params.id })
+    Jobinmahzor.deleteOne({ _id: req.params.id })
     .then((jobinmahzor) => res.json(jobinmahzor))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -101,7 +101,7 @@ exports.jobinmahzorbyid = async(req, res) => {
   // console.log(matchquerry)
   //console.log(andquery)
 
-  Job.aggregate(finalquerry)
+  Jobinmahzor.aggregate(finalquerry)
     .then((result) => {
       res.json(result);
     })
@@ -133,7 +133,7 @@ exports.jobinmahzorsbymahzorid = async(req, res) => {
   // console.log(matchquerry)
   //console.log(andquery)
 
-  Job.aggregate(finalquerry)
+  Jobinmahzor.aggregate(finalquerry)
     .then((result) => {
       res.json(result);
     })
@@ -169,7 +169,7 @@ exports.jobinmahzorsbymahzorid = async(req, res) => {
   // console.log(matchquerry)
   //console.log(andquery)
 
-  Job.aggregate(finalquerry)
+  Jobinmahzor.aggregate(finalquerry)
     .then((result) => {
       res.json(result);
     })
@@ -177,3 +177,15 @@ exports.jobinmahzorsbymahzorid = async(req, res) => {
       res.status(400).json('Error: ' + error);
     });
  }
+
+ exports.deletjobinmahzorbyjobidandmahzorid = (req, res) => {
+  Jobinmahzor.deleteOne({ job: req.params.jobid , mahzor: req.params.mahzorid})
+  .then((jobinmahzor) => res.json(jobinmahzor))
+  .catch((err) => res.status(400).json("Error: " + err));
+};
+
+exports.updatejobinmahzorbyjobidandmahzorid = (req, res) => {
+  Jobinmahzor.updateOne({ job: req.params.jobid , mahzor: req.params.mahzorid},req.body)
+    .then((jobinmahzor) => res.json(jobinmahzor))
+    .catch((err) => res.status(400).json("Error: " + err));
+};

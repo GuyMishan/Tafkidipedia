@@ -1,13 +1,13 @@
 import { ColumnFilter } from './ColumnFilter'
 export const COLUMNS = [
     {
-        Header: 'שם מחזור',
-        accessor: 'mahzor.name',
+        Header: 'אוכלוסייה',
+        accessor: 'mahzor.population.name',
         Filter: ColumnFilter
     },
     {
-        Header: 'שנת איוש',
-        accessor: 'mahzor.year',
+        Header: 'עונת איוש',
+        accessor: 'mahzor.season',
         Filter: ColumnFilter
     },
     {

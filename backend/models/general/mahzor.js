@@ -3,13 +3,10 @@ const {ObjectId} = mongoose.Schema
 
 
 const mahzorSchema = new mongoose.Schema({
-    name:{type:String},
-    // startdate:{type:Date},
-    // enddate:{type:Date},
-    year:{type:Number},
+    season:{type:String},
     numberofjobpicks:{type:Number},
     status:{type:Number},
-    mahzoriosh:{type:ObjectId,ref:'Mahzoriosh'},
+    population:{type:ObjectId,ref:'Population'},
 });
 
 const Mahzor = mongoose.model('Mahzor', mahzorSchema);

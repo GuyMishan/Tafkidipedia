@@ -30,7 +30,7 @@ function MahzorimPage() {
       <Container>
           <MahzorimSortingTable/>
 
-          <Link to={`mahzorform/0`}><Button>הוסף מחזור</Button></Link>
+          <Link to={`mahzorform/0`}><Button>הוסף דש"ב</Button></Link>
       </Container>
     </>
   );

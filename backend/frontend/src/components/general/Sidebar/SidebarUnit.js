@@ -87,7 +87,7 @@ function SidebarUnit() {
             </Col>
             <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
             <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
-                מחזורים
+                דיוני איוש
               </h4>
             </Col>
           </Row>

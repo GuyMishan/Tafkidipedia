@@ -40,8 +40,6 @@ function DisplayMahzor({ match }) {
     axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
       .then(response => {
         let tempmahzor = response.data;
-        // tempmahzor.startdate = tempmahzor.startdate.slice(0, 10);
-        // tempmahzor.enddate = tempmahzor.enddate.slice(0, 10);
         setMahzorData(tempmahzor);
       })
       .catch((error) => {
@@ -61,7 +59,7 @@ function DisplayMahzor({ match }) {
     <div style={{width:'95%'}}>
       <PanelHeader size="sm" content={
         <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{(mahzordata.name)+ " - "}</h1>
+          <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}></h1>
           {mahzordata.status == 1 ?
             <>
                <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>התחלת מחזור חדש</h1>

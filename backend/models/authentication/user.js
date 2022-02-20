@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
     unitid: {type:ObjectId,ref:'Unit'},
     hashed_password: {type: String,required: true},
     salt: String,
+    //17.2
+    population:{type:ObjectId,ref:'Population'},
+    job:{type:ObjectId,ref:'Job'},
 }, {timestamps: true})
 
 // virtual field

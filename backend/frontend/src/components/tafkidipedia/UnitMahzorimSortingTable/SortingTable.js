@@ -100,7 +100,7 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if ((cell.column.id != "year") && (cell.column.id != "mahzoriosh") && (cell.column.id != "status")) {
+                        if ((cell.column.id != "status")) {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
@@ -123,12 +123,6 @@ const SortingTable = ({ match }) => {
                               return <td>שיבוצים סופיים</td>
                             if (cell.value == 6)
                               return <td>מחזור סגור</td>
-                          }
-                          if (cell.column.id == "year") {
-                            return <td>{cell.value}</td>
-                          }
-                          if (cell.column.id == "mahzoriosh") {
-                            return <td>{cell.value.name}</td>
                           }
                         }
                       })

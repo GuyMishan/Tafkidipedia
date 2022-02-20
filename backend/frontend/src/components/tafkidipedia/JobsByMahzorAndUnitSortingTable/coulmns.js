@@ -20,9 +20,9 @@ export const COLUMNS = [
         accessor: 'job.pikodi_or_mikzoi',
         Filter: ColumnFilter
     },
-    {
-        Header: 'ודאי/אופציה',
-        accessor: 'job.certain',
-        Filter: ColumnFilter
-    },
+    // {
+    //     Header: 'ודאי/אופציה',
+    //     accessor: 'job.certain',
+    //     Filter: ColumnFilter
+    // },
 ]

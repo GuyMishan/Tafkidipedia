@@ -1,8 +1,8 @@
 import { ColumnFilter } from './ColumnFilter'
 export const COLUMNS = [
     {
-        Header: 'שם מחזור',
-        accessor: 'name',
+        Header: 'אוכלוסייה',
+        accessor: 'population.name',
         Filter: ColumnFilter
     },
     // {
@@ -16,13 +16,8 @@ export const COLUMNS = [
     //     Filter: ColumnFilter
     // },
     {
-        Header: 'סוג מחזור',
-        accessor: 'mahzoriosh',
-        Filter: ColumnFilter
-    },
-    {
-        Header: 'שנת איוש',
-        accessor: 'year',
+        Header: 'עונת איוש',
+        accessor: 'season',
         Filter: ColumnFilter
     },
     {

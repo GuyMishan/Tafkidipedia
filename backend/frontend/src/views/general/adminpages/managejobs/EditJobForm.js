@@ -30,6 +30,18 @@ const EditJobForm = ({ match }) => {
   const [job, setJob] = useState({});
 
   const [units, setUnits] = useState(undefined);
+  const [users, setUsers] = useState(undefined);
+
+  const loadUsers = () => {
+    let candidaterole = '2'
+    axios.get(`http://localhost:8000/api/usersbyrole/${candidaterole}`)
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const loadUnits = () => {
     axios.get("http://localhost:8000/api/unit")
@@ -95,25 +107,41 @@ const EditJobForm = ({ match }) => {
     var jobid = match.params.jobid;
     axios.put(`http://localhost:8000/api/job/${jobid}`, job)
       .then(response => {
-        console.log(response);
-        toast.success(`תפקיד עודכן בהצלחה`);
-        history.push(`/managejobs`);
+          var userid = job.meaish;
+
+        axios.post("http://localhost:8000/api/getuserbyid", { userid })
+          .then(response => {
+            let user = response.data;
+            user.job = jobid;
+            axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
+              .then(response => {
+                console.log(response);
+                toast.success(`תפקיד עודכן בהצלחה`);
+                history.push(`/managejobs`);
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+          })
+          .catch((error) => {
+            console.log(error);
+          })
       })
       .catch((error) => {
         console.log(error);
       })
   }
 
-  const CreateJob = () => {
-    axios.post(`http://localhost:8000/api/job`, job)
-      .then(response => {
-        console.log(response);
-        toast.success(`תפקיד עודכן בהצלחה`);
-        history.push(`/managejobs`);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+  const CreateJob = async () => {
+    let result = await axios.post(`http://localhost:8000/api/job`, job);
+    var userid = job.meaish;
+    let jobid=result.data._id;
+    let result2 = await axios.post("http://localhost:8000/api/getuserbyid", { userid })
+    let user = result2.data;
+    user.job = jobid;
+    let result3 = await axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
+    toast.success(`תפקיד עודכן בהצלחה`);
+    history.push(`/managejobs`);
   }
 
   const init = () => {
@@ -121,6 +149,7 @@ const EditJobForm = ({ match }) => {
       loadJob();
     }
     loadUnits();
+    loadUsers();
   }
 
   useEffect(() => {
@@ -133,7 +162,7 @@ const EditJobForm = ({ match }) => {
         <Col>
           <Card>
             {job.jobname && job.unit && match.params.jobid != '0' ? <CardHeader style={{ direction: 'rtl' }}>
-              <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'right' }}>ערוך תפקיד: {job.jobname} {job.unit.name}</CardTitle>{/*headline*/}
+              <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'right' }}>ערוך תפקיד: {job.jobname} {job.unit.name}</CardTitle>
             </CardHeader> : null}
 
             <CardBody >
@@ -147,14 +176,14 @@ const EditJobForm = ({ match }) => {
 
                       <div style={{ textAlign: 'right', paddingTop: '10px' }}>קוד תפקיד</div>
                       <Input placeholder="קוד תפקיד" type="number" name="jobcode" value={job.jobcode} onChange={handleChange} />
-                    </> : 
+                    </> :
                     <>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תפקיד</div>
-                    <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} disabled/>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תפקיד</div>
+                      <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} disabled />
 
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>קוד תפקיד</div>
-                    <Input placeholder="קוד תפקיד" type="number" name="jobcode" value={job.jobcode} onChange={handleChange} disabled/>
-                  </>}
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>קוד תפקיד</div>
+                      <Input placeholder="קוד תפקיד" type="number" name="jobcode" value={job.jobcode} onChange={handleChange} disabled />
+                    </>}
 
                   {units != undefined && match.params.jobid == '0' ? <>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>יחידה</div>
@@ -200,24 +229,33 @@ const EditJobForm = ({ match }) => {
                     <option value={'ורסטילי'}>ורסטילי</option>
                   </Input>
 
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>ודאי/אופציה</div>
-                  <Input placeholder="ודאי/אופציה" type="select" name="certain" value={job.certain} onChange={handleChange}>
-                    <option value={"בחר"}>בחר</option>
-                    <option value={"ודאי"}>ודאי</option>
-                    <option value={"אופציה"}>אופציה</option>
-                  </Input>
+                    <div style={{ textAlign: "right", paddingTop: "10px" }}>מאייש נוכחי</div>
+                    <FormGroup dir="rtl">
+                      <Input
+                        type="select"
+                        name="meaish"
+                        value={job.meaish}
+                        onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        {users ? users.map((user, index) => (
+                          <option value={user._id}>{user.name} {user.lastname}</option>
+                        )) : null}
+                      </Input>
+                    </FormGroup>
 
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מפקד</div>
-                  <Input placeholder="שם מפקד" type="string" name="commander" value={job.commander} onChange={handleChange} />
-
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון מפקד</div>
-                  <Input placeholder="פלאפון מפקד" type="string" name="commander_phone" value={job.commander_phone} onChange={handleChange} />
-
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מאייש</div>
-                  <Input placeholder="שם מאייש" type="string" name="meaish" value={job.meaish} onChange={handleChange} />
-
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלאפון מאייש</div>
-                  <Input placeholder="פלאפון מאייש" type="string" name="meaish_phone" value={job.meaish_phone} onChange={handleChange} />
+                    <div style={{ textAlign: "right", paddingTop: "10px" }}>מפקד נוכחי</div>
+                    <FormGroup dir="rtl">
+                      <Input
+                        type="select"
+                        name="commander"
+                        value={job.commander}
+                        onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        {users ? users.map((user, index) => (
+                          <option value={user._id}>{user.name} {user.lastname}</option>
+                        )) : null}
+                      </Input>
+                    </FormGroup>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגת תקן</div>
                   <Input placeholder='דרגת תקן' type="select" name="rank" value={job.rank} onChange={handleChange}>

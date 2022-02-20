@@ -13,9 +13,77 @@ let readtipul = [
   {
     $unwind: "$unit"
   },
+  {
+    $lookup: {
+      from: "users",
+      localField: "meaish",
+      foreignField: "_id",
+      as: "meaish"
+    }
+  },
+  {
+    $unwind: "$meaish"
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "commander",
+      foreignField: "_id",
+      as: "commander"
+    }
+  },
+  {
+    $unwind: "$commander"
+  },
+];
+
+let readtipul2 = [
+  {
+    $lookup: {
+      from: "units",
+      localField: "unit",
+      foreignField: "_id",
+      as: "unit"
+    }
+  },
+  {
+    $unwind: "$unit"
+  },
 ];
 
 exports.findById = async(req, res) => {
+  let tipulfindquerry = readtipul2.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //id
+  if (req.params.id != 'undefined') {
+    andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Job.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+ }
+
+ exports.smartjobbyid = async(req, res) => {
   let tipulfindquerry = readtipul.slice();
   let finalquerry = tipulfindquerry;
 

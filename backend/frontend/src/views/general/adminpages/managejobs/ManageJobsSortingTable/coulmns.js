@@ -29,18 +29,13 @@ export const COLUMNS = [
 
     },
     {
-        Header: 'ודאי/אופציה',
-        accessor:'certain',
-        Filter:ColumnFilter
-    },
-    {
         Header: 'מפקד נוכחי',
         accessor:'commander',
         Filter:ColumnFilter
     },
     {
         Header: 'פלאפון מפקד נוכחי',
-        accessor:'commander_phone',
+        accessor:'commander.cellphone',
         Filter:ColumnFilter
     },
     {
@@ -50,7 +45,7 @@ export const COLUMNS = [
     },
     {
         Header: 'פלאפון מאייש',
-        accessor:'meaish_phone',
+        accessor:'meaish.cellphone',
         Filter:ColumnFilter
 
     },
@@ -59,11 +54,11 @@ export const COLUMNS = [
         accessor:'rank',
         Filter:ColumnFilter
     },
-    {
-        Header: 'הערות תפקיד',
-        accessor:'jobremarks',
-        Filter:ColumnFilter
-    },
+    // {
+    //     Header: 'הערות תפקיד',
+    //     accessor:'jobremarks',
+    //     Filter:ColumnFilter
+    // },
     {
         Header: 'דמ"ח',
         accessor:'damah',
@@ -74,26 +69,26 @@ export const COLUMNS = [
         accessor:'pikodi_or_mikzoi',
         Filter:ColumnFilter
     },
-    {
-        Header: 'נתוני סף 1',
-        accessor:'saf1',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'נתוני סף 2',
-        accessor:'saf2',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'נתוני סף 3',
-        accessor:'saf3',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'נתוני סף 4',
-        accessor:'saf4',
-        Filter:ColumnFilter
-    },
+    // {
+    //     Header: 'נתוני סף 1',
+    //     accessor:'saf1',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'נתוני סף 2',
+    //     accessor:'saf2',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'נתוני סף 3',
+    //     accessor:'saf3',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'נתוני סף 4',
+    //     accessor:'saf4',
+    //     Filter:ColumnFilter
+    // },
     {
         Header: 'מיקום',
         accessor:'location',
@@ -109,36 +104,36 @@ export const COLUMNS = [
         accessor:'peilut_level',
         Filter:ColumnFilter
     },
-    {
-        Header: 'מאפייני תפקיד',
-        accessor:'description',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'תרומת התפקיד לפרט',
-        accessor:'job_contribution',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'יכולת חשיבה ותכנון',
-        accessor:'thinking_ability',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'יחסים בין אישיים',
-        accessor:'realtionship_ability',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'יכולת ניהול וארגון',
-        accessor:'management_ability',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'מנהיגות ופיקוד',
-        accessor:'leadership_ability',
-        Filter:ColumnFilter
-    },
+    // {
+    //     Header: 'מאפייני תפקיד',
+    //     accessor:'description',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'תרומת התפקיד לפרט',
+    //     accessor:'job_contribution',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'יכולת חשיבה ותכנון',
+    //     accessor:'thinking_ability',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'יחסים בין אישיים',
+    //     accessor:'realtionship_ability',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'יכולת ניהול וארגון',
+    //     accessor:'management_ability',
+    //     Filter:ColumnFilter
+    // },
+    // {
+    //     Header: 'מנהיגות ופיקוד',
+    //     accessor:'leadership_ability',
+    //     Filter:ColumnFilter
+    // },
     {
         Header: 'סיווג',
         accessor:'sivug',
