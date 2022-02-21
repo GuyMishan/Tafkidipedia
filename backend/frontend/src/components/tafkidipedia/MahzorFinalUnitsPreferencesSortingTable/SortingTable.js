@@ -20,6 +20,11 @@ const SortingTable = ({ match }) => {
   }
 
   const getMahzorUnitsPreferences = async () => {//get + sort by mahzorid
+    let tempcandidatesbymahzor = [];
+
+    let result = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`);
+    tempcandidatesbymahzor = result.data;
+
     await axios.get(`http://localhost:8000/api/smartfinalunitpreference`)
       .then(async response => {
         let tempdata = response.data;
@@ -27,11 +32,14 @@ const SortingTable = ({ match }) => {
         for (let i = 0; i < tempdata.length; i++) {
           if (tempdata[i].mahzor._id == match.params.mahzorid) {
             for (let j = 0; j < tempdata[i].preferencerankings.length; j++) {
-              let result1 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempdata[i].preferencerankings[j].candidate}`);
-              tempdata[i].preferencerankings[j].candidate = result1.data[0];
-              delete tempdata[i].preferencerankings[j].__v;
-              delete tempdata[i].preferencerankings[j]._id;
-              delete tempdata[i].preferencerankings[j].candidate.__v;
+              for (let k = 0; k < tempcandidatesbymahzor.length; k++) {
+                if (tempdata[i].preferencerankings[j].candidate == tempcandidatesbymahzor[k]._id) {
+                  tempdata[i].preferencerankings[j].candidate = tempcandidatesbymahzor[k];
+                  delete tempdata[i].preferencerankings[j].__v;
+                  delete tempdata[i].preferencerankings[j]._id;
+                  delete tempdata[i].preferencerankings[j].candidate.__v;
+                }
+              }
             }
             tempunitspreferences.push(tempdata[i])
           }
@@ -102,7 +110,7 @@ const SortingTable = ({ match }) => {
                           if (cell.column.id == "jobinmahzor.job.jobname") {
                             return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
                           }
-                          if (cell.column.id == "jobinmahzor.job.certain") {
+                          if (cell.column.id == "jobinmahzor.certain") {
                             return <td>{cell.value}</td>
                           }
                         if (cell.column.id == "preferencerankings") {

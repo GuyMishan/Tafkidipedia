@@ -7,7 +7,7 @@ export const COLUMNS = [
     },
     {
         Header: 'ודאי/אופציה',
-        accessor: 'jobinmahzor.job.certain',
+        accessor: 'jobinmahzor.certain',
         Filter: ColumnFilter
     },
     {

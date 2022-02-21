@@ -139,7 +139,7 @@ const CandidatePreferenceForm = ({ match }) => {
     let jobs = result.data;
 
     for (let i = 0; i < jobs.length; i++) {
-      if (jobs[i].job.certain == "ודאי") // תפקיד ודאי
+      if (jobs[i].certain == "ודאי") // תפקיד ודאי
       {
         let tempjob = jobs[i];
         tempcertjobs.push(tempjob)

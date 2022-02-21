@@ -20,6 +20,15 @@ const SortingTable = ({ match }) => {
   }
 
   const getMahzorCabdidatePreferences = async () => {//get + sort by mahzorid
+    let tempcandidatepreferenceranking = [];
+    let tempjobsinmahzor = [];
+
+    let result = await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`);
+    tempjobsinmahzor = result.data;
+
+    let result2 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking`);//need to be changed to only jobinmahzors preferencerankings
+    tempcandidatepreferenceranking = result2.data;
+
     await axios.get(`http://localhost:8000/api/smartcandidatepreference`)
       .then(async response => {
         let tempdata = response.data;
@@ -27,20 +36,32 @@ const SortingTable = ({ match }) => {
         for (let i = 0; i < tempdata.length; i++) {
           if (tempdata[i].mahzor._id == match.params.mahzorid) {
             for (let j = 0; j < tempdata[i].certjobpreferences.length; j++) {
-              let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempdata[i].certjobpreferences[j]}`);
-              tempdata[i].certjobpreferences[j] = result1.data;
-              delete tempdata[i].certjobpreferences[j].__v;
-              delete tempdata[i].certjobpreferences[j]._id;
-              let result2 = await axios.get(`http://localhost:8000/api/jobinmahzorbyid/${tempdata[i].certjobpreferences[j].jobinmahzor}`);
-              tempdata[i].certjobpreferences[j].jobinmahzor = result2.data[0];
+              for (let k = 0; k < tempcandidatepreferenceranking.length; k++) {
+                if (tempdata[i].certjobpreferences[j] == tempcandidatepreferenceranking[k]._id) {
+                  tempdata[i].certjobpreferences[j] = tempcandidatepreferenceranking[k];
+                  delete tempdata[i].certjobpreferences[j].__v;
+                  delete tempdata[i].certjobpreferences[j]._id;
+                  for (let l = 0; l < tempjobsinmahzor.length; l++) {
+                    if (tempdata[i].certjobpreferences[j].jobinmahzor == tempjobsinmahzor[l]._id) {
+                      tempdata[i].certjobpreferences[j].jobinmahzor = tempjobsinmahzor[l];
+                    }
+                  }
+                }
+              }
             }
             for (let j = 0; j < tempdata[i].noncertjobpreferences.length; j++) {
-              let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempdata[i].noncertjobpreferences[j]}`);
-              tempdata[i].noncertjobpreferences[j] = result1.data;
-              delete tempdata[i].noncertjobpreferences[j].__v;
-              delete tempdata[i].noncertjobpreferences[j]._id;
-              let result2 = await axios.get(`http://localhost:8000/api/jobinmahzorbyid/${tempdata[i].noncertjobpreferences[j].jobinmahzor}`);
-              tempdata[i].noncertjobpreferences[j].jobinmahzor = result2.data[0];
+              for (let k = 0; k < tempcandidatepreferenceranking.length; k++) {
+                if (tempdata[i].noncertjobpreferences[j] == tempcandidatepreferenceranking[k]._id) {
+                  tempdata[i].noncertjobpreferences[j] = tempcandidatepreferenceranking[k];
+                  delete tempdata[i].noncertjobpreferences[j].__v;
+                  delete tempdata[i].noncertjobpreferences[j]._id;
+                  for (let l = 0; l < tempjobsinmahzor.length; l++) {
+                    if (tempdata[i].noncertjobpreferences[j].jobinmahzor == tempjobsinmahzor[l]._id) {
+                      tempdata[i].noncertjobpreferences[j].jobinmahzor = tempjobsinmahzor[l];
+                    }
+                  }
+                }
+              }
             }
             tempcandidatepreferences.push(tempdata[i])
           }

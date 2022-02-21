@@ -73,7 +73,7 @@ const SortingTable = (props) => {
         if (certainfilter != undefined) {
           tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
             return el.jobinmahzor.job.migzar == migzarfilter &&
-              el.jobinmahzor.job.certain == certainfilter &&
+              el.jobinmahzor.certain == certainfilter &&
               el.jobinmahzor.job.unit.name == unitfilter;
           });
         }
@@ -129,7 +129,7 @@ const SortingTable = (props) => {
               {data.length > 0 ? <th></th> : null}
               {data.map(eshkol => {
                 return (
-                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.job.certain}</h5></th>
+                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5></th>
                 )
               }
               )}
