@@ -178,7 +178,7 @@ exports.jobinmahzorsbymahzorid = async(req, res) => {
     });
  }
 
- exports.deletjobinmahzorbyjobidandmahzorid = (req, res) => {
+ exports.deletejobinmahzorbyjobidandmahzorid = (req, res) => {
   Jobinmahzor.deleteOne({ job: req.params.jobid , mahzor: req.params.mahzorid})
   .then((jobinmahzor) => res.json(jobinmahzor))
   .catch((err) => res.status(400).json("Error: " + err));
@@ -188,4 +188,10 @@ exports.updatejobinmahzorbyjobidandmahzorid = (req, res) => {
   Jobinmahzor.updateOne({ job: req.params.jobid , mahzor: req.params.mahzorid},req.body)
     .then((jobinmahzor) => res.json(jobinmahzor))
     .catch((err) => res.status(400).json("Error: " + err));
+};
+
+exports.jobinmahzorbyjobidandmahzorid = (req, res) => {
+  Jobinmahzor.jobinmahzorbyjobidandmahzorid({ job: req.params.jobid, mahzor: req.params.mahzorid})
+  .then((jobinmahzor) => res.json(jobinmahzor))
+  .catch((err) => res.status(400).json("Error: " + err));
 };

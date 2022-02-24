@@ -298,16 +298,94 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
       tempjobinmahzor.job = originalandnewchanged[i].job;
       tempjobinmahzor.certain = IsjobCertainByUserMovement(originalandnewchanged[i].movement);
       let result;
-      if (tempjobinmahzor.certain != 'לא נפתח') {
-        //try to update..
+
+      if (tempjobinmahzor.certain != 'לא נפתח') { 
         result = await axios.put(`http://localhost:8000/api/updatejobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`, tempjobinmahzor);
-        if (result.data.nModified == 0)//job in mahzor doesnt exists (המתמודד היה "ממשיך" 5)
+
+        if (result.data.nModified == 0) // ממשיך -> ודאי/אופציה
         {
-          result = await axios.post(`http://localhost:8000/api/jobinmahzor`, tempjobinmahzor);
+          result = await axios.post(`http://localhost:8000/api/jobinmahzor`, tempjobinmahzor);//create jobinmahzor
+          if (mahzordata.status >= 3)//check status of mahzor  
+          {
+            let response = await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${match.params.mahzorid}`)
+            let tempeshkolbymahzorid = response.data;
+            if (tempeshkolbymahzorid.length > 0)//check if eshkols created already
+            {
+              let tempmahzoreshkol = ({ mahzor: match.params.mahzorid, jobinmahzor: result.data._id, finalconfirmation: false, candidatesineshkol: [] })
+              let response1 = await axios.post(`http://localhost:8000/api/eshkol`, tempmahzoreshkol)
+            }
+            if (mahzordata.status >= 5)//check status of mahzor  
+            {
+              let response = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${match.params.mahzorid}`)
+              let tempeshkolbymahzorid = response.data;
+              if (tempeshkolbymahzorid.length > 0)//check if finaleshkols created already
+              {
+                let tempmahzoreshkol = ({ mahzor: match.params.mahzorid, jobinmahzor: result.data._id, finalconfirmation: false, candidatesineshkol: [] })
+                let response1 = await axios.post(`http://localhost:8000/api/finaleshkol`, tempmahzoreshkol)
+              }
+            }
+          }
+        }
+        else // אופציה -> ודאי / ודאי -> אופציה
+        {
+          //?????????
         }
       }
-      else
-        result = await axios.delete(`http://localhost:8000/api/deletjobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`);
+      else // ודאי/אופציה -> ממשיך
+      {
+        let result1 = await axios.get(`http://localhost:8000/api/jobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`);
+        let tempjobinmahzortodelete = result1.data;
+        //delete jobinmahzor
+        let result2 = await axios.delete(`http://localhost:8000/api/deletejobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`);
+        //delete candidatepref + candidateprefrankings related to jobinmahzor
+        let response3 = await axios.get(`http://localhost:8000/api/candidatepreferencebymahzorid/${match.params.mahzorid}`)
+        let tempcandidatespreferencesdata = response3.data;
+
+        //finding jobinmahzor in everyones preferences+rankings and deleting them.. + candidate which his job is deleted preference delete+rankings
+        for (let i = 0; i < tempcandidatespreferencesdata.length; i++) {
+          //delete preferenceranking from preference array / update certjobpreferences/noncertjobpreferences /update candidatepreference
+          let tempcandidatespreference_cerjobprefs = tempcandidatespreferencesdata[i].certjobpreferences;
+          let tempcandidatespreference_noncerjobprefs = tempcandidatespreferencesdata[i].noncertjobpreferences;
+
+          for (let j = 0; j < tempcandidatespreferencesdata[i].certjobpreferences.length; j++) {
+            let result4 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].certjobpreferences[j]}`);
+            if (result4.jobinmahzor == tempjobinmahzortodelete._id) {
+              //delete preferenceranking
+              let result5 = await axios.delete(`http://localhost:8000/api/candidatepreferenceranking/${result4._id}`);
+              tempcandidatespreference_cerjobprefs.splice(j, 1)
+            }
+          }
+
+          for (let j = 0; j < tempcandidatespreferencesdata[i].noncertjobpreferences.length; j++) {
+            let result4 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].noncertjobpreferences[j]}`);
+            if (result4.jobinmahzor == tempjobinmahzortodelete._id) {
+              //delete preferenceranking
+              let result5 = await axios.delete(`http://localhost:8000/api/candidatepreferenceranking/${result4._id}`);
+              tempcandidatespreference_noncerjobprefs.splice(j, 1)
+            }
+          }
+          let tempcandidatespreference = tempcandidatespreferencesdata[i];
+          let tempcandidatespreference_id = tempcandidatespreference._id;
+          tempcandidatespreference.certjobpreferences = tempcandidatespreference_cerjobprefs;
+          tempcandidatespreference.noncertjobpreferences = tempcandidatespreference_noncerjobprefs;
+          delete tempcandidatespreference._id;
+          let response6 = await axios.put(`http://localhost:8000/api/candidatepreference/${tempcandidatespreference_id}`);
+
+          //candidate which his job is deleted preference delete+rankings
+          if (tempcandidatespreferencesdata[i].candidate == originalandnewchanged[i].candidateid)
+          {
+            for (let j = 0; j < tempcandidatespreferencesdata[i].certjobpreferences.length; j++) {
+              //delete preferenceranking
+              let result7 = await axios.delete(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].certjobpreferences[j]}`);
+            }
+            for (let j = 0; j < tempcandidatespreferencesdata[i].noncertjobpreferences.length; j++) {
+              //delete preferenceranking
+              let result7 = await axios.delete(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].noncertjobpreferences[j]}`);
+            }
+            let result8 = await axios.delete(`http://localhost:8000/api/candidatepreference/${tempcandidatespreference_id}`);
+          }
+        }
+      }
     }
 
     for (let i = 0; i < notoriginalandnew.length; i++) { //add jobinmahzors thats no in db
