@@ -191,7 +191,7 @@ exports.updatejobinmahzorbyjobidandmahzorid = (req, res) => {
 };
 
 exports.jobinmahzorbyjobidandmahzorid = (req, res) => {
-  Jobinmahzor.jobinmahzorbyjobidandmahzorid({ job: req.params.jobid, mahzor: req.params.mahzorid})
+  Jobinmahzor.find({ job: req.params.jobid, mahzor: req.params.mahzorid})
   .then((jobinmahzor) => res.json(jobinmahzor))
   .catch((err) => res.status(400).json("Error: " + err));
 };

@@ -171,36 +171,39 @@ exports.finaleshkolbymahzoridandunitid = (req, res) => {
     });
 };
 
-exports.finaleshkolbyjobid = (req, res) => {
-  let tipulfindquerry = readtipul.slice();
-  let finalquerry = tipulfindquerry;
+exports.finaleshkolbyjobinmahzorid = (req, res) => {
+  // let tipulfindquerry = readtipul.slice();
+  // let finalquerry = tipulfindquerry;
 
-  let andquery = [];
+  // let andquery = [];
 
-  //jobid
-  if (req.params.jobid != 'undefined') {
-    andquery.push({ "job._id": mongoose.Types.ObjectId(req.params.jobid) });
-  }
+  // //jobid
+  // if (req.params.jobinmahzorid != 'undefined') {
+  //   andquery.push({ "jobinmahzor._id": mongoose.Types.ObjectId(req.params.jobinmahzorid) });
+  // }
 
-  if (andquery.length != 0) {
-    let matchquerry = {
-      "$match": {
-        "$and": andquery
-      }
-    };
-    finalquerry.push(matchquerry)
-  }
+  // if (andquery.length != 0) {
+  //   let matchquerry = {
+  //     "$match": {
+  //       "$and": andquery
+  //     }
+  //   };
+  //   finalquerry.push(matchquerry)
+  // }
 
-  // console.log(matchquerry)
-  //console.log(andquery)
+  // // console.log(matchquerry)
+  // //console.log(andquery)
 
-  Finaleshkol.aggregate(finalquerry)
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((error) => {
-      res.status(400).json('Error: ' + error);
-    });
+  // Finaleshkol.aggregate(finalquerry)
+  //   .then((result) => {
+  //     res.json(result);
+  //   })
+  //   .catch((error) => {
+  //     res.status(400).json('Error: ' + error);
+  //   });
+  Finaleshkol.find({ jobinmahzor: req.params.jobinmahzorid})
+  .then((result) => res.json(result))
+  .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.finaleshkolbyid = (req, res) => {

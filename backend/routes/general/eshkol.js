@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { create, find, update, remove, findById,deleteMahzorEshkol,eshkolbymahzorid,eshkolbymahzoridandunitid,eshkolbyjobid,eshkolbyid} = require('../../controllers/general/eshkol');
+const { create, find, update, remove, findById,deleteMahzorEshkol,eshkolbymahzorid,eshkolbymahzoridandunitid,eshkolbyjobinmahzorid,eshkolbyid} = require('../../controllers/general/eshkol');
 
 // find spec 
 router.get('/eshkol/:id', findById)
@@ -20,7 +20,7 @@ router.get('/eshkolbymahzorid/:mahzorid', eshkolbymahzorid)
 
 router.get('/eshkolbymahzoridandunitid/:mahzorid/:unitid', eshkolbymahzoridandunitid)
 
-router.get('/eshkolbyjobid/:jobid', eshkolbyjobid)
+router.get('/eshkolbyjobinmahzorid/:jobinmahzorid', eshkolbyjobinmahzorid)
 
 router.get('/eshkolbyid/:id', eshkolbyid)
 
