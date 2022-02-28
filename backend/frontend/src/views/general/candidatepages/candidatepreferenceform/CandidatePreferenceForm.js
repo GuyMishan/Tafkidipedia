@@ -161,7 +161,7 @@ const CandidatePreferenceForm = ({ match }) => {
 
   function countInArray(array, what) {
     return array.filter(item => item.jobinmahzor == what.jobinmahzor).length;
-}
+  }
 
   function CheckPreferenceData() {
     let flag = true;
@@ -196,9 +196,9 @@ const CandidatePreferenceForm = ({ match }) => {
       //     certjobsflag = false;
       //   }
       // }
-        if (countInArray(candidatepreference.certjobpreferences,candidatepreference.certjobpreferences[i])!=1) {
-          certjobsflag = false;
-        }
+      if (countInArray(candidatepreference.certjobpreferences, candidatepreference.certjobpreferences[i]) != 1) {
+        certjobsflag = false;
+      }
     }
 
     //אופציה- בדיקה
@@ -216,11 +216,11 @@ const CandidatePreferenceForm = ({ match }) => {
       //     noncertjobsflag = false;
       //   }
       // }
-      if (countInArray(candidatepreference.noncertjobpreferences,candidatepreference.noncertjobpreferences[i])!=1) {
+      if (countInArray(candidatepreference.noncertjobpreferences, candidatepreference.noncertjobpreferences[i]) != 1) {
         noncertjobsflag = false;
       }
     }
-    
+
 
     //
     if (certjobsemptyflag == false)
@@ -373,12 +373,19 @@ const CandidatePreferenceForm = ({ match }) => {
                         <Col xs={12} md={4}>
                           <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
                           <FormGroup dir="rtl" >
-                            <Input type="select" name={i} value={candidatepreference.certjobpreferences[i].jobinmahzor} onChange={handleChangecertjobpreferences}>
-                              <option value={undefined}>{"בחר תפקיד"}</option>
-                              {certmahzorjobs.map((job, index) => (
-                                <option value={job._id}>{job.job.jobname + "/" + job.job.unit.name}</option>
-                              ))}
-                            </Input>
+                            {candidatepreference.certjobpreferences[i] ?
+                              <Input type="select" name={i} value={candidatepreference.certjobpreferences[i].jobinmahzor} onChange={handleChangecertjobpreferences}>
+                                <option value={undefined}>{"בחר תפקיד"}</option>
+                                {certmahzorjobs.map((job, index) => (
+                                  <option value={job._id}>{job.job.jobname + "/" + job.job.unit.name}</option>
+                                ))}
+                              </Input> :
+                              <Input type="select" name={i} /*value={candidatepreference.certjobpreferences[i].job}*/ onChange={handleChangecertjobpreferences}>
+                                <option value={undefined}>{"בחר תפקיד"}</option>
+                                {certmahzorjobs.map((job, index) => (
+                                  <option value={job._id}>{job.job.jobname + "/" + job.job.unit.name}</option>
+                                ))}
+                              </Input>}
                           </FormGroup>
                         </Col>)}
                     </Row>
@@ -390,12 +397,19 @@ const CandidatePreferenceForm = ({ match }) => {
                         <Col xs={12} md={4}>
                           <div style={{ textAlign: 'center', paddingTop: '10px' }}>תפקיד {i + 1}</div>
                           <FormGroup dir="rtl" >
-                            <Input type="select" name={i} value={candidatepreference.noncertjobpreferences[i].jobinmahzor} onChange={handleChangenoncertjobpreferences}>
-                              <option value={undefined}>{"בחר תפקיד"}</option>
-                              {noncertmahzorjobs.map((job, index) => (
-                                <option value={job._id}>{job.job.jobname + "/" + job.job.unit.name}</option>
-                              ))}
-                            </Input>
+                            {candidatepreference.noncertjobpreferences[i] ?
+                              <Input type="select" name={i} value={candidatepreference.noncertjobpreferences[i].jobinmahzor} onChange={handleChangenoncertjobpreferences}>
+                                <option value={undefined}>{"בחר תפקיד"}</option>
+                                {noncertmahzorjobs.map((job, index) => (
+                                  <option value={job._id}>{job.job.jobname + "/" + job.job.unit.name}</option>
+                                ))}
+                              </Input> :
+                              <Input type="select" name={i} /*value={candidatepreference.certjobpreferences[i].job}*/ onChange={handleChangecertjobpreferences}>
+                                <option value={undefined}>{"בחר תפקיד"}</option>
+                                {noncertmahzorjobs.map((job, index) => (
+                                  <option value={job._id}>{job.job.jobname + "/" + job.job.unit.name}</option>
+                                ))}
+                              </Input>}
                           </FormGroup>
                         </Col>)}
                     </Row>
