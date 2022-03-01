@@ -23,7 +23,7 @@ const SortingTable = ({ match }) => {
     let tempcandidateswithoutpreferences = [];
 
     //get all mahzor candidates
-    let result = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`)
+    let result = await axios.get(`http://localhost:8000/api/activecandidatesbymahzorid/${match.params.mahzorid}`)
     let tempallcandidates = result.data;
 
     //get all candidates with a preference

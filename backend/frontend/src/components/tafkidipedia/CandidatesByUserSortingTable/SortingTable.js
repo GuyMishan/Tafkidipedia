@@ -22,7 +22,7 @@ const SortingTable = ({ match }) => {
 
   const getCandidatesByUser = async () => {
     try {
-      await axios.get(`http://localhost:8000/api/candidate/candidatesbyuser/${match.params.userid}`)
+      await axios.get(`http://localhost:8000/api/candidate/activecandidatesbyuser/${match.params.userid}`)
         .then(response => {
           setData(response.data)
         })

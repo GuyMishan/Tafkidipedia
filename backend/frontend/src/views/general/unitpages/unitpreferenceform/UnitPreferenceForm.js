@@ -77,7 +77,7 @@ const UnitPreferenceForm = ({ match }) => {
 
   const loadmahzordata = async () => {
     //candidates
-    let result1 = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`)
+    let result1 = await axios.get(`http://localhost:8000/api/activecandidatesbymahzorid/${match.params.mahzorid}`)
     let candidates = result1.data;
     let tempmahzorcandidates = [];
     for (let i = 0; i < candidates.length; i++) {

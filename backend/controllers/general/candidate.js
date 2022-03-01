@@ -37,6 +37,53 @@ let readtipul = [
   },
 ];
 
+let readtipul2 = [
+  {
+    $lookup: {
+      from: "users",
+      localField: "user",
+      foreignField: "_id",
+      as: "user"
+    }
+  },
+  {
+    $unwind: "$user"
+  },
+  {
+    $lookup: {
+      from: "mahzors",
+      localField: "mahzor",
+      foreignField: "_id",
+      as: "mahzor"
+    }
+  },
+  {
+    $unwind: "$mahzor"
+  },
+  {
+    $lookup: {
+      from: "populations",
+      localField: "mahzor.population",
+      foreignField: "_id",
+      as: "mahzor.population"
+    }
+  },
+  {
+    $unwind: "$mahzor.population"
+  },
+  {
+    $lookup: {
+      from: "movements",
+      localField: "movement",
+      foreignField: "_id",
+      as: "movement"
+    }
+  },
+  {
+    $unwind: "$movement"
+  },
+];
+
 exports.findById = async (req, res) => {
   const candidate = await Candidate.findOne().where({ _id: req.params.id })
 
@@ -160,6 +207,55 @@ exports.smartcandidatebyid = async (req, res) => {
     };
     finalquerry.push(matchquerry)
   }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Candidate.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+}
+
+
+exports.activecandidatesbymahzorid = async (req, res) => {
+  let tipulfindquerry = readtipul2.slice();
+  let finalquerry = tipulfindquerry;
+
+    let matchquerry = {
+      "$match": {
+        "mahzor._id": mongoose.Types.ObjectId(req.params.mahzorid),
+        "movement.name": { $not: { $eq: "ממשיך" } },
+      }
+    };
+    finalquerry.push(matchquerry)
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Candidate.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+}
+
+exports.activecandidatesbyuser = async (req, res) => {
+  let tipulfindquerry = readtipul2.slice();
+  let finalquerry = tipulfindquerry;
+
+  let matchquerry = {
+    "$match": {
+      "user._id": mongoose.Types.ObjectId(req.params.userid),
+      "movement.name": { $not: { $eq: "ממשיך" } },
+    }
+  };
+  finalquerry.push(matchquerry)
 
   // console.log(matchquerry)
   //console.log(andquery)

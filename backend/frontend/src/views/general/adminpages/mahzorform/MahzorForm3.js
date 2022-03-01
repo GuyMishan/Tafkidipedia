@@ -301,11 +301,13 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
       let result;
 
       if (tempjobinmahzor.certain != 'לא נפתח') {
+        //try to update jobinmahzor
         result = await axios.put(`http://localhost:8000/api/updatejobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`, tempjobinmahzor);
 
         if (result.data.nModified == 0) // ממשיך -> ודאי/אופציה
         {
-          result = await axios.post(`http://localhost:8000/api/jobinmahzor`, tempjobinmahzor);//create jobinmahzor
+          //create jobinmahzor
+          result = await axios.post(`http://localhost:8000/api/jobinmahzor`, tempjobinmahzor);
           if (mahzordata.status >= 3)//check status of mahzor  
           {
             let response = await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${match.params.mahzorid}`)
@@ -329,15 +331,18 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
         }
         else // אופציה -> ודאי / ודאי -> אופציה
         {
+        //get updated jobinmahzor
+        let result1 = await axios.get(`http://localhost:8000/api/jobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`);
+        let tempupdatedjobinmahzor = result1.data[0];
+        console.log(tempupdatedjobinmahzor)
           //?????????
         }
       }
       else // ודאי/אופציה -> ממשיך
       {
+        //get jobinmahzor to delete
         let result1 = await axios.get(`http://localhost:8000/api/jobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`);
         let tempjobinmahzortodelete = result1.data[0];
-        //delete jobinmahzor
-        let result2 = await axios.delete(`http://localhost:8000/api/deletejobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`);
 
         //delete candidatepreferences + candidateprefrankings related to jobinmahzor
         let response3 = await axios.get(`http://localhost:8000/api/candidatepreferencebymahzorid/${match.params.mahzorid}`)
@@ -379,7 +384,7 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
               //delete preferenceranking
               let result7 = await axios.delete(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[j].noncertjobpreferences[k]}`);
             }
-            let result8 = await axios.delete(`http://localhost:8000/api/candidatepreference/${tempcandidatespreferencesdata[j]._id}`);
+            let result8 = await axios.delete(`http://localhost:8000/api/candidatepreference/${tempcandidatespreference_id}`);
           }
         }
 
@@ -455,9 +460,42 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
               }
             }
           }
-
-
         }
+
+        //delete unitpreference + rankings related to candidate
+        let response7 = await axios.get(`http://localhost:8000/api/unitpreferencebymahzorid/${match.params.mahzorid}`)
+        let tempunitpreferencesdata = response7.data;
+
+        for (let j = 0; j < tempunitpreferencesdata.length; j++) {
+          //delete candidatepreferences + candidateprefrankings related to jobinmahzor
+          let tempunitpreference_preferencerankings = tempunitpreferencesdata[j].preferencerankings;
+
+          for (let k = 0; k < tempunitpreferencesdata[j].preferencerankings.length; k++) {
+            let result15 = await axios.get(`http://localhost:8000/api/unitpreferenceranking/${tempunitpreferencesdata[j].preferencerankings[k]._id}`);
+            if (result15.data.candidate == originalandnewchanged[i].candidateid) {
+              let result16 = await axios.delete(`http://localhost:8000/api/unitpreferenceranking/${result15.data._id}`);
+              tempunitpreference_preferencerankings.splice(k, 1)
+            }
+          }
+
+          let tempunitpreference = tempunitpreferencesdata[j];
+          let tempunitpreference_id = tempunitpreference._id;
+          tempunitpreference.preferencerankings = tempunitpreference_preferencerankings;
+          delete tempunitpreference._id;
+          let response6 = await axios.put(`http://localhost:8000/api/unitpreference/${tempunitpreference_id}`, tempunitpreference);
+
+          //delete unitpreference + rankings of jobinmahzor
+          if (tempunitpreferencesdata[j].jobinmahzor._id == tempjobinmahzortodelete._id) {
+            for (let k = 0; k < tempunitpreferencesdata[j].preferencerankings.length; k++) {
+              //delete preferenceranking
+              let result7 = await axios.delete(`http://localhost:8000/api/unitpreferenceranking/${tempunitpreferencesdata[j].preferencerankings[k]._id}`);
+            }
+            let result8 = await axios.delete(`http://localhost:8000/api/unitpreference/${tempunitpreference_id}`);
+          }
+        }
+
+        //delete jobinmahzor
+        let result2 = await axios.delete(`http://localhost:8000/api/deletejobinmahzorbyjobidandmahzorid/${originalandnewchanged[i].job}/${tempmahzordata._id}`);
       }
     }
 

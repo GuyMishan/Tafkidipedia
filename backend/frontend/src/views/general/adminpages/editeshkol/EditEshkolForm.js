@@ -72,7 +72,7 @@ const EditEshkolForm = ({ match }) => {
   }
 
   const loadcandidates = async (mahzorid) => {
-    let result = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${mahzorid}`)
+    let result = await axios.get(`http://localhost:8000/api/activecandidatesbymahzorid/${mahzorid}`)
     let candidates = result.data;
     setCandidates(candidates);
   }
