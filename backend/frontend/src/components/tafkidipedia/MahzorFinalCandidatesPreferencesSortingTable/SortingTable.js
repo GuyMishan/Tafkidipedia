@@ -15,6 +15,9 @@ const SortingTable = ({ match }) => {
 
   const [data, setData] = useState([])
 
+  const [certheaderspan, setCertheaderspan] = useState(0)
+  const [noncertheaderspan, setNoncertheaderspan] = useState(0)
+
   function init() {
     getMahzorCabdidatePreferences();
   }
@@ -67,10 +70,29 @@ const SortingTable = ({ match }) => {
           }
         }
         setData(tempcandidatepreferences)
+        CalculateHeaderSpan(tempcandidatepreferences)
       })
       .catch((error) => {
         console.log(error);
       })
+  }
+
+  const CalculateHeaderSpan = async (tabledata) => {
+    let tempcertheaderspan = 0;
+    let tempnoncertheaderspan = 0;
+
+    for (let i = 0; i < tabledata.length; i++) {
+      if(tabledata[i].certjobpreferences.length>tempcertheaderspan)
+      {
+        tempcertheaderspan=tabledata[i].certjobpreferences.length
+      }
+      if(tabledata[i].noncertjobpreferences.length>tempnoncertheaderspan)
+      {
+        tempnoncertheaderspan=tabledata[i].noncertjobpreferences.length
+      }
+    }
+    setCertheaderspan(tempcertheaderspan);
+    setNoncertheaderspan(tempnoncertheaderspan);
   }
 
   useEffect(() => {
@@ -118,8 +140,8 @@ const SortingTable = ({ match }) => {
             <thead style={{ backgroundColor: '#4fff64' }}>
               <tr>
                 <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
-                <th colSpan={data[0].mahzor.numberofjobpicks} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
-                <th colSpan={data[0].mahzor.numberofjobpicks}>תפקידים אופציה</th>
+                <th colSpan={certheaderspan} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
+                <th colSpan={noncertheaderspan}>תפקידים אופציה</th>
               </tr>
             </thead> : null}
 
@@ -135,20 +157,28 @@ const SortingTable = ({ match }) => {
                           return <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
                         }
                         if (cell.column.id == "certjobpreferences") {
-                          // return <> {cell.value.map((jobpreference, index) => (
-                          //   <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
-                          // ))}</>
-                          return [...Array(data[0].mahzor.numberofjobpicks)].map((x, i) =>
-                            cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                              : <td style={{ width: '200px' }}></td>)
+                          // if (cell.value.length > data[0].mahzor.numberofjobpicks) {
+                            return <> {cell.value.map((jobpreference, index) => (
+                              <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
+                            ))}</>
+                          // }
+                          // else {
+                          //   return [...Array(data[0].mahzor.numberofjobpicks)].map((x, i) =>
+                          //     cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                          //       : <td style={{ width: '200px' }}></td>)
+                          // }
                         }
                         if (cell.column.id == "noncertjobpreferences") {
-                          // return <> {cell.value.map((jobpreference, index) => (
-                          //   <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
-                          // ))}</>
-                          return [...Array(data[0].mahzor.numberofjobpicks)].map((x, i) =>
-                            cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                              : <td style={{ width: '200px' }}></td>)
+                          // if (cell.value.length > data[0].mahzor.numberofjobpicks) {
+                            return <> {cell.value.map((jobpreference, index) => (
+                              <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
+                            ))}</>
+                          // }
+                          // else {
+                          //   return [...Array(data[0].mahzor.numberofjobpicks)].map((x, i) =>
+                          //     cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                          //       : <td style={{ width: '200px' }}></td>)
+                          // }
                         }
                       })
                     }
