@@ -82,13 +82,11 @@ const SortingTable = ({ match }) => {
     let tempnoncertheaderspan = 0;
 
     for (let i = 0; i < tabledata.length; i++) {
-      if(tabledata[i].certjobpreferences.length>tempcertheaderspan)
-      {
-        tempcertheaderspan=tabledata[i].certjobpreferences.length
+      if (tabledata[i].certjobpreferences.length > tempcertheaderspan) {
+        tempcertheaderspan = tabledata[i].certjobpreferences.length
       }
-      if(tabledata[i].noncertjobpreferences.length>tempnoncertheaderspan)
-      {
-        tempnoncertheaderspan=tabledata[i].noncertjobpreferences.length
+      if (tabledata[i].noncertjobpreferences.length > tempnoncertheaderspan) {
+        tempnoncertheaderspan = tabledata[i].noncertjobpreferences.length
       }
     }
     setCertheaderspan(tempcertheaderspan);
@@ -140,8 +138,10 @@ const SortingTable = ({ match }) => {
             <thead style={{ backgroundColor: '#4fff64' }}>
               <tr>
                 <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
-                <th colSpan={certheaderspan} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
-                <th colSpan={noncertheaderspan}>תפקידים אופציה</th>
+                {certheaderspan != 0 ? <th colSpan={certheaderspan} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
+                  : null}
+                {noncertheaderspan != 0 ? <th colSpan={noncertheaderspan}>תפקידים אופציה</th>
+                  : null}
               </tr>
             </thead> : null}
 
@@ -157,28 +157,14 @@ const SortingTable = ({ match }) => {
                           return <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
                         }
                         if (cell.column.id == "certjobpreferences") {
-                          // if (cell.value.length > data[0].mahzor.numberofjobpicks) {
-                            return <> {cell.value.map((jobpreference, index) => (
-                              <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor.job._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
-                            ))}</>
-                          // }
-                          // else {
-                          //   return [...Array(data[0].mahzor.numberofjobpicks)].map((x, i) =>
-                          //     cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                          //       : <td style={{ width: '200px' }}></td>)
-                          // }
+                          return [...Array(certheaderspan)].map((x, i) =>
+                            cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                              : <td style={{ width: '200px' }}></td>)
                         }
                         if (cell.column.id == "noncertjobpreferences") {
-                          // if (cell.value.length > data[0].mahzor.numberofjobpicks) {
-                            return <> {cell.value.map((jobpreference, index) => (
-                              <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${jobpreference.jobinmahzor.job._id}`}> {jobpreference.jobinmahzor.job.jobname}/{jobpreference.jobinmahzor.job.unit.name}</Link>({jobpreference.rank})</td>
-                            ))}</>
-                          // }
-                          // else {
-                          //   return [...Array(data[0].mahzor.numberofjobpicks)].map((x, i) =>
-                          //     cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                          //       : <td style={{ width: '200px' }}></td>)
-                          // }
+                          return [...Array(noncertheaderspan)].map((x, i) =>
+                            cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                              : <td style={{ width: '200px' }}></td>)
                         }
                       })
                     }
