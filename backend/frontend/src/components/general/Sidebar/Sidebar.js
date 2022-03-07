@@ -11,8 +11,6 @@ import {
 
 import { ThemeContext, themes } from "contexts/ThemeContext";
 
-import Logoeged from 'assets/img/logotene2.png';
-import { signout } from 'auth/index';
 import history from '../../../history'
 
 import {
@@ -36,12 +34,23 @@ import {
 } from "reactstrap";
 
 import { signin, authenticate, isAuthenticated } from 'auth/index';
+import Logo100 from 'assets/img/team100.png';
 
 import SidebarAdmin from 'components/general/Sidebar/SidebarAdmin';
 import SidebarUnit from 'components/general/Sidebar/SidebarUnit';
 import SidebarCandidate from 'components/general/Sidebar/SidebarCandidate';
 
+import { signout } from "auth/index";
+
 function Sidebar() {
+
+  const clickSubmit = (event) => {
+    event.preventDefault();
+    signout().then((response) => {
+      history.push(`/signin`);
+    });
+  };
+
   const [color, setcolor] = useState("transparent");
   const { user } = isAuthenticated()
 
@@ -55,16 +64,25 @@ function Sidebar() {
         )}
       </ThemeContext.Consumer>
 
-      <div className="sidebar" style={{ background: color, marginTop: '60px', boxShadow: 'none', borderRadius: '0px',borderLeft:'1px solid lightgray'}}>
-        <div className="sidebar-wrapper" style={{overflow:'hidden'}}>
+      <div className="sidebar" style={{ background: color, marginTop: '60px', boxShadow: 'none', borderRadius: '0px', borderLeft: '1px solid lightgray' }}>
+        <div className="sidebar-wrapper" style={{ overflow: 'hidden' }}>
           {user.role === "0" ? <SidebarAdmin /> :
 
             user.role === "1" ? <SidebarUnit /> :
 
               user.role === "2" ? <SidebarCandidate /> : null
-            }
+          }
+          <div style={{ textAlign: 'center', position: 'absolute', bottom: 0, width: '100%', marginBottom: '15px' }}>
+            <Button
+              onClick={clickSubmit}
+              className="btn-danger"
+              style={{ width: '80%' }}
+            >
+              התנתק
+            </Button>
+            <img src={Logo100} height='100px'></img>
           </div>
-     
+        </div>
       </div>
     </>
   );

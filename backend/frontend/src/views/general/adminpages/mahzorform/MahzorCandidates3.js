@@ -16,9 +16,40 @@ import SettingModal from "../../../../components/general/modal/SettingModal";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const MahzorCandidates3 = (props) => {
-    useEffect(() => {
 
-    }, [props]);
+    const [userstopresent, setUserstppresent] = useState([]); //users to candidate
+
+    const [jobs, setJobs] = useState([]); //users to candidate
+
+    useEffect(() => {
+        // setUserstppresent(props.users)
+        let tempuserstopresent = [];
+        if (props.users && jobs && jobs.length != 0 && props.users.length != 0) {
+            for (let i = 0; i < props.users.length; i++) {
+                tempuserstopresent[i] = props.users[i];
+                for (let j = 0; j < jobs.length; j++) {
+                    if (tempuserstopresent[i].job == jobs[j]._id) {
+                        tempuserstopresent[i].jobtopresent = jobs[j];
+                    }
+                }
+            }
+            setUserstppresent(tempuserstopresent)
+        }
+    }, [props.users, jobs]);
+
+    useEffect(() => {
+        loadjobs();
+    }, []);
+
+    const loadjobs = () => {
+        axios.get(`http://localhost:8000/api/smartjobs`)
+            .then(response => {
+                setJobs(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
 
     return (
         props.mahzordata.population != undefined ?
@@ -27,7 +58,7 @@ const MahzorCandidates3 = (props) => {
                     <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>מועמדים</CardTitle>{/*headline*/}
                 </CardHeader>
                 <CardBody style={{ direction: 'ltr' }}>
-                    <Container>
+                    {/* <Container>
                         <Row style={{ direction: "rtl", paddingTop: '10px' }} >
                             <div style={{ float: 'right' }}>
                                 <ReactHTMLTableToExcel
@@ -65,7 +96,33 @@ const MahzorCandidates3 = (props) => {
                                 </tbody>
                             </table>
                         </Row>
-                    </Container>
+                    </Container> */}
+                    <Row style={{ direction: "rtl", paddingTop: '10px' }} >
+                        {userstopresent ? userstopresent.map((user, userindex) => (
+                            <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                                <Card style={{ direction: 'ltr', background: 'linear-gradient(0deg, rgb(27 42 54) 0%, rgb(12,31,45) 100%)' }}>
+                                    <CardBody style={{ direction: 'rtl' }}>
+                                        <Row>
+                                            <Col xs={12} md={5}>
+                                                <img src={soldier} style={{}}></img>
+                                            </Col>
+                                            <Col xs={12} md={7}>
+                                                <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${user._id}`}>
+                                                    <h3 style={{ color: 'white', textAlign: 'center', margin: '4px' }}>{user.name} {user.lastname}</h3>
+                                                </Link>
+                                                <h5 style={{ color: 'white', textAlign: 'center' }}>{user.jobtopresent.unit.name}/{user.jobtopresent.jobname}</h5>
+                                                <Input style={{ color: 'white', textAlign: 'center' }} type="select" name={userindex} value={user.movement} onChange={props.handleChangeUser}>
+                                                    {props.movement.map((movement, index) => (
+                                                        <option style={{ textAlign: 'center' }} key={index} value={movement._id}>{movement.name}</option>
+                                                    ))}
+                                                </Input>
+                                            </Col>
+                                        </Row>
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        )) : null}
+                    </Row>
                 </CardBody>
             </Card> : null
     );

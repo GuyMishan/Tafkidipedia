@@ -165,71 +165,65 @@ const CandidatePreferenceForm = ({ match }) => {
 
   function CheckPreferenceData() {
     let flag = true;
-    let certjobsemptyflag = true;
-    let noncertjobsemptyflag = true;
+    // let certjobsemptyflag = true;
+    // let noncertjobsemptyflag = true;
     let certjobsflag = true;
     let noncertjobsflag = true;
     let error = [];
 
-    if (candidatepreference.certjobpreferences.length < mahzordata.numberofjobpicks) //ודאי-בדיקה
-    {
-      certjobsemptyflag = false;
-    }
+    // if (candidatepreference.certjobpreferences.length < mahzordata.numberofjobpicks) //ודאי-בדיקה
+    // {
+    //   certjobsemptyflag = false;
+    // }
 
-    if (candidatepreference.noncertjobpreferences.length < mahzordata.numberofjobpicks) //אופציה-בדיקה
-    {
-      noncertjobsemptyflag = false;
-    }
+    // if (candidatepreference.noncertjobpreferences.length < mahzordata.numberofjobpicks) //אופציה-בדיקה
+    // {
+    //   noncertjobsemptyflag = false;
+    // }
 
     //ודאי-בדיקה
     for (let i = 0; i < candidatepreference.certjobpreferences.length; i++) {
-      if (candidatepreference.certjobpreferences[i] == null || candidatepreference.certjobpreferences[i] == undefined) {
-        certjobsemptyflag = false;
-        break;
-      }
-      if (candidatepreference.certjobpreferences[i] ? candidatepreference.certjobpreferences[i].jobinmahzor == "בחר תפקיד" : false) {
-        certjobsemptyflag = false;
-        break;
-      }
-      // for (let j = i + 1; j < ((candidatepreference.certjobpreferences.length)-(i+1)); j++) {
-      //   if (candidatepreference.certjobpreferences[i].jobinmahzor == candidatepreference.certjobpreferences[j].jobinmahzor) {
-      //     certjobsflag = false;
-      //   }
+      // if (candidatepreference.certjobpreferences[i] == null || candidatepreference.certjobpreferences[i] == undefined) {
+      //   certjobsemptyflag = false;
+      //   break;
       // }
-      if (countInArray(candidatepreference.certjobpreferences, candidatepreference.certjobpreferences[i]) != 1) {
-        certjobsflag = false;
+      // if (candidatepreference.certjobpreferences[i] ? candidatepreference.certjobpreferences[i].jobinmahzor == "בחר תפקיד" : false) {
+      //   certjobsemptyflag = false;
+      //   break;
+      // }
+      if (candidatepreference.certjobpreferences[i] != null && candidatepreference.certjobpreferences[i] != undefined && candidatepreference.certjobpreferences[i].jobinmahzor != "בחר תפקיד") {
+        if (countInArray(candidatepreference.certjobpreferences, candidatepreference.certjobpreferences[i]) != 1) {
+          certjobsflag = false;
+        }
       }
     }
 
     //אופציה- בדיקה
     for (let i = 0; i < candidatepreference.noncertjobpreferences.length; i++) {
-      if (candidatepreference.noncertjobpreferences[i] == null || candidatepreference.noncertjobpreferences[i] == undefined) {
-        noncertjobsemptyflag = false;
-        break;
-      }
-      if (candidatepreference.noncertjobpreferences[i] ? candidatepreference.noncertjobpreferences[i].jobinmahzor == "בחר תפקיד" : false) {
-        noncertjobsemptyflag = false;
-        break;
-      }
-      // for (let j = i + 1; j < ((candidatepreference.noncertjobpreferences.length)-(i+1)); j++) {
-      //   if (candidatepreference.noncertjobpreferences[i].jobinmahzor == candidatepreference.noncertjobpreferences[j].jobinmahzor) {
-      //     noncertjobsflag = false;
-      //   }
+      // if (candidatepreference.noncertjobpreferences[i] == null || candidatepreference.noncertjobpreferences[i] == undefined) {
+      //   noncertjobsemptyflag = false;
+      //   break;
       // }
+      // if (candidatepreference.noncertjobpreferences[i] ? candidatepreference.noncertjobpreferences[i].jobinmahzor == "בחר תפקיד" : false) {
+      //   noncertjobsemptyflag = false;
+      //   break;
+      // }
+      if (candidatepreference.noncertjobpreferences[i] != null && candidatepreference.noncertjobpreferences[i] != undefined && candidatepreference.noncertjobpreferences[i].jobinmahzor != "בחר תפקיד") {
       if (countInArray(candidatepreference.noncertjobpreferences, candidatepreference.noncertjobpreferences[i]) != 1) {
         noncertjobsflag = false;
       }
     }
+    }
 
 
     //
-    if (certjobsemptyflag == false)
-      error.push('יש להזין את כל ההעדפות - ודאי')
+    // if (certjobsemptyflag == false)
+    //   error.push('יש להזין את כל ההעדפות - ודאי')
     if (certjobsflag == false)
       error.push('אין להזין אותו תפקיד פעמיים - ודאי')
 
-    if (noncertjobsemptyflag == false)
-      error.push('יש להזין את כל ההעדפות - אופציה')
+    // if (noncertjobsemptyflag == false)
+    //   error.push('יש להזין את כל ההעדפות - אופציה')
     if (noncertjobsflag == false)
       error.push('אין להזין אותו תפקיד פעמיים - אופציה')
     //
@@ -252,17 +246,30 @@ const CandidatePreferenceForm = ({ match }) => {
       let tempcandidatepreference_certjobpreferencesid = [];
       let tempcandidatepreference_noncertjobpreferencesid = [];
 
+      let certrankindex = 1;
       for (let i = 0; i < tempcandidatepreference.certjobpreferences.length; i++) {
-        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.certjobpreferences[i])
-          .then(res => {
-            tempcandidatepreference_certjobpreferencesid.push(res.data._id)
-          })
+        if ((candidatepreference.certjobpreferences[i]) && (candidatepreference.certjobpreferences[i] != null) && (candidatepreference.certjobpreferences[i] != undefined) && (candidatepreference.certjobpreferences[i].jobinmahzor != "בחר תפקיד")) {
+          let tempcertjobpreference = candidatepreference.certjobpreferences[i];
+          tempcertjobpreference.rank = certrankindex;
+          await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcertjobpreference)
+            .then(res => {
+              tempcandidatepreference_certjobpreferencesid.push(res.data._id);
+              certrankindex++;
+            })
+        }
       }
+
+      let noncertrankindex = 1;
       for (let i = 0; i < tempcandidatepreference.noncertjobpreferences.length; i++) {
-        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.noncertjobpreferences[i])
-          .then(res => {
-            tempcandidatepreference_noncertjobpreferencesid.push(res.data._id)
-          })
+        if ((candidatepreference.noncertjobpreferences[i]) && (candidatepreference.noncertjobpreferences[i] != null) && (candidatepreference.noncertjobpreferences[i] != undefined) && (candidatepreference.noncertjobpreferences[i].jobinmahzor != "בחר תפקיד")) {
+          let tempnoncertjobpreference = candidatepreference.noncertjobpreferences[i];
+          tempnoncertjobpreference.rank = noncertrankindex;
+          await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempnoncertjobpreference)
+            .then(res => {
+              tempcandidatepreference_noncertjobpreferencesid.push(res.data._id);
+              noncertrankindex++;
+            })
+        }
       }
 
       //create new candidate preference
@@ -304,17 +311,30 @@ const CandidatePreferenceForm = ({ match }) => {
       let tempcandidatepreference_certjobpreferencesid = [];
       let tempcandidatepreference_noncertjobpreferencesid = [];
 
+      let certrankindex = 1;
       for (let i = 0; i < tempcandidatepreference.certjobpreferences.length; i++) {
-        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.certjobpreferences[i])
-          .then(res => {
-            tempcandidatepreference_certjobpreferencesid.push(res.data._id)
-          })
+        if ((candidatepreference.certjobpreferences[i]) && (candidatepreference.certjobpreferences[i] != null) && (candidatepreference.certjobpreferences[i] != undefined) && (candidatepreference.certjobpreferences[i].jobinmahzor != "בחר תפקיד")) {
+          let tempcertjobpreference = candidatepreference.certjobpreferences[i];
+          tempcertjobpreference.rank = certrankindex;
+          await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcertjobpreference)
+            .then(res => {
+              tempcandidatepreference_certjobpreferencesid.push(res.data._id);
+              certrankindex++;
+            })
+        }
       }
+
+      let noncertrankindex = 1;
       for (let i = 0; i < tempcandidatepreference.noncertjobpreferences.length; i++) {
-        await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempcandidatepreference.noncertjobpreferences[i])
-          .then(res => {
-            tempcandidatepreference_noncertjobpreferencesid.push(res.data._id)
-          })
+        if ((candidatepreference.noncertjobpreferences[i]) && (candidatepreference.noncertjobpreferences[i] != null) && (candidatepreference.noncertjobpreferences[i] != undefined) && (candidatepreference.noncertjobpreferences[i].jobinmahzor != "בחר תפקיד")) {
+          let tempnoncertjobpreference = candidatepreference.noncertjobpreferences[i];
+          tempnoncertjobpreference.rank = noncertrankindex;
+          await axios.post(`http://localhost:8000/api/candidatepreferenceranking`, tempnoncertjobpreference)
+            .then(res => {
+              tempcandidatepreference_noncertjobpreferencesid.push(res.data._id);
+              noncertrankindex++;
+            })
+        }
       }
 
       //update candidate preference

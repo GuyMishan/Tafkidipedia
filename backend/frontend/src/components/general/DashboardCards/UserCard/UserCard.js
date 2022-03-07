@@ -23,7 +23,7 @@ import { ThemeContext, themes } from "contexts/ThemeContext";
 import history from "../../../../history";
 
 import soldier from "assets/img/soldier.png";
-import tafkidipediashortlogo from "assets/img/tafkidipediashortlogo.png";
+import tafkidipediashortlogo from "assets/img/tafkidipedialogo3.png";
 
 import UserCarousel from "./UserCarousel"
 
@@ -74,7 +74,7 @@ const UserCard = (props) => {
                                 </Col>
 
                                 <Col lg="2" style={{ padding: "0px",textAlign:'center'}}>
-                                <img src={tafkidipediashortlogo} style={{ height: "6rem" ,paddingTop:'1rem',paddingBottom:'1rem'}}></img>
+                                <img src={tafkidipediashortlogo} style={{ height: "10rem" ,paddingTop:'1rem',paddingBottom:'1rem'}}></img>
                                 </Col>
                             </Row>
                         </CardBody>
@@ -111,7 +111,7 @@ const UserCard = (props) => {
                                 </Col>
 
                                 <Col lg="2" style={{ padding: "0px",textAlign:'center'}}>
-                                <img src={tafkidipediashortlogo} style={{ height: "6rem",paddingTop:'1rem',paddingBottom:'1rem'}}></img>
+                                <img src={tafkidipediashortlogo} style={{ height: "10rem",paddingTop:'1rem',paddingBottom:'1rem'}}></img>
                                 </Col>
                             </Row>
                         </CardBody>

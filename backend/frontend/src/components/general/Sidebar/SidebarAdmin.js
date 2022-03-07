@@ -139,13 +139,13 @@ function SidebarAdmin() {
         </li>
       </Nav>
       <div style={{ justifyContent: 'center', textAlign: 'center', bottom: 0, width: '100%' }}>
-        <Button
+        {/* <Button
           onClick={clickSubmit}
           className="btn-danger"
           style={{ width: '80%' }}
         >
           התנתק
-        </Button>
+        </Button> */}
       </div>
     </>
   );

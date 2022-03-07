@@ -49,11 +49,6 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
   const [users, setUsers] = useState([]); //users to candidate
   //candidates
 
-  //jobs
-  // const [mahzororiginaljobs, setMahzorOriginalJobs] = useState([]);
-  // const [jobs, setJobs] = useState([]);//jobs to add
-  //jobs
-
   //new
   const [population, setPopulation] = useState([]);
   const [movement, setMovement] = useState([]);
@@ -336,7 +331,7 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
           let tempupdatedjobinmahzor = result1.data[0];
           // console.log(tempupdatedjobinmahzor)
 
-          if (mahzordata.status >= 3) {
+          if (mahzordata.status < 5) {
             //update candidatepreferences related to jobinmahzor
             let response17 = await axios.get(`http://localhost:8000/api/candidatepreferencebymahzorid/${match.params.mahzorid}`)
             let tempcandidatespreferencestoupdate = response17.data;
@@ -673,8 +668,12 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
       let result = await axios.delete(`http://localhost:8000/api/deletjobinmahzorbyjobidandmahzorid/${originalandnotnew[i].job}/${tempmahzordata._id}`);
     }
     //jobs
+    
     if (mahzordata.status >= 3) {
     await CalculateUpdateMahzorEshkol();
+    if (mahzordata.status >= 5) {
+      await CalculateUpdateMahzorFinalEshkol();
+      }
     }
   }
 
@@ -699,8 +698,8 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
         }
       }
     }
-    console.log("eshkols with only admin added prefs")
-    console.log(tempeshkolbymahzorid)
+    // console.log("eshkols with only admin added prefs")
+    // console.log(tempeshkolbymahzorid)
 
     //get all jobs of mahzor
     let response2 = await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`)
@@ -764,9 +763,8 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
         }
       }
     }
-    console.log("eshkols with admin prefs + calculated prefs:")
-    console.log(tempeshkolbymahzorid)
-
+    // console.log("eshkols with admin prefs + calculated prefs:")
+    // console.log(tempeshkolbymahzorid)
 
     //post mahzor eshkols candidatesineshkol to db
     for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
@@ -778,9 +776,8 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
         }
       }
     }
-
-    console.log("eshkols with admin prefs + calculated prefs ids:")
-    console.log(tempeshkolbymahzorid)
+    // console.log("eshkols with admin prefs + calculated prefs ids:")
+    // console.log(tempeshkolbymahzorid)
 
     //post mahzor eshkols to db
     for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
@@ -791,8 +788,119 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
     }
   }
 
+  async function CalculateUpdateMahzorFinalEshkol() {
+    //delete all candidatesineshkol that not added from Admin + update
+    let response22 = await axios.get(`http://localhost:8000/api/finaleshkolbymahzorid/${match.params.mahzorid}`)
+    let temptesteshkolbymahzorid = response22.data;
+    let tempeshkolbymahzorid = [];
+
+    for (let j = 0; j < temptesteshkolbymahzorid.length; j++) {
+      tempeshkolbymahzorid[j] = { ...temptesteshkolbymahzorid[j] }
+      tempeshkolbymahzorid[j].candidatesineshkol = [];
+      tempeshkolbymahzorid[j].jobinmahzor =  tempeshkolbymahzorid[j].jobinmahzor._id;
+      tempeshkolbymahzorid[j].mahzor =  tempeshkolbymahzorid[j].mahzor._id;
+      for (let k = 0; k < temptesteshkolbymahzorid[j].candidatesineshkol.length; k++) {
+        //  if candidatesineshkol is not admin inserted -> delete it.
+        if (!((temptesteshkolbymahzorid[j].candidatesineshkol[k].candidaterank) || (temptesteshkolbymahzorid[j].candidatesineshkol[k].unitrank))) {
+          tempeshkolbymahzorid[j].candidatesineshkol.push({ ...temptesteshkolbymahzorid[j].candidatesineshkol[k] })
+        }
+        else {
+          let result13 = await axios.delete(`http://localhost:8000/api/candidateineshkol/${temptesteshkolbymahzorid[j].candidatesineshkol[k]._id}`);
+        }
+      }
+    }
+    // console.log("finaleshkols with only admin added prefs")
+    // console.log(tempeshkolbymahzorid)
+
+    //get all jobs of mahzor
+    let response2 = await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`)
+    let tempmahzorjobs = response2.data;
+    // console.log(tempmahzorjobs)
+
+    //get all candidatepreferences of mahzor
+    let response3 = await axios.get(`http://localhost:8000/api/finalcandidatepreferencebymahzorid/${match.params.mahzorid}`)
+    let tempcandidatespreferencesdata = response3.data;
+    for (let i = 0; i < tempcandidatespreferencesdata.length; i++) {
+      for (let j = 0; j < tempcandidatespreferencesdata[i].certjobpreferences.length; j++) {
+        let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].certjobpreferences[j]}`);
+        tempcandidatespreferencesdata[i].certjobpreferences[j] = result1.data;
+        delete tempcandidatespreferencesdata[i].certjobpreferences[j].__v;
+        delete tempcandidatespreferencesdata[i].certjobpreferences[j]._id;
+      }
+      for (let j = 0; j < tempcandidatespreferencesdata[i].noncertjobpreferences.length; j++) {
+        let result1 = await axios.get(`http://localhost:8000/api/candidatepreferenceranking/${tempcandidatespreferencesdata[i].noncertjobpreferences[j]}`);
+        tempcandidatespreferencesdata[i].noncertjobpreferences[j] = result1.data;
+        delete tempcandidatespreferencesdata[i].noncertjobpreferences[j].__v;
+        delete tempcandidatespreferencesdata[i].noncertjobpreferences[j]._id;
+      }
+    }
+    //  console.log(tempcandidatespreferencesdata)
+
+    //get all unitpreferences of mahzor
+    let response4 = await axios.get(`http://localhost:8000/api/finalunitpreferencebymahzorid/${match.params.mahzorid}`)
+    let tempunitspreferences = response4.data;
+    //  console.log(tempunitspreferences)
+
+    for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
+      //calculate eshkols candidate preferences 
+      for (let j = 0; j < tempcandidatespreferencesdata.length; j++) {
+        for (let k = 0; k < tempcandidatespreferencesdata[j].certjobpreferences.length; k++) {
+          if (tempcandidatespreferencesdata[j].certjobpreferences[k].jobinmahzor == tempeshkolbymahzorid[i].jobinmahzor) {
+            tempeshkolbymahzorid[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].certjobpreferences[k].rank })
+          }
+        }
+        for (let k = 0; k < tempcandidatespreferencesdata[j].noncertjobpreferences.length; k++) {
+          if (tempcandidatespreferencesdata[j].noncertjobpreferences[k].jobinmahzor == tempeshkolbymahzorid[i].jobinmahzor) {
+            tempeshkolbymahzorid[i].candidatesineshkol.push({ candidate: tempcandidatespreferencesdata[j].candidate._id, candidaterank: tempcandidatespreferencesdata[j].noncertjobpreferences[k].rank })
+          }
+        }
+      }
+
+      //calculate eshkols unit preferences 
+      for (let l = 0; l < tempunitspreferences.length; l++) {
+        if (tempunitspreferences[l].jobinmahzor._id == tempeshkolbymahzorid[i].jobinmahzor) {
+          for (let m = 0; m < tempunitspreferences[l].preferencerankings.length; m++) {
+            let flag = false;  //flag = is candidate exists in certain eshkol 
+            for (let n = 0; n < tempeshkolbymahzorid[i].candidatesineshkol.length; n++) {
+              if (tempeshkolbymahzorid[i].candidatesineshkol[n].candidate == tempunitspreferences[l].preferencerankings[m].candidate) {
+                flag = true;
+                tempeshkolbymahzorid[i].candidatesineshkol[n].unitrank = tempunitspreferences[l].preferencerankings[m].rank;
+              }
+            }
+            if (flag == false) {
+              tempeshkolbymahzorid[i].candidatesineshkol.push({ candidate: tempunitspreferences[l].preferencerankings[m].candidate, unitrank: tempunitspreferences[l].preferencerankings[m].rank })
+            }
+          }
+        }
+      }
+    }
+    // console.log("finaleshkols with admin prefs + calculated prefs:")
+    // console.log(tempeshkolbymahzorid)
+
+    //post mahzor eshkols candidatesineshkol to db
+    for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
+      for (let j = 0; j < tempeshkolbymahzorid[i].candidatesineshkol.length; j++) {
+        if ((tempeshkolbymahzorid[i].candidatesineshkol[j].candidaterank) || (tempeshkolbymahzorid[i].candidatesineshkol[j].unitrank)) {
+          let response1 = await axios.post(`http://localhost:8000/api/candidateineshkol`, tempeshkolbymahzorid[i].candidatesineshkol[j])
+          let tempdata = response1.data;
+          tempeshkolbymahzorid[i].candidatesineshkol[j] = tempdata._id
+        }
+      }
+    }
+    // console.log("finaleshkols with admin prefs + calculated prefs ids:")
+    // console.log(tempeshkolbymahzorid)
+
+    //post mahzor eshkols to db
+    for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
+      let tempeshkolbymahzorid_id=tempeshkolbymahzorid[i]._id;
+      delete tempeshkolbymahzorid[i]._id;
+      let response1 = await axios.put(`http://localhost:8000/api/finaleshkol/${tempeshkolbymahzorid_id}`, tempeshkolbymahzorid[i])
+      // let tempdata = response1.data;
+    }
+  }
+
   return (
-    <Container style={{ direction: 'rtl' }}>
+    <div style={{ direction: 'rtl' }}>
       <MahzorDataComponent mahzordata={mahzordata} oldmahzordata={oldmahzordata} population={population} handleChangeMahzorData={handleChangeMahzorData} />
 
       <MahzorCandidates3 mahzordata={mahzordata} users={users} movement={movement} handleChangeUser={handleChangeUser} />
@@ -800,7 +908,7 @@ const MahzorForm3 = ({ match }) => { //onsubmit moves to different page!!!!!!! (
       <Button type="primary" onClick={() => clickSubmit()}>
         אישור
       </Button>
-    </Container>
+    </div>
   );
 }
 export default withRouter(MahzorForm3);;
