@@ -228,7 +228,7 @@ exports.activecandidatesbymahzorid = async (req, res) => {
     let matchquerry = {
       "$match": {
         "mahzor._id": mongoose.Types.ObjectId(req.params.mahzorid),
-        "movement.name": { $not: { $eq: "ממשיך" } },
+        "movement.name": { $not: {$in: ['ממשיך', 'רוחב לקידום/ממשיך', 'שחרור', 'פרישה'] } },
       }
     };
     finalquerry.push(matchquerry)
@@ -252,7 +252,7 @@ exports.activecandidatesbyuser = async (req, res) => {
   let matchquerry = {
     "$match": {
       "user._id": mongoose.Types.ObjectId(req.params.userid),
-      "movement.name": { $not: { $eq: "ממשיך" } },
+      "movement.name": { $not: {$in: ['ממשיך', 'רוחב לקידום/ממשיך', 'שחרור', 'פרישה'] } },
     }
   };
   finalquerry.push(matchquerry)

@@ -9,6 +9,7 @@ import CandidateRoute from "auth/CandidateRoute";
 import UnitRoute from "auth/UnitRoute";
 
 import SignIn from "views/general/authentication/SignInForm";
+import AdminSignIn from "views/general/authentication/AdminSignInForm";
 import SignUp from "views/general/authentication/SignUpForm";
 
 import ManageUsers from "views/general/authentication/manageusers/ManageUsers";
@@ -43,8 +44,13 @@ const routesgeneral =
         <>
             {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
             <UnloggedinRoute path="/signin" exact component={SignIn} />
+            <UnloggedinRoute path="/adminsignin" exact component={AdminSignIn} />
             <UnloggedinRoute path="/signup" exact component={SignUp} />
             {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
+            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
+            <Route path="/exceluploadusers" exact component={Exceluploadusers} />
+            <Route path="/exceluploadjobs" exact component={Exceluploadjobs} />
+            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
 
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
             <LoggedinRoute path="/jobsbymahzor/:mahzorid" exact component={JobsByMahzor} />
@@ -84,11 +90,6 @@ const routesgeneral =
             <CandidateRoute path="/usermahzorimpage/:userid" exact component={Usermahzorimpage} />
             <CandidateRoute path="/candidatepreferenceform/:mahzorid/:candidateid" exact component={CandidatePreferenceForm} />
             {/*////////////////////////////////////////Candidate User//////////////////////////////////////////////////*/}
-
-            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
-            <Route path="/exceluploadusers" exact component={Exceluploadusers} />
-            <Route path="/exceluploadjobs" exact component={Exceluploadjobs} />
-            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
         </>
     )
 

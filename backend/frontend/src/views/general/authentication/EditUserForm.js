@@ -38,19 +38,41 @@ const EditUserForm = ({ match }) => {
     gender: "",
     cellphone: "",
     rank: "",
-    error: false,
-    successmsg: false,
-    loading: false,
-    redirectToReferrer: false,
   });
 
   const [units, setUnits] = useState([]);
+
+  const [populations, setPopulations] = useState([]);
+
+  const [jobs, setJobs] = useState([]);
 
   const loadUnits = () => {
     axios
       .get("http://localhost:8000/api/unit")
       .then((response) => {
         setUnits(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const loadPopulations = () => {
+    axios
+      .get("http://localhost:8000/api/population")
+      .then((response) => {
+        setPopulations(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const loadJobs = () => {
+    axios
+      .get("http://localhost:8000/api/smartjobs")
+      .then((response) => {
+        setJobs(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -141,9 +163,24 @@ const EditUserForm = ({ match }) => {
 
     axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
       .then(response => {
-        console.log(response);
-        toast.success(`המשתמש עודכן בהצלחה`);
-        history.push(`/manageusers`);
+        let jobid=data.job;
+        axios.get(`http://localhost:8000/api/job/${jobid}`)
+          .then(response => {
+            let jobtoupdate=response.data;
+            jobtoupdate.meaish=userid;
+            axios.put(`http://localhost:8000/api/job/update/${jobid}`, jobtoupdate)
+            .then(response => {
+              // console.log(response);
+            toast.success(`המשתמש עודכן בהצלחה`);
+            history.push(`/manageusers`);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+          })
+          .catch((error) => {
+            console.log(error);
+          })
       })
       .catch((error) => {
         console.log(error);
@@ -164,6 +201,8 @@ const EditUserForm = ({ match }) => {
   useEffect(() => {
     init();
     loadUnits();
+    loadPopulations();
+    loadJobs();
   }, [])
 
   useEffect(() => {
@@ -239,6 +278,34 @@ const EditUserForm = ({ match }) => {
                         <option value={'רס"ן'}>רס"ן</option>
                         <option value={'סא"ל'}>סא"ל</option>
                         <option value={'נגדים'}>נגדים</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: "right", paddingTop: "10px" }}>אוכלוסיה</div>
+                    <FormGroup dir="rtl">
+                      <Input
+                        type="select"
+                        name="population"
+                        value={data.population}
+                        onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        {populations ? populations.map((population, index) => (
+                          <option value={population._id}>{population.name}</option>
+                        )) : null}
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: "right", paddingTop: "10px" }}>תפקיד</div>
+                    <FormGroup dir="rtl">
+                      <Input
+                        type="select"
+                        name="population"
+                        value={data.job}
+                        onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        {jobs ? jobs.map((job, index) => (
+                          <option value={job._id}>{job.jobname} / {job.unit.name} / {job.jobcode}</option>
+                        )) : null}
                       </Input>
                     </FormGroup>
 

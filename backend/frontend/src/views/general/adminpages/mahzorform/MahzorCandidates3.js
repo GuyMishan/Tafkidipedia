@@ -15,14 +15,23 @@ import deletepic from "assets/img/delete.png";
 import SettingModal from "../../../../components/general/modal/SettingModal";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
+import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePageModal';
+
 const MahzorCandidates3 = (props) => {
 
     const [userstopresent, setUserstppresent] = useState([]); //users to candidate
 
-    const [jobs, setJobs] = useState([]); //users to candidate
+    const [jobs, setJobs] = useState([]);
 
-    useEffect(() => {
-        // setUserstppresent(props.users)
+    const [isprofilepageopen, setIsprofilepageopen] = useState(false);
+    const [useridformodal, setUseridformodal] = useState(undefined);
+
+    function Toggle(evt) {
+        setUseridformodal(evt.target.value)
+        setIsprofilepageopen(!isprofilepageopen);
+    }
+
+    const loaduserstopresent = () => {
         let tempuserstopresent = [];
         if (props.users && jobs && jobs.length != 0 && props.users.length != 0) {
             for (let i = 0; i < props.users.length; i++) {
@@ -35,16 +44,20 @@ const MahzorCandidates3 = (props) => {
             }
             setUserstppresent(tempuserstopresent)
         }
-    }, [props.users, jobs]);
+    }
+
+    useEffect(() => {
+        loaduserstopresent()
+    }, [props.users]);
 
     useEffect(() => {
         loadjobs();
     }, []);
 
-    const loadjobs = () => {
-        axios.get(`http://localhost:8000/api/smartjobs`)
+    const loadjobs = async () => {
+        await axios.get(`http://localhost:8000/api/smartjobs`)
             .then(response => {
-                setJobs(response.data);
+                setJobs(response.data, loaduserstopresent);
             })
             .catch((error) => {
                 console.log(error);
@@ -107,9 +120,9 @@ const MahzorCandidates3 = (props) => {
                                                 <img src={soldier} style={{}}></img>
                                             </Col>
                                             <Col xs={12} md={7}>
-                                                <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${user._id}`}>
-                                                    <h3 style={{ color: 'white', textAlign: 'center', margin: '4px' }}>{user.name} {user.lastname}</h3>
-                                                </Link>
+                                                <Button value={user._id} onClick={Toggle} style={{ width: '100%' }}>
+                                                    {user.name} {user.lastname}
+                                                </Button>
                                                 <h5 style={{ color: 'white', textAlign: 'center' }}>{user.jobtopresent.unit.name}/{user.jobtopresent.jobname}</h5>
                                                 <Input style={{ color: 'white', textAlign: 'center' }} type="select" name={userindex} value={user.movement} onChange={props.handleChangeUser}>
                                                     {props.movement.map((movement, index) => (
@@ -123,6 +136,7 @@ const MahzorCandidates3 = (props) => {
                             </Col>
                         )) : null}
                     </Row>
+                    <ProfilePageModal isOpen={isprofilepageopen} userid={useridformodal} Toggle={Toggle} />
                 </CardBody>
             </Card> : null
     );

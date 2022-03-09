@@ -67,10 +67,10 @@ function ExcelUploadUsers() {
       temptablebody.splice(0, 1)//deletes headers
 
       for (let k = 0; k < temptablebody.length; k++) {
-        tablebody[k]={};
+        tablebody[k] = {};
         for (let l = 0; l < tableheaders.length; l++) {
           let a = tableheaders[l];
-          tablebody[k][a]=temptablebody[k][l];
+          tablebody[k][a] = temptablebody[k][l];
         }
       }
 
@@ -82,25 +82,48 @@ function ExcelUploadUsers() {
       //end of data
 
       //get all users
-        let response = await axios.get(`http://localhost:8000/api/users`)
-        let tempusers = response.data;
+      let response = await axios.get(`http://localhost:8000/api/users`)
+      let tempusers = response.data;
 
-      //run over tabledata-> if personal number doesnt exists=> add him / else => present an error with the name of person
+      //get all jobs
+      let response2 = await axios.get(`http://localhost:8000/api/job`)
+      let tempjobs = response2.data;
+
+      //get all populations
+      let response3 = await axios.get(`http://localhost:8000/api/population`)
+      let temppopulations = response3.data;
+
+      //run over tabledata-> if personal number doesnt exists=> add him + search for his job by jobcode / else => present an error with the name of person
       for (let i = 0; i < tablebody.length; i++) {
-        let isuseralreadyexists=false;
+        let isuseralreadyexists = false;
         for (let j = 0; j < tempusers.length; j++) {
-          if(tablebody[i].personalnumber==tempusers[j].personalnumber)
-          {
-            isuseralreadyexists=true;
+          if (tablebody[i].personalnumber == tempusers[j].personalnumber) {
+            isuseralreadyexists = true;
           }
         }
-        if(isuseralreadyexists==false)//modify the user to enter DB
+        if (isuseralreadyexists == false)//modify the user to enter DB
         {
-          tablebody[i].validated=true;
-          tablebody[i].role='2';
-          tablebody[i].password= tablebody[i].personalnumber;
+          tablebody[i].validated = true;
+          tablebody[i].role = '2';
+          tablebody[i].password = tablebody[i].personalnumber;
+
+          //to find job of user
+          for (let k = 0; k < tempjobs.length; k++) {
+            if (tablebody[i].jobcode == tempjobs[k].jobcode) {
+              tablebody[i].job = tempjobs[k]._id;
+            }
+          }
+          delete tablebody[i].jobcode;
+
+          //to find population of user
+          for (let l = 0; l < temppopulations.length; l++) {
+            if (tablebody[i].population == temppopulations[l].name) {
+              tablebody[i].population = temppopulations[l]._id;
+            }
+          }
+
+          //may have a problem if job isnt found->user inserted with no job.. / population
           let response1 = await axios.post(`http://localhost:8000/api/signup`, tablebody[i])
-          // let tempdata = response1.data;
         }
       }
     }
