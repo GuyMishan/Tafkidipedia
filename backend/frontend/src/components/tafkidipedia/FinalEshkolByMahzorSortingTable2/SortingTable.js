@@ -2,14 +2,13 @@ import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination } from "react-table";
 import { withRouter, Redirect, Link } from "react-router-dom";
 import axios from 'axios'
-import style from 'components/Table.css'
-import editpic from "assets/img/edit.png";
-import deletepic from "assets/img/delete.png";
 
+import { Card, CardHeader, CardBody, CardTitle, Col, Input, InputGroup, InputGroupAddon, FormGroup, Label, Button, Fade, FormFeedback, Container, Row } from 'reactstrap';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import MigzarFilter from 'components/tafkidipedia/Filters/MigzarFilter';
 import CertainFilter from 'components/tafkidipedia/Filters/CertainFilter';
 import UnitFilter from 'components/tafkidipedia/Filters/UnitFilter';
+import EditEshkolFormModal from "views/general/adminpages/editeshkol/EditEshkolFormModal";
 
 const SortingTable = (props) => {
   const [data, setData] = useState([])
@@ -20,6 +19,62 @@ const SortingTable = (props) => {
   const [migzarfilter, setMigzarfilter] = useState(undefined)
   const [unitfilter, setUnitfilter] = useState(undefined)
   const [certainfilter, setCertainfilter] = useState(undefined)
+
+  const [iseshkolformopen, setIseshkolformopen] = useState(false);
+  const [eshkolidformodal, setEshkolidformodal] = useState(undefined);
+
+  function Toggle(evt) {
+    setEshkolidformodal(evt.target.value)
+    setIseshkolformopen(!iseshkolformopen);
+  }
+
+  function ToggleForModal(evt) {
+    setIseshkolformopen(!iseshkolformopen);
+    updatechangedeshkol();
+  }
+
+  async function updatechangedeshkol() {
+    let response = await axios.get(`http://localhost:8000/api/finaleshkolbyid/${eshkolidformodal}`)
+    let tempeshkol = response.data[0];
+    let temhighestnumber = tempeshkol.candidatesineshkol.length;
+
+
+    for (let j = 0; j < tempeshkol.candidatesineshkol.length; j++) {
+      for (let k = 0; k < candidatesinmahzor.length; k++) {
+        if (tempeshkol.candidatesineshkol[j].candidate == candidatesinmahzor[k]._id) {
+          tempeshkol.candidatesineshkol[j].candidate = candidatesinmahzor[k];
+        }
+      }
+    }
+
+    if(tempeshkol.finalcandidate)
+    {
+      let result2 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkol.finalcandidate}`);
+      tempeshkol.finalcandidate = result2.data[0];
+    }
+
+    let tempdata = [...data];
+    let temporiginaldata = [...originaldata];
+
+    for (let i = 0; i < tempdata.length; i++) {
+      if (eshkolidformodal == tempdata[i]._id) {
+        tempdata[i] = {...tempeshkol};
+      }
+    }
+
+    for (let i = 0; i < temporiginaldata.length; i++) {
+      if (eshkolidformodal == temporiginaldata[i]._id) {
+        temporiginaldata[i] = {...tempeshkol};
+      }
+    }
+
+    setOriginaldata(temporiginaldata)
+    setData(tempdata)
+
+    if (temhighestnumber >= highestnumber) {
+      setHighestnumber(temhighestnumber)
+    }
+  }
 
   function init() {
     getCandidatesinmahzor();
@@ -118,6 +173,7 @@ const SortingTable = (props) => {
 
   return (
     <>
+      <EditEshkolFormModal isOpen={iseshkolformopen} eshkolid={eshkolidformodal} iseshkol={'false'} Toggle={Toggle} ToggleForModal={ToggleForModal} />
       <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
       <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter} />
       <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter} />
@@ -127,28 +183,32 @@ const SortingTable = (props) => {
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               {data.length > 0 ? <th></th> : null}
-              {data.map(eshkol => {
+              {data && data.length>0 ?data.map(eshkol => {
                 return (
-                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5></th>
-                )
+                  // <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5></th>
+                  <th>
+                  <Button value={eshkol._id} onClick={Toggle} style={{ width: '100%' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Button>
+                  <h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5>
+                </th>
+                  )
               }
-              )}
+              ):null}
             </tr>
           </thead>
           <tbody>
             <tr>
               {data.length > 0 ? <th>שיבוץ סופי</th> : null}
-              {data.map(eshkol => {
+              {data && data.length>0 ? data.map(eshkol => {
                 return (
                   eshkol.finalcandidate && eshkol.finalcandidate.user ?
                     <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.finalcandidate.user._id}`}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</Link></td>
                     : <td></td>)
-              })}
+              }):null}
             </tr>
             {[...Array(highestnumber)].map((x, i) => {
               return (<tr>
                 {data.length > 0 ? <th></th> : null}
-                {data.map(eshkol => {
+                {data && data.length>0 ? data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
                       <td className="greencell">
@@ -169,7 +229,7 @@ const SortingTable = (props) => {
                               <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
                               <p>הוסף ע"י מנהל מערכת</p>
                             </td> : <td></td>)
-                })}
+                }):null}
               </tr>)
             })}
           </tbody>

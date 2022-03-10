@@ -3,10 +3,12 @@ import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination } from 
 import { withRouter, Redirect, Link } from "react-router-dom";
 import axios from 'axios'
 
+import { Card, CardHeader, CardBody, CardTitle, Col, Input, InputGroup, InputGroupAddon, FormGroup, Label, Button, Fade, FormFeedback, Container, Row } from 'reactstrap';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import MigzarFilter from 'components/tafkidipedia/Filters/MigzarFilter';
 import CertainFilter from 'components/tafkidipedia/Filters/CertainFilter';
 import UnitFilter from 'components/tafkidipedia/Filters/UnitFilter';
+import EditEshkolFormModal from "views/general/adminpages/editeshkol/EditEshkolFormModal";
 
 const SortingTable = (props) => {
   const [data, setData] = useState([])
@@ -17,6 +19,56 @@ const SortingTable = (props) => {
   const [migzarfilter, setMigzarfilter] = useState(undefined)
   const [unitfilter, setUnitfilter] = useState(undefined)
   const [certainfilter, setCertainfilter] = useState(undefined)
+
+  const [iseshkolformopen, setIseshkolformopen] = useState(false);
+  const [eshkolidformodal, setEshkolidformodal] = useState(undefined);
+
+  function Toggle(evt) {
+    setEshkolidformodal(evt.target.value)
+    setIseshkolformopen(!iseshkolformopen);
+  }
+
+  function ToggleForModal(evt) {
+    setIseshkolformopen(!iseshkolformopen);
+    updatechangedeshkol();
+  }
+
+  async function updatechangedeshkol() {
+    let response = await axios.get(`http://localhost:8000/api/eshkolbyid/${eshkolidformodal}`)
+    let tempeshkol = response.data[0];
+    let temhighestnumber = tempeshkol.candidatesineshkol.length;
+
+
+    for (let j = 0; j < tempeshkol.candidatesineshkol.length; j++) {
+      for (let k = 0; k < candidatesinmahzor.length; k++) {
+        if (tempeshkol.candidatesineshkol[j].candidate == candidatesinmahzor[k]._id) {
+          tempeshkol.candidatesineshkol[j].candidate = candidatesinmahzor[k];
+        }
+      }
+    }
+
+    let tempdata = [...data];
+    let temporiginaldata = [...originaldata];
+
+    for (let i = 0; i < tempdata.length; i++) {
+      if (eshkolidformodal == tempdata[i]._id) {
+        tempdata[i] = {...tempeshkol};
+      }
+    }
+
+    for (let i = 0; i < temporiginaldata.length; i++) {
+      if (eshkolidformodal == temporiginaldata[i]._id) {
+        temporiginaldata[i] = {...tempeshkol};
+      }
+    }
+
+    setOriginaldata(temporiginaldata)
+    setData(tempdata)
+
+    if (temhighestnumber >= highestnumber) {
+      setHighestnumber(temhighestnumber)
+    }
+  }
 
   function init() {
     getCandidatesinmahzor();
@@ -100,7 +152,7 @@ const SortingTable = (props) => {
 
   useEffect(() => {
     FilterEshkols()
-  }, [migzarfilter,unitfilter,certainfilter]);
+  }, [migzarfilter, unitfilter, certainfilter]);
 
   useEffect(() => {
     init()
@@ -108,26 +160,31 @@ const SortingTable = (props) => {
 
   return (
     <>
+      <EditEshkolFormModal isOpen={iseshkolformopen} eshkolid={eshkolidformodal} iseshkol={'true'} Toggle={Toggle} ToggleForModal={ToggleForModal} />
       <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
-      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter}/>
+      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter} />
       <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter} />
 
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table id="table-to-xls">
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
-              {data.map(eshkol => {
+              {data && data.length>0 ?data.map(eshkol => {
                 return (
-                  <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${true}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5></th>
+                  // <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${true}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5></th>
+                  <th>
+                    <Button value={eshkol._id} onClick={Toggle} style={{ width: '100%' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Button>
+                    <h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5>
+                  </th>
                 )
               }
-              )}
+              ):null}
             </tr>
           </thead>
           <tbody>
             {[...Array(highestnumber)].map((x, i) => {
               return (<tr>
-                {data.map(eshkol => {
+                {data && data.length>0 ? data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
                       <td className="greencell">
@@ -151,11 +208,14 @@ const SortingTable = (props) => {
                               <p>הוסף ע"י מנהל מערכת</p>
                             </td>
                             : <td></td>)
-                })}
+                }):null}
               </tr>)
             })}
           </tbody>
         </table>
+        <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
+          {data.length == 0 ? <h2 style={{ fontWeight: 'bold' }}>אין נתונים בטבלה</h2> : null}
+        </div>
         <div style={{ display: 'flex', paddingTop: '5px' }}>
           <h4 style={{ fontWeight: 'bold' }}>מספר אשכולות : {data.length}</h4>
         </div>
