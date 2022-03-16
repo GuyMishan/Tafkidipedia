@@ -73,14 +73,14 @@ function Sidebar() {
               user.role === "2" ? <SidebarCandidate /> : null
           }
           <div style={{ textAlign: 'center', position: 'absolute', bottom: 0, width: '100%', marginBottom: '15px' }}>
+          <img src={Logo100} height='100px'></img>
             <Button
               onClick={clickSubmit}
               className="btn-danger"
-              style={{ width: '80%' }}
+              style={{ width: '80%' ,marginTop:'15px' }}
             >
               התנתק
             </Button>
-            <img src={Logo100} height='100px'></img>
           </div>
         </div>
       </div>

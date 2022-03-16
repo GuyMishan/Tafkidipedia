@@ -9,6 +9,7 @@ import MigzarFilter from 'components/tafkidipedia/Filters/MigzarFilter';
 import CertainFilter from 'components/tafkidipedia/Filters/CertainFilter';
 import UnitFilter from 'components/tafkidipedia/Filters/UnitFilter';
 import EditEshkolFormModal from "views/general/adminpages/editeshkol/EditEshkolFormModal";
+import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePageModal';
 
 const SortingTable = (props) => {
   const [data, setData] = useState([])
@@ -20,11 +21,12 @@ const SortingTable = (props) => {
   const [unitfilter, setUnitfilter] = useState(undefined)
   const [certainfilter, setCertainfilter] = useState(undefined)
 
+  //eshkol modal
   const [iseshkolformopen, setIseshkolformopen] = useState(false);
   const [eshkolidformodal, setEshkolidformodal] = useState(undefined);
 
   function Toggle(evt) {
-    setEshkolidformodal(evt.target.value)
+    setEshkolidformodal(evt.currentTarget.value)
     setIseshkolformopen(!iseshkolformopen);
   }
 
@@ -32,6 +34,18 @@ const SortingTable = (props) => {
     setIseshkolformopen(!iseshkolformopen);
     updatechangedeshkol();
   }
+  //eshkol modal
+
+  //user modal
+  const [isprofilepageopen, setIsprofilepageopen] = useState(false);
+  const [useridformodal, setUseridformodal] = useState(undefined);
+
+  async function ToggleUserModal(evt) {
+    // console.log(evt.currentTarget.value)
+    setUseridformodal(evt.currentTarget.value)
+    setIsprofilepageopen(!isprofilepageopen);
+  }
+  //user modal
 
   async function updatechangedeshkol() {
     let response = await axios.get(`http://localhost:8000/api/finaleshkolbyid/${eshkolidformodal}`)
@@ -47,8 +61,7 @@ const SortingTable = (props) => {
       }
     }
 
-    if(tempeshkol.finalcandidate)
-    {
+    if (tempeshkol.finalcandidate) {
       let result2 = await axios.get(`http://localhost:8000/api/candidate/smartcandidatebyid/${tempeshkol.finalcandidate}`);
       tempeshkol.finalcandidate = result2.data[0];
     }
@@ -58,13 +71,13 @@ const SortingTable = (props) => {
 
     for (let i = 0; i < tempdata.length; i++) {
       if (eshkolidformodal == tempdata[i]._id) {
-        tempdata[i] = {...tempeshkol};
+        tempdata[i] = { ...tempeshkol };
       }
     }
 
     for (let i = 0; i < temporiginaldata.length; i++) {
       if (eshkolidformodal == temporiginaldata[i]._id) {
-        temporiginaldata[i] = {...tempeshkol};
+        temporiginaldata[i] = { ...tempeshkol };
       }
     }
 
@@ -173,9 +186,10 @@ const SortingTable = (props) => {
 
   return (
     <>
+      <ProfilePageModal isOpen={isprofilepageopen} userid={useridformodal} Toggle={ToggleUserModal} />
       <EditEshkolFormModal isOpen={iseshkolformopen} eshkolid={eshkolidformodal} iseshkol={'false'} Toggle={Toggle} ToggleForModal={ToggleForModal} />
       <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
-      <UnitFilter data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter} />
+      <UnitFilter originaldata={originaldata} data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter} />
       <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter} />
 
       <div className="table-responsive" style={{ overflow: 'auto' }}>
@@ -183,53 +197,73 @@ const SortingTable = (props) => {
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
               {data.length > 0 ? <th></th> : null}
-              {data && data.length>0 ?data.map(eshkol => {
+              {data && data.length > 0 ? data.map(eshkol => {
                 return (
                   // <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5></th>
                   <th>
-                  <Button value={eshkol._id} onClick={Toggle} style={{ width: '100%' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Button>
-                  <h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5>
-                </th>
-                  )
+                    {/* <Button value={eshkol._id} onClick={Toggle} style={{ width: '100%' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Button> */}
+                    <button value={eshkol._id} onClick={Toggle} className="btn-empty">
+                      <p style={{ fontWeight: 'bold', color: 'white' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</p>
+                    </button>
+                    <h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5>
+                  </th>
+                )
               }
-              ):null}
+              ) : null}
             </tr>
           </thead>
           <tbody>
             <tr>
               {data.length > 0 ? <th>שיבוץ סופי</th> : null}
-              {data && data.length>0 ? data.map(eshkol => {
+              {data && data.length > 0 ? data.map(eshkol => {
                 return (
                   eshkol.finalcandidate && eshkol.finalcandidate.user ?
-                    <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.finalcandidate.user._id}`}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</Link></td>
+                    <td>
+                      <button value={eshkol.finalcandidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
+                        <p style={{ fontWeight: 'bold' }}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</p>
+                      </button>
+                      {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.finalcandidate.user._id}`}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</Link> */}
+                    </td>
                     : <td></td>)
-              }):null}
+              }) : null}
             </tr>
             {[...Array(highestnumber)].map((x, i) => {
               return (<tr>
                 {data.length > 0 ? <th></th> : null}
-                {data && data.length>0 ? data.map(eshkol => {
+                {data && data.length > 0 ? data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
                       <td className="greencell">
-                        <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
+                        {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                        <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
+                          <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
+                        </button>
                         {eshkol.candidatesineshkol[i].candidaterank ? <p>דירוג מתמודד:{eshkol.candidatesineshkol[i].candidaterank}</p> : null}
                         {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                       </td>
                       : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
                         <td className="redcell">
-                          <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
+                          {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                          <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
+                            <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
+                          </button>
                           {eshkol.candidatesineshkol[i].candidaterank ? <p>דירוג מתמודד:{eshkol.candidatesineshkol[i].candidaterank}</p> : null}
                         </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
                           <td className="yellowcell">
-                            <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
+                            {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                            <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
+                              <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
+                            </button>
                             {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                           </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
                             <td className="bluecell">
-                              <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link>
+                              {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                              <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
+                                <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
+                              </button>
                               <p>הוסף ע"י מנהל מערכת</p>
                             </td> : <td></td>)
-                }):null}
+                }) : null}
               </tr>)
             })}
           </tbody>

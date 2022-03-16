@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'components/Table.css' 
 import 'components/TableDark.css' 
 import 'components/ExcelButton.css' 
+import 'components/EmptyButton.css' 
 import "assets/css/black-dashboard-react.css";
 import ThemeContextWrapper from "./components/general/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/general/BackgroundColorWrapper/BackgroundColorWrapper";
