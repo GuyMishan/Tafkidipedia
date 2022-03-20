@@ -19,7 +19,8 @@ import {
     Spinner,
     Label,
     Col,
-    Dropdown
+    Dropdown,
+    DropdownToggle
 } from "reactstrap";
 
 import { ThemeContext, themes } from "contexts/ThemeContext";
@@ -40,16 +41,22 @@ function UserProfileDropdownMenu(props) {
                         : setcolor("white")
                 )}
             </ThemeContext.Consumer>
-            <Dropdown isOpen={props.dropDownIsOpen}>
+            <Dropdown isOpen={props.dropDownIsOpen} toggle={props.handleClick}>
+                <DropdownToggle tag='div'>
+                    <div style={{ borderRadius: '50%', height: '40px', width: '40px', background: 'linear-gradient(0deg, rgb(84 192 245) 0%, rgb(8 130 255) 100%)', cursor: 'pointer', textAlign: 'center', lineHeight: '40px', fontSize: '22px', color: 'white' }}
+                        onClick={props.handleClick}>
+                        {props.fname.slice(0, 1)}
+                    </div>
+                </DropdownToggle>
                 <ul className="dropdown-menu show" style={{ background: props.bgcolor, paddingRight: '10px' }}>
                     <li style={{ textAlign: 'right', paddingBottom: '10px' }}>
                         <NavLink to="/dashboard" style={{ margin: '0px' }}>
                             <Row style={{ direction: "rtl" }}>
-                                <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center'}}>
+                                <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center' }}>
                                     <img src={setting} style={{ height: "14px" }}></img>
                                 </Col>
                                 <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-                                    <h5 style={{ color: color,marginTop:'1px' }}>
+                                    <h5 style={{ color: color, marginTop: '1px' }}>
                                         הגדרות
                                     </h5>
                                 </Col>
@@ -57,7 +64,7 @@ function UserProfileDropdownMenu(props) {
                         </NavLink>
                     </li>
                     <li style={{ direction: 'ltr' }}>
-                        <ToggleDarkModeButton />
+                        <ToggleDarkModeButton color={color} />
                     </li>
                 </ul>
             </Dropdown>

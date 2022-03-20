@@ -12,12 +12,22 @@ import ToggleButton from "react-toggle-button";
 function ToggleDarkModeButton(props) {
   const [temptheme, settemptheme] = useState(true);//true=light ,false=dark
 
+  function init() {
+    if (props.color == "white")
+      settemptheme(false)
+    if (props.color == "black")
+      settemptheme(true)
+  }
+
+  useEffect(() => {
+    init();
+  }, [props.color])
+
   return (
     <div style={{ textAlign: '-webkit-right' }}>
       <ThemeContext.Consumer>
         {({ changeTheme, theme }) => (
           <ToggleButton
-
             colors={{
               activeThumb: {
                 base: 'rgb(250,250,250)',
@@ -34,8 +44,8 @@ function ToggleDarkModeButton(props) {
                 hover: 'rgb(95,96,98)',
               }
             }}
-            inactiveLabel={<img src={darkmodeimg} style={{ width: 'inherit', height: 'inherit' }}></img>}
-            activeLabel={<img src={lightmodeimg} style={{ width: 'inherit', height: 'inherit' }}></img>}
+            inactiveLabel={<img src={darkmodeimg} style={{ width: '15px', height: '15px' }}></img>}
+            activeLabel={<img src={lightmodeimg} style={{ width: '15px', height: '15px' }}></img>}
             value={temptheme}
             onToggle={() => {
               changeTheme((theme) => {
