@@ -12,7 +12,7 @@ table {
   } */
 
   table td,table th {
-    border: 1px solid white;
+    border: 2px solid white;
     padding: 5px;
     font-size: 16px;
     font-weight: bold;
@@ -20,7 +20,7 @@ table {
     color: white;
   }
 
-  table tr:nth-child(even){background-color:  #141E30;}
+  table tr:nth-child(even){background-color:  #27293d;}
 
   /*table tr:hover {background-color: #2ccb6d;}*/
   

@@ -151,7 +151,7 @@ function DisplayMahzorFinalEshkol(props) {
                 </Col>
             </Row>
 
-            <Row style={{ direction: 'rtl', textAlign: 'center' }}>
+            {/* <Row style={{ direction: 'rtl', textAlign: 'center' }}>
                 <Col xs={12} md={3}>
                     <h5 style={{ color: "rgb(255 97 97)" }}>&#9632; בחירת מתמודד בלבד</h5>
                 </Col>
@@ -164,7 +164,7 @@ function DisplayMahzorFinalEshkol(props) {
                 <Col xs={12} md={3}>
                     <h5 style={{ color: 'rgb(98 85 255)' }}>&#9632; הוסף ע"י מנהל מערכת</h5>
                 </Col>
-            </Row>
+            </Row> */}
 
             <SortingTable mahzorid={props.mahzorid} editable={props.editable} />
 

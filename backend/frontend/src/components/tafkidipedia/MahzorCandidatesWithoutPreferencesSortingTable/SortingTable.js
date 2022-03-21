@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef, createRef } from "react";
 import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination } from "react-table";
 import { withRouter, Redirect, Link } from "react-router-dom";
 import { COLUMNS } from "./coulmns";
@@ -7,16 +7,113 @@ import axios from 'axios'
 import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
-
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
+import CandidateFilter from 'components/tafkidipedia/Filters/CandidateFilter';
 
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
+  const [originaldata, setOriginalData] = useState([])
   const [data, setData] = useState([])
+
+  const [candidatefilter, setCandidatefilter] = useState({})
 
   function init() {
     getMahzorCabdidateWithoutPreferences();
+  }
+
+  const setfilter = (evt) => {
+    if (evt.currentTarget.name == 'movement') {
+      if (candidatefilter.movementfilter) {
+        let tempmovementfilter = [...candidatefilter.movementfilter]
+        const index = tempmovementfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmovementfilter.splice(index, 1);
+        }
+        else {
+          tempmovementfilter.push(evt.currentTarget.value)
+        }
+        setCandidatefilter({ ...candidatefilter, movementfilter: tempmovementfilter })
+      }
+      else {
+        setCandidatefilter({ ...candidatefilter, movementfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'unit') {
+      if (candidatefilter.unitfilter) {
+        let tempunitfilter = [...candidatefilter.unitfilter]
+        const index = tempunitfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempunitfilter.splice(index, 1);
+        }
+        else {
+          tempunitfilter.push(evt.currentTarget.value)
+        }
+        setCandidatefilter({ ...candidatefilter, unitfilter: tempunitfilter })
+      }
+      else {
+        setCandidatefilter({ ...candidatefilter, unitfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'migzar') {
+      if (candidatefilter.migzarfilter) {
+        let tempmigzarfilter = [...candidatefilter.migzarfilter]
+        const index = tempmigzarfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmigzarfilter.splice(index, 1);
+        }
+        else {
+          tempmigzarfilter.push(evt.currentTarget.value)
+        }
+        setCandidatefilter({ ...candidatefilter, migzarfilter: tempmigzarfilter })
+      }
+      else {
+        setCandidatefilter({ ...candidatefilter, migzarfilter: [evt.currentTarget.value] })
+      }
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayUnitFiltered = [];
+    if (candidatefilter.unitfilter && candidatefilter.unitfilter.length > 0) {
+      myArrayUnitFiltered = tempdatabeforefilter.filter((el) => {
+        return candidatefilter.unitfilter.some((f) => {
+          return f === el.user.job.unit;
+        });
+      });
+    }
+    else {
+      myArrayUnitFiltered = originaldata;
+    }
+
+    let myArrayUnitAndMovementFiltered = [];
+    if (candidatefilter.movementfilter && candidatefilter.movementfilter.length > 0) {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered.filter((el) => {
+        return candidatefilter.movementfilter.some((f) => {
+          return f === el.movement._id;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered;
+    }
+
+    let myArrayUnitAndMovementAndMigzarFiltered = [];
+    if (candidatefilter.migzarfilter && candidatefilter.migzarfilter.length > 0) {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered.filter((el) => {
+        return candidatefilter.migzarfilter.some((f) => {
+          return f === el.user.migzar;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered;
+    }
+
+    setData(myArrayUnitAndMovementAndMigzarFiltered)
   }
 
   const getMahzorCabdidateWithoutPreferences = async () => {
@@ -36,21 +133,25 @@ const SortingTable = ({ match }) => {
       }
     }
 
-    //aves only candiidates without a preference
+    //saves only candiidates without a preference
     for (let k = 0; k < tempallcandidates.length; k++) {
-      let flag=false;
+      let flag = false;
       for (let l = 0; l < tempcandidateswithpreference.length; l++)
         if (tempallcandidates[k]._id == tempcandidateswithpreference[l]._id) {
-          flag=true;
+          flag = true;
         }
-        if(flag==false)
-        {
-          tempcandidateswithoutpreferences.push(tempallcandidates[k]);
-        }
+      if (flag == false) {
+        tempcandidateswithoutpreferences.push(tempallcandidates[k]);
+      }
     }
 
     setData(tempcandidateswithoutpreferences)
+    setOriginalData(tempcandidateswithoutpreferences)
   }
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [candidatefilter]);
 
   useEffect(() => {
     init();
@@ -81,6 +182,7 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <CandidateFilter originaldata={originaldata} candidatefilter={candidatefilter} setfilter={setfilter} />
       <div style={{ float: 'right' }}>
         <ReactHTMLTableToExcel
           id="test-table-xls-button"

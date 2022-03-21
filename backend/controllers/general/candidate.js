@@ -84,6 +84,64 @@ let readtipul2 = [
   },
 ];
 
+let readtipul3 = [
+  {
+    $lookup: {
+      from: "users",
+      localField: "user",
+      foreignField: "_id",
+      as: "user"
+    }
+  },
+  {
+    $unwind: "$user"
+  },
+  {
+    $lookup: {
+      from: "jobs",
+      localField: "user.job",
+      foreignField: "_id",
+      as: "user.job"
+    }
+  },
+  {
+    $unwind: "$user.job"
+  },
+  {
+    $lookup: {
+      from: "mahzors",
+      localField: "mahzor",
+      foreignField: "_id",
+      as: "mahzor"
+    }
+  },
+  {
+    $unwind: "$mahzor"
+  },
+  {
+    $lookup: {
+      from: "populations",
+      localField: "mahzor.population",
+      foreignField: "_id",
+      as: "mahzor.population"
+    }
+  },
+  {
+    $unwind: "$mahzor.population"
+  },
+  {
+    $lookup: {
+      from: "movements",
+      localField: "movement",
+      foreignField: "_id",
+      as: "movement"
+    }
+  },
+  {
+    $unwind: "$movement"
+  },
+];
+
 exports.findById = async (req, res) => {
   const candidate = await Candidate.findOne().where({ _id: req.params.id })
 
@@ -222,7 +280,7 @@ exports.smartcandidatebyid = async (req, res) => {
 
 
 exports.activecandidatesbymahzorid = async (req, res) => {
-  let tipulfindquerry = readtipul2.slice();
+  let tipulfindquerry = readtipul3.slice();
   let finalquerry = tipulfindquerry;
 
     let matchquerry = {

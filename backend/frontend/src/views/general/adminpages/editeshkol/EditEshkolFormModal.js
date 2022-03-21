@@ -29,6 +29,8 @@ import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
 
+import Select from 'components/general/Select/EshkolAnimatedMultiSelect'
+
 const EditEshkolForm = (props) => {
   //mahzor
   const [oldeshkoldata, setOldEshkolData] = useState({})
@@ -89,15 +91,14 @@ const EditEshkolForm = (props) => {
   }
 
   const handleChangeCandidatesInEshkol = event => {
-    if (event.target.value != "בחר מועמד") {
-      let tempcandidate = candidates[event.target.value];
+      let tempcandidate = candidates[event.value];
       let tempeshkoldatacandidatesineshkol = [...eshkoldata.candidatesineshkol];
 
       if (!isDuplicate(tempeshkoldatacandidatesineshkol, tempcandidate)) {
         tempeshkoldatacandidatesineshkol.push({ candidate: tempcandidate })
         setEshkolData({ ...eshkoldata, candidatesineshkol: tempeshkoldatacandidatesineshkol });
       }
-    }
+    console.log(event)
   }
 
   const handleChangeFinalCandidateInEshkol = event => {
@@ -234,19 +235,28 @@ const EditEshkolForm = (props) => {
 
               <CardBody style={{ direction: 'rtl' }}>
                 <div style={{width:'90%',margin:'auto'}}>
-                  <Row>
-                    <Col xs={12} md={12}>
-                      <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
-                      <FormGroup dir="rtl" >
-                        <Input type="select" onChange={handleChangeCandidatesInEshkol}>
-                          <option value={"בחר מועמד"}>בחר מועמד</option>
-                          {candidates.map((candidate, index) => (
-                            <option key={index} value={index}>{candidate.user.name} {candidate.user.lastname}</option>
-                          ))}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                {/* <Row>
+                  <Col xs={12} md={12}>
+                    <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
+                    <FormGroup dir="rtl" >
+                      <Input type="select" onChange={handleChangeCandidatesInEshkol}>
+                        <option value={"בחר מועמד"}>בחר מועמד</option>
+                        {candidates.map((candidate, index) => (
+                          <option key={index} value={index}>{candidate.user.name} {candidate.user.lastname}</option>
+                        ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                </Row> */}
+                
+                <Row>
+                  <Col xs={12} md={12}>
+                    <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
+                    <div style={{ textAlign: 'right' }}>
+                    <Select data={candidates} handleChangeCandidatesInEshkol={handleChangeCandidatesInEshkol}/>
+                    </div>
+                  </Col>
+                </Row>
 
                   <Row style={{ direction: "rtl", paddingTop: '10px' }} >
                     {eshkoldata && eshkoldata.candidatesineshkol ? eshkoldata.candidatesineshkol.map((candidateineshkol, index) => (

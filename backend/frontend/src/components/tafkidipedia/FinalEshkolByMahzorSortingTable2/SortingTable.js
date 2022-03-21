@@ -11,15 +11,18 @@ import UnitFilter from 'components/tafkidipedia/Filters/UnitFilter';
 import EditEshkolFormModal from "views/general/adminpages/editeshkol/EditEshkolFormModal";
 import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePageModal';
 
+import EshkolFilter from 'components/tafkidipedia/Filters/EshkolFilter';
+
 const SortingTable = (props) => {
   const [data, setData] = useState([])
   const [originaldata, setOriginaldata] = useState([])
   const [candidatesinmahzor, setCandidatesinmahzor] = useState([])
   const [highestnumber, setHighestnumber] = useState(0)
 
-  const [migzarfilter, setMigzarfilter] = useState(undefined)
-  const [unitfilter, setUnitfilter] = useState(undefined)
-  const [certainfilter, setCertainfilter] = useState(undefined)
+  // const [migzarfilter, setMigzarfilter] = useState(undefined)
+  // const [unitfilter, setUnitfilter] = useState(undefined)
+  // const [certainfilter, setCertainfilter] = useState(undefined)
+  const [eshkolfilter, setEshkolfilter] = useState({})
 
   //eshkol modal
   const [iseshkolformopen, setIseshkolformopen] = useState(false);
@@ -41,7 +44,6 @@ const SortingTable = (props) => {
   const [useridformodal, setUseridformodal] = useState(undefined);
 
   async function ToggleUserModal(evt) {
-    // console.log(evt.currentTarget.value)
     setUseridformodal(evt.currentTarget.value)
     setIsprofilepageopen(!isprofilepageopen);
   }
@@ -130,55 +132,159 @@ const SortingTable = (props) => {
     setHighestnumber(temhighestnumber)
   }
 
-  const FilterEshkols = async () => {
-    let temhighestnumber = 0;
-    let tempeshkolbymahzorid = [];
-    let tempeshkolbymahzorid_beforefilters = originaldata;
+  // const FilterEshkols = async () => {
+  //   let temhighestnumber = 0;
+  //   let tempeshkolbymahzorid = [];
+  //   let tempeshkolbymahzorid_beforefilters = originaldata;
 
-    //to filter eshkols
-    if (migzarfilter != undefined) {
-      if (unitfilter != undefined) {
-        if (certainfilter != undefined) {
-          tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
-            return el.jobinmahzor.job.migzar == migzarfilter &&
-              el.jobinmahzor.certain == certainfilter &&
-              el.jobinmahzor.job.unit.name == unitfilter;
-          });
+  //   //to filter eshkols
+  //   if (migzarfilter != undefined) {
+  //     if (unitfilter != undefined) {
+  //       if (certainfilter != undefined) {
+  //         tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
+  //           return el.jobinmahzor.job.migzar == migzarfilter &&
+  //             el.jobinmahzor.certain == certainfilter &&
+  //             el.jobinmahzor.job.unit.name == unitfilter;
+  //         });
+  //       }
+  //       else {
+  //         tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
+  //           return el.jobinmahzor.job.migzar == migzarfilter &&
+  //             el.jobinmahzor.job.unit.name == unitfilter;
+  //         });
+  //       }
+  //     }
+  //     else {
+  //       tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
+  //         return el.jobinmahzor.job.migzar == migzarfilter
+  //       });
+  //     }
+  //   }
+  //   else {
+  //     tempeshkolbymahzorid = originaldata
+  //   }
+
+  //   for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
+  //     if (tempeshkolbymahzorid[i].candidatesineshkol.length >= temhighestnumber) {
+  //       temhighestnumber = tempeshkolbymahzorid[i].candidatesineshkol.length;
+  //     }
+  //   }
+
+  //   setData(tempeshkolbymahzorid)
+  //   setHighestnumber(temhighestnumber)
+  // }
+
+  const setfilter = (evt) => {
+    if (evt.currentTarget.name == 'certain') {
+      if (eshkolfilter.certainfilter) {
+        let tempcertainfilter = [...eshkolfilter.certainfilter]
+        const index = tempcertainfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempcertainfilter.splice(index, 1);
         }
         else {
-          tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
-            return el.jobinmahzor.job.migzar == migzarfilter &&
-              el.jobinmahzor.job.unit.name == unitfilter;
-          });
+          tempcertainfilter.push(evt.currentTarget.value)
         }
+        setEshkolfilter({ ...eshkolfilter, certainfilter: tempcertainfilter })
       }
       else {
-        tempeshkolbymahzorid = tempeshkolbymahzorid_beforefilters.filter(function (el) {
-          return el.jobinmahzor.job.migzar == migzarfilter
-        });
+        setEshkolfilter({ ...eshkolfilter, certainfilter: [evt.currentTarget.value] })
       }
+    }
+    if (evt.currentTarget.name == 'unit') {
+      if (eshkolfilter.unitfilter) {
+        let tempunitfilter = [...eshkolfilter.unitfilter]
+        const index = tempunitfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempunitfilter.splice(index, 1);
+        }
+        else {
+          tempunitfilter.push(evt.currentTarget.value)
+        }
+        setEshkolfilter({ ...eshkolfilter, unitfilter: tempunitfilter })
+      }
+      else {
+        setEshkolfilter({ ...eshkolfilter, unitfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'migzar') {
+      if (eshkolfilter.migzarfilter) {
+        let tempmigzarfilter = [...eshkolfilter.migzarfilter]
+        const index = tempmigzarfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmigzarfilter.splice(index, 1);
+        }
+        else {
+          tempmigzarfilter.push(evt.currentTarget.value)
+        }
+        setEshkolfilter({ ...eshkolfilter, migzarfilter: tempmigzarfilter })
+      }
+      else {
+        setEshkolfilter({ ...eshkolfilter, migzarfilter: [evt.currentTarget.value] })
+      }
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let temhighestnumber = 0;
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayUnitFiltered = [];
+    if (eshkolfilter.unitfilter && eshkolfilter.unitfilter.length > 0) {
+      myArrayUnitFiltered = tempdatabeforefilter.filter((el) => {
+        return eshkolfilter.unitfilter.some((f) => {
+          return f === el.jobinmahzor.job.unit._id;
+        });
+      });
     }
     else {
-      tempeshkolbymahzorid = originaldata
+      myArrayUnitFiltered = originaldata;
     }
 
-    for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
-      if (tempeshkolbymahzorid[i].candidatesineshkol.length >= temhighestnumber) {
-        temhighestnumber = tempeshkolbymahzorid[i].candidatesineshkol.length;
+    let myArrayUnitAndMovementFiltered = [];
+    if (eshkolfilter.certainfilter && eshkolfilter.certainfilter.length > 0) {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered.filter((el) => {
+        return eshkolfilter.certainfilter.some((f) => {
+          return f === el.jobinmahzor.certain;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered;
+    }
+
+    let myArrayUnitAndMovementAndMigzarFiltered = [];
+    if (eshkolfilter.migzarfilter && eshkolfilter.migzarfilter.length > 0) {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered.filter((el) => {
+        return eshkolfilter.migzarfilter.some((f) => {
+          return f === el.jobinmahzor.job.migzar;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered;
+    }
+
+    for (let i = 0; i < myArrayUnitAndMovementAndMigzarFiltered.length; i++) {
+      if (myArrayUnitAndMovementAndMigzarFiltered[i].candidatesineshkol.length >= temhighestnumber) {
+        temhighestnumber = myArrayUnitAndMovementAndMigzarFiltered[i].candidatesineshkol.length;
       }
     }
-
-    setData(tempeshkolbymahzorid)
+    setData(myArrayUnitAndMovementAndMigzarFiltered)
     setHighestnumber(temhighestnumber)
   }
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [eshkolfilter]);
 
   useEffect(() => {
     getMahzorEshkol()
   }, [candidatesinmahzor]);
 
-  useEffect(() => {
-    FilterEshkols()
-  }, [migzarfilter, unitfilter, certainfilter]);
+  // useEffect(() => {
+  //   FilterEshkols()
+  // }, [migzarfilter, unitfilter, certainfilter]);
 
   useEffect(() => {
     init()
@@ -186,11 +292,17 @@ const SortingTable = (props) => {
 
   return (
     <>
+      {/* modals */}
       <ProfilePageModal isOpen={isprofilepageopen} userid={useridformodal} Toggle={ToggleUserModal} />
       <EditEshkolFormModal isOpen={iseshkolformopen} eshkolid={eshkolidformodal} iseshkol={'false'} Toggle={Toggle} ToggleForModal={ToggleForModal} />
-      <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
+      {/* modals */}
+
+      {/* filters */}
+      {/* <MigzarFilter data={data} setMigzarfilter={setMigzarfilter} migzarfilter={migzarfilter} />
       <UnitFilter originaldata={originaldata} data={data} setUnitfilter={setUnitfilter} unitfilter={unitfilter} migzarfilter={migzarfilter} certainfilter={certainfilter} />
-      <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter} />
+      <CertainFilter data={data} setCertainfilter={setCertainfilter} certainfilter={certainfilter} unitfilter={unitfilter} /> */}
+      <EshkolFilter originaldata={originaldata} eshkolfilter={eshkolfilter} setfilter={setfilter} />
+      {/* filters */}
 
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table id="table-to-xls">
@@ -199,9 +311,7 @@ const SortingTable = (props) => {
               {data.length > 0 ? <th></th> : null}
               {data && data.length > 0 ? data.map(eshkol => {
                 return (
-                  // <th><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/editeshkol/${false}/${eshkol._id}`}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Link><h5 style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', margin: '0px' }}>{eshkol.jobinmahzor.certain}</h5></th>
-                  <th>
-                    {/* <Button value={eshkol._id} onClick={Toggle} style={{ width: '100%' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</Button> */}
+                  <th style={{width:'200px'}}>
                     <button value={eshkol._id} onClick={Toggle} className="btn-empty">
                       <p style={{ fontWeight: 'bold', color: 'white' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</p>
                     </button>
@@ -222,7 +332,6 @@ const SortingTable = (props) => {
                       <button value={eshkol.finalcandidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                         <p style={{ fontWeight: 'bold' }}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</p>
                       </button>
-                      {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.finalcandidate.user._id}`}>{eshkol.finalcandidate.user.name} {eshkol.finalcandidate.user.lastname}</Link> */}
                     </td>
                     : <td></td>)
               }) : null}
@@ -233,8 +342,7 @@ const SortingTable = (props) => {
                 {data && data.length > 0 ? data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
-                      <td className="greencell">
-                        {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                      <td>
                         <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                           <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                         </button>
@@ -242,22 +350,19 @@ const SortingTable = (props) => {
                         {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                       </td>
                       : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
-                        <td className="redcell">
-                          {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                        <td>
                           <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                             <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                           </button>
                           {eshkol.candidatesineshkol[i].candidaterank ? <p>דירוג מתמודד:{eshkol.candidatesineshkol[i].candidaterank}</p> : null}
                         </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
-                          <td className="yellowcell">
-                            {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                          <td>
                             <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                               <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                             </button>
                             {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                           </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
-                            <td className="bluecell">
-                              {/* <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${eshkol.candidatesineshkol[i].candidate.user._id}`}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</Link> */}
+                            <td>
                               <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                                 <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                               </button>

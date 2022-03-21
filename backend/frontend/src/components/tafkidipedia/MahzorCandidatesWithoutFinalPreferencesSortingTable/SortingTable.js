@@ -10,14 +10,114 @@ import deletepic from "assets/img/delete.png";
 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
+import CandidateFilter from 'components/tafkidipedia/Filters/CandidateFilter';
+
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
+  const [originaldata, setOriginalData] = useState([])
   const [data, setData] = useState([])
+
+  const [candidatefilter, setCandidatefilter] = useState({})
 
   function init() {
     getMahzorCabdidateWithoutPreferences();
   }
+
+  const setfilter = (evt) => {
+    if (evt.currentTarget.name == 'movement') {
+      if (candidatefilter.movementfilter) {
+        let tempmovementfilter = [...candidatefilter.movementfilter]
+        const index = tempmovementfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmovementfilter.splice(index, 1);
+        }
+        else {
+          tempmovementfilter.push(evt.currentTarget.value)
+        }
+        setCandidatefilter({ ...candidatefilter, movementfilter: tempmovementfilter })
+      }
+      else {
+        setCandidatefilter({ ...candidatefilter, movementfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'unit') {
+      if (candidatefilter.unitfilter) {
+        let tempunitfilter = [...candidatefilter.unitfilter]
+        const index = tempunitfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempunitfilter.splice(index, 1);
+        }
+        else {
+          tempunitfilter.push(evt.currentTarget.value)
+        }
+        setCandidatefilter({ ...candidatefilter, unitfilter: tempunitfilter })
+      }
+      else {
+        setCandidatefilter({ ...candidatefilter, unitfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'migzar') {
+      if (candidatefilter.migzarfilter) {
+        let tempmigzarfilter = [...candidatefilter.migzarfilter]
+        const index = tempmigzarfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmigzarfilter.splice(index, 1);
+        }
+        else {
+          tempmigzarfilter.push(evt.currentTarget.value)
+        }
+        setCandidatefilter({ ...candidatefilter, migzarfilter: tempmigzarfilter })
+      }
+      else {
+        setCandidatefilter({ ...candidatefilter, migzarfilter: [evt.currentTarget.value] })
+      }
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayUnitFiltered = [];
+    if (candidatefilter.unitfilter && candidatefilter.unitfilter.length > 0) {
+      myArrayUnitFiltered = tempdatabeforefilter.filter((el) => {
+        return candidatefilter.unitfilter.some((f) => {
+          return f === el.user.job.unit;
+        });
+      });
+    }
+    else {
+      myArrayUnitFiltered = originaldata;
+    }
+
+    let myArrayUnitAndMovementFiltered = [];
+    if (candidatefilter.movementfilter && candidatefilter.movementfilter.length > 0) {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered.filter((el) => {
+        return candidatefilter.movementfilter.some((f) => {
+          return f === el.movement._id;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered;
+    }
+
+    let myArrayUnitAndMovementAndMigzarFiltered = [];
+    if (candidatefilter.migzarfilter && candidatefilter.migzarfilter.length > 0) {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered.filter((el) => {
+        return candidatefilter.migzarfilter.some((f) => {
+          return f === el.user.migzar;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered;
+    }
+
+    setData(myArrayUnitAndMovementAndMigzarFiltered)
+    // console.log("dsdsds")
+  }
+
 
   const getMahzorCabdidateWithoutPreferences = async () => {
     let tempcandidateswithoutpreferences = [];
@@ -52,6 +152,10 @@ const SortingTable = ({ match }) => {
   }
 
   useEffect(() => {
+    applyfiltersontodata()
+  }, [candidatefilter]);
+
+  useEffect(() => {
     init();
     setPageSize(5);
   }, []);
@@ -80,6 +184,7 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <CandidateFilter originaldata={originaldata} candidatefilter={candidatefilter} setfilter={setfilter} />
       <div style={{ float: 'right' }}>
         <ReactHTMLTableToExcel
           id="test-table-xls-button"
