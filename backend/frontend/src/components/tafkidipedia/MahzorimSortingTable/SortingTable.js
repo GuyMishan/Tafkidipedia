@@ -127,7 +127,7 @@ const SortingTable = ({ match }) => {
                     <td style={{ textAlign: "center" }}>
                       <Link to={`/jobsbymahzor/${row.original._id}`}>
                         <button
-                          className="btn btn-success"
+                          className="btn-new"
                           style={{ padding: "0.5rem" }}
                         >
                           לצפייה בתפקידים
@@ -138,7 +138,7 @@ const SortingTable = ({ match }) => {
                       row.original.status == 1 ? <td style={{ textAlign: "center" }}>
                         <Link to={`/mahzorform/${row.original._id}`}>
                           <button
-                            className="btn btn-success"
+                            className="btn-new"
                             style={{ padding: "0.5rem" }}
                           >
                             <img
@@ -152,7 +152,7 @@ const SortingTable = ({ match }) => {
                         <td style={{ textAlign: "center" }}>
                           <Link to={`/displaymahzor/${row.original._id}`}>
                             <button
-                              className="btn btn-success"
+                              className="btn-new"
                               style={{ padding: "0.5rem" }}
                             >
                               <img

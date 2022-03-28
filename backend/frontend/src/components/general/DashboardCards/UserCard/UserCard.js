@@ -46,7 +46,7 @@ const UserCard = (props) => {
                     <Card style={{ borderRadius: '40px' ,boxShadow:"0 1px 10px 0 rgb(0 0 0 / 10%), 0 1px 10px 0 rgb(0 0 0 / 15%)",marginBottom:'10px'}}>
                         <CardBody style={{ padding: "0px" }}>
                             <Row style={{ margin: 'auto' }}>
-                                <Col lg="2" style={{ padding: "0px" }}>
+                                {/* <Col lg="2" style={{ padding: "0px" }}>
                                     <div className="sidebar-wrapper">
                                         <Nav style={{ textAlign: "right", display: "block", padding: '0px' }}>
                                             <li style={{ textAlign: "center" }}>
@@ -68,14 +68,14 @@ const UserCard = (props) => {
                                             </li>
                                         </Nav>
                                     </div>
-                                </Col>
-                                <Col lg="8" style={{padding:'0px'}}>
+                                </Col> */}
+                                <Col lg="12" style={{padding:'0px'}}>
                                     <UserCarousel/>
                                 </Col>
-
+{/* 
                                 <Col lg="2" style={{ padding: "0px",textAlign:'center'}}>
                                 <img src={tafkidipediashortlogo} style={{ height: "10rem" ,paddingTop:'1rem',paddingBottom:'1rem'}}></img>
-                                </Col>
+                                </Col> */}
                             </Row>
                         </CardBody>
                     </Card>
@@ -83,14 +83,14 @@ const UserCard = (props) => {
                     <Card style={{ borderRadius: '40px',boxShadow:"0 1px 10px 0 rgb(0 0 0 / 10%), 0 1px 10px 0 rgb(0 0 0 / 15%)",marginBottom:'10px'}}>
                         <CardBody style={{ padding: "0px" }}>
                             <Row style={{ margin: 'auto' }}>
-                                <Col lg="2" style={{ padding: "0px" }}>
+                                {/* <Col lg="2" style={{ padding: "0px" }}>
                                     <div className="sidebar-wrapper">
                                         <Nav style={{ textAlign: "right", display: "block", padding: '0px' }}>
                                             <li style={{ textAlign: "center" }}>
                                                 <h3></h3>
                                             </li>
                                             <li style={{ textAlign: "center" }}>
-                                                <NavLink to="/dashboard" style={{}}>
+                                                {/* <NavLink to="/dashboard" style={{}}>
                                                     <img src={soldier} style={{ height: "10rem" }}></img>
                                                 </NavLink>
                                             </li>
@@ -105,14 +105,14 @@ const UserCard = (props) => {
                                             </li>
                                         </Nav>
                                     </div>
-                                </Col>
-                                <Col lg="8" style={{padding: "0px"}}>
+                                </Col> */}
+                                <Col lg="12" style={{padding: "0px"}}>
                                 <UserCarousel/>
                                 </Col>
-
+{/* 
                                 <Col lg="2" style={{ padding: "0px",textAlign:'center'}}>
                                 <img src={tafkidipediashortlogo} style={{ height: "10rem",paddingTop:'1rem',paddingBottom:'1rem'}}></img>
-                                </Col>
+                                </Col> */}
                             </Row>
                         </CardBody>
                     </Card>

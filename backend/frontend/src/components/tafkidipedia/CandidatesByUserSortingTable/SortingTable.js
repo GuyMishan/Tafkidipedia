@@ -127,7 +127,7 @@ const SortingTable = ({ match }) => {
                     <td style={{ textAlign: "center" }}>
                       <Link to={`/jobsbymahzor/${row.original.mahzor._id}`}>
                         <button
-                          className="btn btn-success"
+                          className="btn-new"
                           style={{ padding: "0.5rem" }}
                         >
                           לצפייה בתפקידים
@@ -137,7 +137,7 @@ const SortingTable = ({ match }) => {
                     <td style={{ textAlign: "center" }}>
                       <Link to={`/candidatepreferenceform/${row.original.mahzor._id}/${row.original._id}`}>
                         <button
-                          className="btn btn-success"
+                          className="btn-new"
                           style={{ padding: "0.5rem" }}
                         >
                           <img

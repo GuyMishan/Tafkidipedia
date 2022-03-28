@@ -59,7 +59,7 @@ function WorkplanNavbar(props) {
                 </Col>
                 <Col xs={12} md={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {/* <ToggleDarkModeButton /> */}
-                  {/* <p style={{ fontWeight: 'bold', paddingLeft: '30px' }}> שלום, {user.name + ' ' + user.lastname}</p> */}
+                  <h3 style={{ fontWeight: 'bold', paddingLeft: '30px' }}> שלום, {user.name + ' ' + user.lastname}</h3>
                 </Col>
               </Row>
             </Navbar>

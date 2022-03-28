@@ -29,7 +29,7 @@ import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
 
-import Select from 'components/general/Select/EshkolAnimatedMultiSelect'
+import Select from 'components/tafkidipedia/Select/EshkolAnimatedMultiSelect'
 
 const EditEshkolForm = (props) => {
   //mahzor
@@ -358,7 +358,7 @@ const EditEshkolForm = (props) => {
                     : null}
 
                   <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                    <button className="btn btn-primary" onClick={clickSubmit}>עדכן אשכול</button>
+                    <button className="btn" onClick={clickSubmit}>עדכן אשכול</button>
                   </div>
 
                 </div>

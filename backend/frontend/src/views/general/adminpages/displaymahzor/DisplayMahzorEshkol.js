@@ -147,7 +147,7 @@ function DisplayMahzorEshkol({ match }) {
                     <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת אשכולות</h3>
                 </Col>
                 <Col>
-                <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', float: 'left' }} to={`/displaymahzoreshkols/${true}/${match.params.mahzorid}`}><button className="btn btn-success" style={{ padding: "0.5rem" }}>פתח במסך מלא</button></Link>
+                <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit', float: 'left' }} to={`/displaymahzoreshkols/${true}/${match.params.mahzorid}`}><button className="btn" style={{ padding: "0.5rem" }}>פתח במסך מלא</button></Link>
                 </Col>
             </Row>
 

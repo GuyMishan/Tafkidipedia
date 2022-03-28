@@ -11,8 +11,6 @@
     "immer": "^9.0.3",
     "react": "16.13.1",
     "react-chartjs-2": "^3.0.3",
-    "react-circular-progressbar": "^2.0.4",
-    "react-d3-speedometer": "^1.0.1",
     "react-dom": "16.13.1",
     "react-excel-renderer": "^1.1.0",
     "react-html-table-to-excel": "^2.0.0",

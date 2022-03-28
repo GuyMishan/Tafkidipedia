@@ -317,7 +317,7 @@ const UnitPreferenceForm = ({ match }) => {
               </Row>
 
               <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                <button className="btn btn-primary" onClick={clickSubmit}>עדכן העדפות</button>
+                <button className="btn" onClick={clickSubmit}>עדכן העדפות</button>
               </div>
             </Container>
           </CardBody>

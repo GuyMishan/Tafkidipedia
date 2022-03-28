@@ -336,7 +336,7 @@ const EditEshkolForm = ({ match }) => {
                   : null}
 
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                  <button className="btn btn-primary" onClick={clickSubmit}>עדכן אשכול</button>
+                  <button className="btn" onClick={clickSubmit}>עדכן אשכול</button>
                 </div>
 
               </Container>

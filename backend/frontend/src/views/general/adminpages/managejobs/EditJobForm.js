@@ -337,7 +337,7 @@ const EditJobForm = ({ match }) => {
                   </Input>
 
                   <div className="text-center">
-                    <button onClick={clickSubmit} className="btn btn-primary">עדכן</button>
+                    <button onClick={clickSubmit} className="btn">עדכן</button>
                   </div>
                 </Form>
               </Container>

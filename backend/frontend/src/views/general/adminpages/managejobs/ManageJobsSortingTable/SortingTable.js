@@ -99,7 +99,7 @@ const SortingTable = ({ match }) => {
                       })
                     }
                     {/* {console.log(row)} */}
-                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <Link to={`/editjob/${row.original._id}`}><button className="btn btn-success">עדכן</button></Link> </div> </td>
+                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <Link to={`/editjob/${row.original._id}`}><button className="btn-new">עדכן</button></Link> </div> </td>
                   </tr>
                 )
               })

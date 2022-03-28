@@ -48,7 +48,7 @@ const MahzorCandidates3 = (props) => {
 
     useEffect(() => {
         loaduserstopresent()
-    }, [props.users]);
+    }, [props.users,props.jobs]);
 
     useEffect(() => {
         loadjobs();

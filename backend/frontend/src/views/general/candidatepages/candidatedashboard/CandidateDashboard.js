@@ -24,6 +24,7 @@ import {
 import { isAuthenticated } from 'auth/index';
 
 import UserCard from "components/general/DashboardCards/UserCard/UserCard";
+import SegelMessage from "components/general/DashboardCards/UserCard/SegelMessage";
 
 function CandidateDashboard() {
   const { user } = isAuthenticated();
@@ -35,6 +36,7 @@ function CandidateDashboard() {
       </Container>
 
       <Container style={{ paddingTop: '2rem' }}>
+        <SegelMessage />
       </Container>
     </>
   );

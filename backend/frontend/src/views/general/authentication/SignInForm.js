@@ -122,12 +122,12 @@ function Signin() {
                     <Row>
                       <Col>
                         <div className="text-center">
-                          <button onClick={clickSubmit} className="btn btn-primary">התחבר</button>
+                          <button onClick={clickSubmit} className="btn">התחבר</button>
                         </div>
                       </Col>
                       <Col>
                         <div className="text-center">
-                          <button onClick={() => { history.push(`/signup`) }} className="btn btn-primary">הרשם</button>
+                          <button onClick={() => { history.push(`/signup`) }} className="btn">הרשם</button>
                         </div>
                       </Col>
                     </Row>

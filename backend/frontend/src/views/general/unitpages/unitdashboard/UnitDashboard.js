@@ -23,7 +23,7 @@ import axios from 'axios';
 
 import UserCard from "components/general/DashboardCards/UserCard/UserCard";
 
-import plus from "assets/img/add.png";
+import SegelMessage from "components/general/DashboardCards/UserCard/SegelMessage";
 
 function UnitDashboard({ match }) {
 
@@ -35,6 +35,10 @@ function UnitDashboard({ match }) {
     <>
       <Container>
         <UserCard />
+      </Container>
+
+      <Container style={{ paddingTop: '2rem' }}>
+        <SegelMessage />
       </Container>
     </>
   );

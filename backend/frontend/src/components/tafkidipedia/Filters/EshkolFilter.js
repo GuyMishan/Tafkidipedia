@@ -36,6 +36,26 @@ const EshkolFilter = (props) => {
         setcollapseOpen(!collapseOpen);
     };
 
+    const isDuplicate = (data, obj) => {
+        let flag = false;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i]._id == obj._id) {
+                flag = true
+            }
+        }
+        return flag;
+    }
+
+    const calculateUnitsAccordingToData = async () => {
+        let tempunits = [];
+        for (let i = 0; i < props.originaldata.length; i++) {
+            if (!isDuplicate(tempunits, props.originaldata[i].jobinmahzor.job.unit)) {
+                tempunits.push(props.originaldata[i].jobinmahzor.job.unit)
+            }
+        }
+        setUnits(tempunits);
+    }
+
     const getUnits = async () => {
         let tempunits = [];
         let result = await axios.get(`http://localhost:8000/api/unit`)
@@ -61,9 +81,15 @@ const EshkolFilter = (props) => {
 
     function init() {
         getCertains();
-        getUnits();
+        // getUnits();
+        // calculateUnitsAccordingToData();
         getMigzars();
     }
+
+    useEffect(() => {
+        if ((props.originaldata != undefined))
+        calculateUnitsAccordingToData()
+    }, [props.originaldata]);
 
     useEffect(() => {
         init();

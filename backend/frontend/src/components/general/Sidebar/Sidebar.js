@@ -76,7 +76,7 @@ function Sidebar() {
           <img src={Logo100} height='100px'></img>
             <Button
               onClick={clickSubmit}
-              className="btn-danger"
+              className="btn"
               style={{ width: '80%' ,marginTop:'15px' }}
             >
               התנתק

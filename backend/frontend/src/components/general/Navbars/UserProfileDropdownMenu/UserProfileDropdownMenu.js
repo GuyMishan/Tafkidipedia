@@ -43,7 +43,7 @@ function UserProfileDropdownMenu(props) {
             </ThemeContext.Consumer>
             <Dropdown isOpen={props.dropDownIsOpen} toggle={props.handleClick}>
                 <DropdownToggle tag='div'>
-                    <div style={{ borderRadius: '50%', height: '40px', width: '40px', background: 'linear-gradient(0deg, rgb(84 192 245) 0%, rgb(8 130 255) 100%)', cursor: 'pointer', textAlign: 'center', lineHeight: '40px', fontSize: '22px', color: 'white' }}
+                    <div style={{ borderRadius: '50%', height: '40px', width: '40px', background: '#364e68', cursor: 'pointer', textAlign: 'center', lineHeight: '40px', fontSize: '22px', color: 'white' }}
                         onClick={props.handleClick}>
                         {props.fname.slice(0, 1)}
                     </div>

@@ -22,6 +22,7 @@ import {
 } from "reactstrap";
 
 import UserCard from "components/general/DashboardCards/UserCard/UserCard";
+import SegelMessage from "components/general/DashboardCards/UserCard/SegelMessage";
 
 function AdminDashboard() {
 
@@ -32,6 +33,7 @@ function AdminDashboard() {
       </Container>
 
       <Container style={{ paddingTop: '2rem' }}>
+        <SegelMessage />
       </Container>
     </>
   );
