@@ -146,7 +146,7 @@ exports.remove = (req, res) => {
 };
 
 exports.smartjobs = async(req, res) => {
-  let tipulfindquerry = readtipul.slice();
+  let tipulfindquerry = readtipul2.slice();
   let finalquerry = tipulfindquerry;
 
   Job.aggregate(finalquerry)

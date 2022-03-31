@@ -36,6 +36,26 @@ const CandidateFilter = (props) => {
         setcollapseOpen(!collapseOpen);
     };
 
+    const isDuplicate = (data, obj) => {
+        let flag = false;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i]._id == obj._id) {
+                flag = true
+            }
+        }
+        return flag;
+    }
+
+    const calculateUnitsAccordingToData = async (data) => {
+        let tempunits = [];
+        for (let i = 0; i < data.length; i++) {
+            if (!isDuplicate(tempunits, data[i].user.job.unit)) {
+                tempunits.push(data[i].user.job.unit)
+            }
+        }
+        setUnits(tempunits);
+    }
+
     const getUnits = async () => {
         let tempunits = [];
         let result = await axios.get(`http://localhost:8000/api/unit`)
@@ -61,13 +81,18 @@ const CandidateFilter = (props) => {
 
     function init() {
         getMovements();
-        getUnits();
+        // getUnits();
         getMigzars();
     }
 
     useEffect(() => {
         init();
     }, []);
+
+    useEffect(() => {
+        if ((props.originaldata != undefined))
+        calculateUnitsAccordingToData(props.originaldata)
+    }, [props.originaldata]);
 
     return (
         <div style={{ width: '100%', margin: 'auto', textAlign: 'right' }}>

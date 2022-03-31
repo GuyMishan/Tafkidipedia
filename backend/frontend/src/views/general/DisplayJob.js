@@ -28,8 +28,20 @@ function DisplayJob({ match }) {
   const loadjob = () => {
     axios.get(`http://localhost:8000/api/smartjobbyid/${match.params.jobid}`)
       .then(response => {
-        let tempjob = response.data[0];
-        setJobData(tempjob);
+        if (response.data.length == 0) {
+          axios.get(`http://localhost:8000/api/job/${match.params.jobid}`)
+            .then(response1 => {
+              let tempjob = response1.data[0];
+              setJobData(tempjob);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        }
+        else {
+          let tempjob = response.data[0];
+          setJobData(tempjob);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -45,86 +57,62 @@ function DisplayJob({ match }) {
   }, [])
 
   return (
-    <Container>
-      <PanelHeader size="sm" content={
-        <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{jobdata ? jobdata.jobname : null}</h1>
-        </Container>} />
+    jobdata ?
+      <>
+        < Container>
+          <PanelHeader size="sm" content={
+            <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+              <h1 style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>{jobdata ? jobdata.jobname : null}</h1>
+            </Container>} />
 
-      <Row>
-        <Col>
-          <Card style={{ marginTop: '30px' }}>
-            <CardHeader>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>תיאור התפקיד</h3>
-            </CardHeader>
-            <CardBody style={{ textAlign: 'right' }}>
-              {jobdata.description}
-            </CardBody>
-          </Card>
-
-          <Card style={{ marginTop: '30px' }}>
-            <CardHeader>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>תרומת התפקיד לפרט</h3>
-            </CardHeader>
-            <CardBody style={{ textAlign: 'right' }}>
-              {jobdata.job_contribution}
-            </CardBody>
-          </Card>
-        </Col>
-
-        <Col>
-          <Card style={{ marginTop: '30px' }}>
-            <CardHeader>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>פרטי התפקיד</h3>
-            </CardHeader>
-            <CardBody>
-              <Container>
-                {jobdata.unit ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>יחידה: </h5> <h5> {jobdata.unit.name}</h5></Row> : null}
-                {jobdata.rank ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>דרגת תקן: </h5> <h5> {jobdata.rank}</h5></Row> : null}
-                {jobdata.sivug ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>סיווג תפקיד: </h5> <h5> {jobdata.sivug}</h5></Row> : null}
-                {jobdata.damah ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>תפקיד מדומ"ח: </h5> <h5> {jobdata.damah}</h5></Row> : null}
-                {jobdata.pikodi_or_mikzoi ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>פיקוד/מקצועי: </h5> <h5> {jobdata.pikodi_or_mikzoi}</h5></Row> : null}
-              </Container>
-            </CardBody>
-          </Card>
-
-          <Card style={{ marginTop: '30px' }}>
-            <CardHeader>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>נתוני סף (תנאי להתמודדות)</h3>
-            </CardHeader>
-            <CardBody>
-              <Container>
-                {jobdata.saf1 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>א: </h5> <h5> {jobdata.saf1}</h5></Row> : null}
-                {jobdata.saf2 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ב: </h5> <h5> {jobdata.saf2}</h5></Row> : null}
-                {jobdata.saf3 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ג: </h5> <h5> {jobdata.saf3}</h5></Row> : null}
-                {jobdata.saf4 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ד: </h5> <h5> {jobdata.saf4}</h5></Row> : null}
-              </Container>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col>
-          <h3 style={{ textAlign: 'center', fontWeight: 'bold' }}>כישורים נדרשים לתפקיד</h3>
           <Row>
             <Col>
-              <Card>
+              <Card style={{ marginTop: '30px' }}>
                 <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יכולת חשיבה ותכנון:</h4>
+                  <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>תיאור התפקיד</h3>
                 </CardHeader>
                 <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.thinking_ability}
+                  {jobdata.description}
+                </CardBody>
+              </Card>
+
+              <Card style={{ marginTop: '30px' }}>
+                <CardHeader>
+                  <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>תרומת התפקיד לפרט</h3>
+                </CardHeader>
+                <CardBody style={{ textAlign: 'right' }}>
+                  {jobdata.job_contribution}
                 </CardBody>
               </Card>
             </Col>
+
             <Col>
-              <Card>
+              <Card style={{ marginTop: '30px' }}>
                 <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יחסים בינאישיים:</h4>
+                  <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>פרטי התפקיד</h3>
                 </CardHeader>
-                <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.realtionship_ability}
+                <CardBody>
+                  <Container>
+                    {jobdata.unit ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>יחידה: </h5> <h5> {jobdata.unit.name}</h5></Row> : null}
+                    {jobdata.rank ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>דרגת תקן: </h5> <h5> {jobdata.rank}</h5></Row> : null}
+                    {jobdata.sivug ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>סיווג תפקיד: </h5> <h5> {jobdata.sivug}</h5></Row> : null}
+                    {jobdata.damah ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>תפקיד מדומ"ח: </h5> <h5> {jobdata.damah}</h5></Row> : null}
+                    {jobdata.pikodi_or_mikzoi ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>פיקוד/מקצועי: </h5> <h5> {jobdata.pikodi_or_mikzoi}</h5></Row> : null}
+                  </Container>
+                </CardBody>
+              </Card>
+
+              <Card style={{ marginTop: '30px' }}>
+                <CardHeader>
+                  <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>נתוני סף (תנאי להתמודדות)</h3>
+                </CardHeader>
+                <CardBody>
+                  <Container>
+                    {jobdata.saf1 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>א: </h5> <h5> {jobdata.saf1}</h5></Row> : null}
+                    {jobdata.saf2 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ב: </h5> <h5> {jobdata.saf2}</h5></Row> : null}
+                    {jobdata.saf3 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ג: </h5> <h5> {jobdata.saf3}</h5></Row> : null}
+                    {jobdata.saf4 ? <Row><h5 style={{ textAlign: 'right', fontWeight: 'bold' }}>ד: </h5> <h5> {jobdata.saf4}</h5></Row> : null}
+                  </Container>
                 </CardBody>
               </Card>
             </Col>
@@ -132,66 +120,94 @@ function DisplayJob({ match }) {
 
           <Row>
             <Col>
-              <Card>
-                <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יכולות ניהול וארגון:</h4>
-                </CardHeader>
-                <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.management_ability}
-                </CardBody>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
-                </CardHeader>
-                <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.leadership_ability}
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
+              <h3 style={{ textAlign: 'center', fontWeight: 'bold' }}>כישורים נדרשים לתפקיד</h3>
+              <Row>
+                <Col>
+                  <Card>
+                    <CardHeader>
+                      <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יכולת חשיבה ותכנון:</h4>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'right' }}>
+                      {jobdata.thinking_ability}
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card>
+                    <CardHeader>
+                      <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יחסים בינאישיים:</h4>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'right' }}>
+                      {jobdata.realtionship_ability}
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
 
-        <Col style={{ alignItems: 'center' }}>
-          <Row style={{ alignItems: 'center' }}>
-            <Col>
-              <Card>
-                <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מפקד נוכחי:</h4>
-                </CardHeader>
-                <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.commander ? <h5>{jobdata.commander.name} {jobdata.commander.lastname}</h5> : null}
-                  {jobdata.commander ? <h5>{jobdata.commander.cellphone}</h5> : null}
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מאייש נוכחי:</h4>
-                </CardHeader>
-                <CardBody style={{ textAlign: 'right' }}>
-                  {jobdata.meaish ? <h5>{jobdata.meaish.name} {jobdata.meaish.lastname}</h5> : null}
-                  {jobdata.meaish ? <h5>{jobdata.meaish.cellphone}</h5> : null}
-                </CardBody>
-              </Card>
+              <Row>
+                <Col>
+                  <Card>
+                    <CardHeader>
+                      <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>יכולות ניהול וארגון:</h4>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'right' }}>
+                      {jobdata.management_ability}
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card>
+                    <CardHeader>
+                      <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מנהיגות ופיקוד:</h4>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'right' }}>
+                      {jobdata.leadership_ability}
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
             </Col>
-            <Col>
-              <Card>
-                <CardHeader>
-                  <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>תנאי שירות:</h4>
-                </CardHeader>
-                <CardBody style={{ textAlign: 'right' }}>
-                  <h5>מיקום:{jobdata.location}</h5>
-                  <h5>יחידה פתוחה/סגורה:{jobdata.ptoha_or_sgora}</h5>
-                  <h5>רמת פעילות:{jobdata.peilut_level}</h5>
-                </CardBody>
-              </Card>
+
+            <Col style={{ alignItems: 'center' }}>
+              <Row style={{ alignItems: 'center' }}>
+                <Col>
+                  <Card>
+                    <CardHeader>
+                      <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מפקד נוכחי:</h4>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'right' }}>
+                      {jobdata.commander ? <h5>{jobdata.commander.name} {jobdata.commander.lastname}</h5> : null}
+                      {jobdata.commander ? <h5>{jobdata.commander.cellphone}</h5> : null}
+                    </CardBody>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>מאייש נוכחי:</h4>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'right' }}>
+                      {jobdata.meaish ? <h5>{jobdata.meaish.name} {jobdata.meaish.lastname}</h5> : null}
+                      {jobdata.meaish ? <h5>{jobdata.meaish.cellphone}</h5> : null}
+                    </CardBody>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card>
+                    <CardHeader>
+                      <h4 style={{ textAlign: 'right', fontWeight: 'bold' }}>תנאי שירות:</h4>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'right' }}>
+                      <h5>מיקום:{jobdata.location}</h5>
+                      <h5>יחידה פתוחה/סגורה:{jobdata.ptoha_or_sgora}</h5>
+                      <h5>רמת פעילות:{jobdata.peilut_level}</h5>
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
             </Col>
           </Row>
-        </Col>
-      </Row>
-    </Container>
+        </Container >
+      </>
+      : null
   );
 }
 

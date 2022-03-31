@@ -29,27 +29,6 @@ export const COLUMNS = [
 
     },
     {
-        Header: 'מפקד נוכחי',
-        accessor:'commander',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'פלאפון מפקד נוכחי',
-        accessor:'commander.cellphone',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'מאייש',
-        accessor:'meaish',
-        Filter:ColumnFilter
-    },
-    {
-        Header: 'פלאפון מאייש',
-        accessor:'meaish.cellphone',
-        Filter:ColumnFilter
-
-    },
-    {
         Header: 'דרגת תקן',
         accessor:'rank',
         Filter:ColumnFilter

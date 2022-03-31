@@ -15,6 +15,8 @@ const SortingTable = ({ match }) => {
 
   const [data, setData] = useState([])
 
+  const [headerspan, setheaderspan] = useState(0)
+
   function init() {
     getMahzorUnitsPreferences();
   }
@@ -45,10 +47,22 @@ const SortingTable = ({ match }) => {
           }
         }
         setData(tempunitspreferences)
+        CalculateHeaderSpan(tempunitspreferences)
       })
       .catch((error) => {
         console.log(error);
       })
+  }
+
+  const CalculateHeaderSpan = async (tabledata) => {
+    let tempheaderspan = 0;
+
+    for (let i = 0; i < tabledata.length; i++) {
+      if (tabledata[i].preferencerankings.length > tempheaderspan) {
+        tempheaderspan = tabledata[i].preferencerankings.length
+      }
+    }
+    setheaderspan(tempheaderspan);
   }
 
   useEffect(() => {
@@ -108,15 +122,18 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "jobinmahzor.job.jobname") {
-                          return <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
+                          return <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
                         }
                         if (cell.column.id == "jobinmahzor.certain") {
-                          return <td>{cell.value}</td>
+                          return <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}>{cell.value}</td>
                         }
                         if (cell.column.id == "preferencerankings") {
-                          return <> {cell.value.map((preferenceranking, index) => (
-                            <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${preferenceranking.candidate.user._id}`}>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname}</Link> ({preferenceranking.rank})</td>
-                          ))}</>
+                          // return <> {cell.value.map((preferenceranking, index) => (
+                          //   <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${preferenceranking.candidate.user._id}`}>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname}</Link> ({preferenceranking.rank})</td>
+                          // ))}</>
+                          return [...Array(headerspan)].map((x, i) =>
+                          cell.value[i] ? <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value[i].candidate.user._id}`}>{cell.value[i].candidate.user.name} {cell.value[i].candidate.user.lastname}</Link> ({cell.value[i].rank})</td>
+                            : <td tyle={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}></td>)
                         }
                       })
                     }

@@ -27,6 +27,7 @@ import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
 import soldier from "assets/img/soldier.png";
+import UnitPreferenceAnimatedMultiSelect from 'components/tafkidipedia/Select/UnitPreferenceAnimatedMultiSelect';
 
 const UnitPreferenceForm = ({ match }) => {
 
@@ -66,6 +67,18 @@ const UnitPreferenceForm = ({ match }) => {
     }
   }
 
+  const handleChangCandidatesOfPreference2 = event => {
+    if (event.value != "בחר מועמד") {
+      let tempcandidate = mahzorcandidates[event.value];
+      let tempunitpreferencepreferencerankings = [...unitpreference.preferencerankings];
+
+      if (!isDuplicate(tempunitpreferencepreferencerankings, tempcandidate)) {
+        tempunitpreferencepreferencerankings.push({ candidate: tempcandidate, rank: 1 })
+        setUnitPreference({ ...unitpreference, preferencerankings: tempunitpreferencepreferencerankings });
+      }
+    }
+  }
+
   const handleChangePreferenceRank = event => {
     let temprank = parseInt(event.target.value);
     let tempindex = parseInt(event.target.name);
@@ -92,13 +105,13 @@ const UnitPreferenceForm = ({ match }) => {
 
     //mahzor - for knowing the status..
     axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
-    .then(response => {
-      let tempmahzor = response.data;
-      setMahzorData(tempmahzor);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+      .then(response => {
+        let tempmahzor = response.data;
+        setMahzorData(tempmahzor);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   const loadunitpreference = async () => {
@@ -107,13 +120,11 @@ const UnitPreferenceForm = ({ match }) => {
     let users = result.data;
     //unitpreference
     let tempunitpreference;
-    if(mahzordata.status==2)
-    {
+    if (mahzordata.status == 2) {
       let result1 = await axios.get(`http://localhost:8000/api/unitpreferencebyjobinmahzorid/${match.params.jobid}`)
       tempunitpreference = result1.data[0];
     }
-    else if(mahzordata.status==4)
-    {
+    else if (mahzordata.status == 4) {
       let result1 = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobinmahzorid/${match.params.jobid}`)
       tempunitpreference = result1.data[0];
     }
@@ -132,14 +143,12 @@ const UnitPreferenceForm = ({ match }) => {
       setUnitPreference(tempunitpreference);
 
       let tempoldunitpreferencedata; //if has existing preference save the old one
-      if(mahzordata.status==2)
-      {
+      if (mahzordata.status == 2) {
         let oldresult = await axios.get(`http://localhost:8000/api/unitpreferencebyjobinmahzorid/${match.params.jobid}`)
         tempoldunitpreferencedata = oldresult.data[0];
         setOldunitPreference(tempoldunitpreferencedata)
       }
-      else if(mahzordata.status==4)
-      {
+      else if (mahzordata.status == 4) {
         let oldresult = await axios.get(`http://localhost:8000/api/finalunitpreferencebyjobinmahzorid/${match.params.jobid}`)
         tempoldunitpreferencedata = oldresult.data[0];
         setOldunitPreference(tempoldunitpreferencedata)
@@ -187,21 +196,19 @@ const UnitPreferenceForm = ({ match }) => {
     //create new unit preference
     tempunitpreference.preferencerankings = tempunitpreference_preferencerankings_ids;
 
-    if(mahzordata.status==2)
-    {
-    await axios.post(`http://localhost:8000/api/unitpreference`, tempunitpreference)
-      .then(res => {
-        toast.success("העדפה עודכנה בהצלחה")
-        history.goBack();
-      })
+    if (mahzordata.status == 2) {
+      await axios.post(`http://localhost:8000/api/unitpreference`, tempunitpreference)
+        .then(res => {
+          toast.success("העדפה עודכנה בהצלחה")
+          history.goBack();
+        })
     }
-    else if(mahzordata.status==4)
-    {
+    else if (mahzordata.status == 4) {
       await axios.post(`http://localhost:8000/api/finalunitpreference`, tempunitpreference)
-      .then(res => {
-        toast.success("העדפה עודכנה בהצלחה")
-        history.goBack();
-      })
+        .then(res => {
+          toast.success("העדפה עודכנה בהצלחה")
+          history.goBack();
+        })
     }
   }
 
@@ -213,12 +220,12 @@ const UnitPreferenceForm = ({ match }) => {
     }
 
     //delete all old unit preferencerankings 
-   for (let i = 0; i < oldunitpreference.preferencerankings.length; i++) {
-    await axios.delete(`http://localhost:8000/api/unitpreferenceranking/${oldunitpreference.preferencerankings[i]._id}`)
-      .then(res => {
+    for (let i = 0; i < oldunitpreference.preferencerankings.length; i++) {
+      await axios.delete(`http://localhost:8000/api/unitpreferenceranking/${oldunitpreference.preferencerankings[i]._id}`)
+        .then(res => {
 
-      })
-  }
+        })
+    }
 
     //create all unit preferencerankings 
     let tempunitpreference_preferencerankings_ids = [];
@@ -233,21 +240,19 @@ const UnitPreferenceForm = ({ match }) => {
     //create new unit preference
     tempunitpreference.preferencerankings = tempunitpreference_preferencerankings_ids;
 
-    if(mahzordata.status==2)
-    {
-    await axios.put(`http://localhost:8000/api/unitpreference/${unitpreference._id}`, tempunitpreference)
-      .then(res => {
-        toast.success("העדפה עודכנה בהצלחה")
-        history.goBack();
-      })
+    if (mahzordata.status == 2) {
+      await axios.put(`http://localhost:8000/api/unitpreference/${unitpreference._id}`, tempunitpreference)
+        .then(res => {
+          toast.success("העדפה עודכנה בהצלחה")
+          history.goBack();
+        })
     }
-    else if(mahzordata.status==4)
-    {
+    else if (mahzordata.status == 4) {
       await axios.put(`http://localhost:8000/api/finalunitpreference/${unitpreference._id}`, tempunitpreference)
-      .then(res => {
-        toast.success("העדפה עודכנה בהצלחה")
-        history.goBack();
-      })
+        .then(res => {
+          toast.success("העדפה עודכנה בהצלחה")
+          history.goBack();
+        })
     }
   }
 
@@ -264,19 +269,19 @@ const UnitPreferenceForm = ({ match }) => {
   }, [mahzordata])
 
   return (
-    mahzordata.status == 2 || mahzordata.status == 4?
-    <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
-      <Row>
-        <Card>
-          <CardHeader style={{ direction: 'rtl' }}>
-            <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס העדפות יחידה: {job.job ? job.job.jobname : null}</CardTitle>{/*headline*/}
-          </CardHeader>
+    mahzordata.status == 2 || mahzordata.status == 4 ?
+      <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
+        <Row>
+          <Card>
+            <CardHeader style={{ direction: 'rtl' }}>
+              <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס העדפות יחידה: {job.job ? job.job.jobname : null}</CardTitle>{/*headline*/}
+            </CardHeader>
 
-          <CardBody style={{ direction: 'rtl' }}>
-            <Container>
-              <Row>
-                <Col xs={12} md={12}>
-                  <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
+            <CardBody style={{ direction: 'rtl' }}>
+              <Container>
+                <Row>
+                  <Col xs={12} md={12}>
+                    {/* <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
                   <FormGroup dir="rtl" >
                     <Input type="select" onChange={handleChangCandidatesOfPreference}>
                       <option value={"בחר מועמד"}>בחר מועמד</option>
@@ -284,54 +289,57 @@ const UnitPreferenceForm = ({ match }) => {
                         <option key={index} value={index}>{candidate.user.name} {candidate.user.lastname}</option>
                       ))}
                     </Input>
-                  </FormGroup>
-                </Col>
-              </Row>
-
-              <Row style={{ direction: "rtl", paddingTop: '10px' }} >
-                {unitpreference && unitpreference.preferencerankings ? unitpreference.preferencerankings.map((ranking, index) => (
-                  <Col xs={12} md={4} key={index}>
-                    <Row style={{ direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit' }}>
-                      <Col xs={12} md={2} style={{ textAlign: 'center', alignSelf: 'center' }}>
-                        <img src={soldier} alt="bookmark" style={{ height: "2rem" }} />
-                      </Col>
-                      <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
-                        <h5 style={{ textAlign: "right", margin: '0px' }}>{ranking.candidate.user.name} {ranking.candidate.user.lastname}</h5>
-                      </Col>
-                      <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                        <Input type="select" name={index} value={ranking.rank} onChange={handleChangePreferenceRank}>
-                          <option value={"1"}>1</option>
-                          <option value={"2"}>2</option>
-                          <option value={"3"}>3</option>
-                          <option value={"4"}>4</option>
-                          <option value={"5"}>5</option>
-                          <option value={"6"}>6</option>
-                        </Input>
-                      </Col>
-                      <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                        <Button className="btn btn-danger" onClick={(e) => DeletePreferencerankingFromUnitPreference(ranking, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
-                      </Col>
-                    </Row>
+                  </FormGroup> */}
+                    <div style={{direction:'rtl',textAlign:'right'}}>
+                      <UnitPreferenceAnimatedMultiSelect data={mahzorcandidates} handleChangCandidatesOfPreference={handleChangCandidatesOfPreference2} />
+                    </div>
                   </Col>
-                )) : null}
-              </Row>
+                </Row>
 
-              <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                <button className="btn" onClick={clickSubmit}>עדכן העדפות</button>
-              </div>
-            </Container>
-          </CardBody>
+                <Row style={{ direction: "rtl", paddingTop: '10px' }} >
+                  {unitpreference && unitpreference.preferencerankings ? unitpreference.preferencerankings.map((ranking, index) => (
+                    <Col xs={12} md={4} key={index}>
+                      <Row style={{ direction: "rtl", boxShadow: '0px 0px 5px 0px rgb(0 0 0 / 40%)', borderRadius: '10px', width: 'inherit' }}>
+                        <Col xs={12} md={2} style={{ textAlign: 'center', alignSelf: 'center' }}>
+                          <img src={soldier} alt="bookmark" style={{ height: "2rem" }} />
+                        </Col>
+                        <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
+                          <h5 style={{ textAlign: "right", margin: '0px' }}>{ranking.candidate.user.name} {ranking.candidate.user.lastname}</h5>
+                        </Col>
+                        <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                          <Input type="select" name={index} value={ranking.rank} onChange={handleChangePreferenceRank}>
+                            <option value={"1"}>1</option>
+                            <option value={"2"}>2</option>
+                            <option value={"3"}>3</option>
+                            <option value={"4"}>4</option>
+                            <option value={"5"}>5</option>
+                            <option value={"6"}>6</option>
+                          </Input>
+                        </Col>
+                        <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                          <Button className="btn btn-danger" onClick={(e) => DeletePreferencerankingFromUnitPreference(ranking, e)} style={{ padding: '11px 20px 11px 20px' }}>X</Button>
+                        </Col>
+                      </Row>
+                    </Col>
+                  )) : null}
+                </Row>
+
+                <div style={{ textAlign: 'center', paddingTop: '20px' }}>
+                  <button className="btn" onClick={clickSubmit}>עדכן העדפות</button>
+                </div>
+              </Container>
+            </CardBody>
+          </Card>
+        </Row>
+      </Container>
+      :
+      <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
+        <Card>
+          <CardHeader style={{ direction: 'rtl' }}>
+            <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>שלב המחזור לא תואם - לא ניתן להזין העדפה כרגע</CardTitle>
+          </CardHeader>
         </Card>
-      </Row>
-    </Container>
-     :
-     <Container style={{ paddingTop: '80px', direction: 'rtl' }}>
-       <Card>
-         <CardHeader style={{ direction: 'rtl' }}>
-           <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>שלב המחזור לא תואם - לא ניתן להזין העדפה כרגע</CardTitle>
-         </CardHeader>
-       </Card>
-     </Container>
+      </Container>
   );
 }
 export default withRouter(UnitPreferenceForm);;

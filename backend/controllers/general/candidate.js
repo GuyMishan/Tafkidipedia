@@ -109,6 +109,17 @@ let readtipul3 = [
   },
   {
     $lookup: {
+      from: "units",
+      localField: "user.job.unit",
+      foreignField: "_id",
+      as: "user.job.unit"
+    }
+  },
+  {
+    $unwind: "$user.job.unit"
+  },
+  {
+    $lookup: {
       from: "mahzors",
       localField: "mahzor",
       foreignField: "_id",

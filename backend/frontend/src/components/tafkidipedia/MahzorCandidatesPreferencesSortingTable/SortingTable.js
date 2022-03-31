@@ -154,17 +154,17 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "candidate.user.name") {
-                          return <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
+                          return <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
                         }
                         if (cell.column.id == "certjobpreferences") {
                           return [...Array(certheaderspan)].map((x, i) =>
-                            cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                              : <td style={{ width: '200px' }}></td>)
+                            cell.value[i] ? <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                              : <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}></td>)
                         }
                         if (cell.column.id == "noncertjobpreferences") {
                           return [...Array(noncertheaderspan)].map((x, i) =>
-                            cell.value[i] ? <td style={{ width: '200px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                              : <td style={{ width: '200px' }}></td>)
+                            cell.value[i] ? <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                              : <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}></td>)
                         }
                       })
                     }

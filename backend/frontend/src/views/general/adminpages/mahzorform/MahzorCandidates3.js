@@ -19,9 +19,9 @@ import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePage
 
 const MahzorCandidates3 = (props) => {
 
-    const [userstopresent, setUserstppresent] = useState([]); //users to candidate
+    // const [userstopresent, setUserstppresent] = useState([]); //users to candidate
 
-    const [jobs, setJobs] = useState([]);
+    // const [jobs, setJobs] = useState([]);
 
     const [isprofilepageopen, setIsprofilepageopen] = useState(false);
     const [useridformodal, setUseridformodal] = useState(undefined);
@@ -31,38 +31,38 @@ const MahzorCandidates3 = (props) => {
         setIsprofilepageopen(!isprofilepageopen);
     }
 
-    const loaduserstopresent = () => {
-        let tempuserstopresent = [];
-        if (props.users && jobs && jobs.length != 0 && props.users.length != 0) {
-            for (let i = 0; i < props.users.length; i++) {
-                tempuserstopresent[i] = props.users[i];
-                for (let j = 0; j < jobs.length; j++) {
-                    if (tempuserstopresent[i].job == jobs[j]._id) {
-                        tempuserstopresent[i].jobtopresent = jobs[j];
-                    }
-                }
-            }
-            setUserstppresent(tempuserstopresent)
-        }
-    }
+    // const loaduserstopresent = () => {
+    //     let tempuserstopresent = [];
+    //     if (props.users && jobs && jobs.length != 0 && props.users.length != 0) {
+    //         for (let i = 0; i < props.users.length; i++) {
+    //             tempuserstopresent[i] = props.users[i];
+    //             for (let j = 0; j < jobs.length; j++) {
+    //                 if (tempuserstopresent[i].job == jobs[j]._id) {
+    //                     tempuserstopresent[i].jobtopresent = jobs[j];
+    //                 }
+    //             }
+    //         }
+    //         setUserstppresent(tempuserstopresent)
+    //     }
+    // }
 
-    useEffect(() => {
-        loaduserstopresent()
-    }, [props.users,props.jobs]);
+    // useEffect(() => {
+    //     loaduserstopresent()
+    // }, [props.users,props.jobs]);
 
-    useEffect(() => {
-        loadjobs();
-    }, []);
+    // useEffect(() => {
+    //     loadjobs();
+    // }, []);
 
-    const loadjobs = async () => {
-        await axios.get(`http://localhost:8000/api/smartjobs`)
-            .then(response => {
-                setJobs(response.data, loaduserstopresent);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    }
+    // const loadjobs = async () => {
+    //     await axios.get(`http://localhost:8000/api/smartjobs`)
+    //         .then(response => {
+    //             setJobs(response.data, loaduserstopresent);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         })
+    // }
 
     return (
         props.mahzordata.population != undefined ?
@@ -111,7 +111,7 @@ const MahzorCandidates3 = (props) => {
                         </Row>
                     </Container> */}
                     <Row style={{ direction: "rtl", paddingTop: '10px' }} >
-                        {userstopresent ? userstopresent.map((user, userindex) => (
+                        {props.users ? props.users.map((user, userindex) => (
                             <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                                 <Card style={{ direction: 'ltr', background: 'linear-gradient(0deg, rgb(27 42 54) 0%, rgb(12,31,45) 100%)' }}>
                                     <CardBody style={{ direction: 'rtl' }}>
@@ -123,7 +123,7 @@ const MahzorCandidates3 = (props) => {
                                                 <Button value={user._id} onClick={Toggle} style={{ width: '100%' }}>
                                                     {user.name} {user.lastname}
                                                 </Button>
-                                                <h5 style={{ color: 'white', textAlign: 'center' }}>{user.jobtopresent.unit.name}/{user.jobtopresent.jobname}</h5>
+                                                {/* <h5 style={{ color: 'white', textAlign: 'center' }}>{user.jobtopresent.unit.name}/{user.jobtopresent.jobname}</h5> */}
                                                 <Input style={{ color: 'white', textAlign: 'center' }} type="select" name={userindex} value={user.movement} onChange={props.handleChangeUser}>
                                                     {props.movement.map((movement, index) => (
                                                         <option style={{ textAlign: 'center' }} key={index} value={movement._id}>{movement.name}</option>

@@ -81,7 +81,7 @@ const SortingTable = ({ match }) => {
     if (candidatefilter.unitfilter && candidatefilter.unitfilter.length > 0) {
       myArrayUnitFiltered = tempdatabeforefilter.filter((el) => {
         return candidatefilter.unitfilter.some((f) => {
-          return f === el.user.job.unit;
+          return f === el.user.job.unit._id;
         });
       });
     }
@@ -196,11 +196,22 @@ const SortingTable = ({ match }) => {
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table {...getTableProps()} id="table-to-xls">
           {data[0] ?
-            <thead style={{ backgroundColor: '#4fff64' }}>
-              <tr>
-                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
-              </tr>
-            </thead> : null}
+           <thead>
+           {headerGroups.map((headerGroup) => (
+             <tr {...headerGroup.getHeaderGroupProps()}>
+               {headerGroup.headers.map((column) => (
+                 <th  >
+                   <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
+                   <div>{column.canFilter ? column.render('Filter') : null}</div>
+                   <div>
+                     {column.isSorted ? (column.isSortedDesc ? '🔽' : '⬆️') : ''}
+                   </div>
+                 </th>
+               ))}
+             </tr>
+           ))}
+
+         </thead> : null}
 
           <tbody {...getTableBodyProps()}>
             {
@@ -210,8 +221,11 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id == "user.name") {
-                          return <td className="redcell"><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
+                        if (cell.column.id != "user.name") {
+                          return <td className="redcell" style={{width:`${100/4}%`,minWidth:'125px'}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                        }
+                        else {
+                          return <td className="redcell"  style={{width:`${100/4}%`,minWidth:'125px'}}><Link style={{color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.user._id}`}>{cell.value}{" "}{row.original.user.lastname}</Link></td>
                         }
                       })
                     }

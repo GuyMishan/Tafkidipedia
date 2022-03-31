@@ -311,7 +311,7 @@ const SortingTable = (props) => {
               {data.length > 0 ? <th></th> : null}
               {data && data.length > 0 ? data.map(eshkol => {
                 return (
-                  <th style={{width:'200px'}}>
+                  <th>
                     <button value={eshkol._id} onClick={Toggle} className="btn-empty">
                       <p style={{ fontWeight: 'bold', color: 'white' }}>{eshkol.jobinmahzor.job.unit.name} / {eshkol.jobinmahzor.job.jobname}</p>
                     </button>
@@ -342,7 +342,7 @@ const SortingTable = (props) => {
                 {data && data.length > 0 ? data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
-                      <td>
+                      <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
                         <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                           <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                         </button>
@@ -350,24 +350,24 @@ const SortingTable = (props) => {
                         {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                       </td>
                       : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
-                        <td>
+                        <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
                           <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                             <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                           </button>
                           {eshkol.candidatesineshkol[i].candidaterank ? <p>דירוג מתמודד:{eshkol.candidatesineshkol[i].candidaterank}</p> : null}
                         </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
-                          <td>
+                          <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
                             <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                               <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                             </button>
                             {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                           </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
-                            <td>
+                            <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
                               <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                                 <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                               </button>
                               <p>הוסף ע"י מנהל מערכת</p>
-                            </td> : <td></td>)
+                            </td> : <td style={{width:`${100/data.length}%`,minWidth:'150px'}}></td>)
                 }) : null}
               </tr>)
             })}

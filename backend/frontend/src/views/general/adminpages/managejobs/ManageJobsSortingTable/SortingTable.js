@@ -87,15 +87,7 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if (cell.column.id != "commander" && cell.column.id != "meaish") {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                        }
-                        else {
-                          if (cell.column.id == "commander")
-                            return <td>{cell.value.name} {cell.value.lastname}</td>
-                          if (cell.column.id == "meaish")
-                          return <td>{cell.value.name} {cell.value.lastname}</td>
-                        }
                       })
                     }
                     {/* {console.log(row)} */}
