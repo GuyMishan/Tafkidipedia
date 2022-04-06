@@ -19,10 +19,6 @@ import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePage
 
 const MahzorCandidates3 = (props) => {
 
-    // const [userstopresent, setUserstppresent] = useState([]); //users to candidate
-
-    // const [jobs, setJobs] = useState([]);
-
     const [isprofilepageopen, setIsprofilepageopen] = useState(false);
     const [useridformodal, setUseridformodal] = useState(undefined);
 
@@ -30,39 +26,6 @@ const MahzorCandidates3 = (props) => {
         setUseridformodal(evt.target.value)
         setIsprofilepageopen(!isprofilepageopen);
     }
-
-    // const loaduserstopresent = () => {
-    //     let tempuserstopresent = [];
-    //     if (props.users && jobs && jobs.length != 0 && props.users.length != 0) {
-    //         for (let i = 0; i < props.users.length; i++) {
-    //             tempuserstopresent[i] = props.users[i];
-    //             for (let j = 0; j < jobs.length; j++) {
-    //                 if (tempuserstopresent[i].job == jobs[j]._id) {
-    //                     tempuserstopresent[i].jobtopresent = jobs[j];
-    //                 }
-    //             }
-    //         }
-    //         setUserstppresent(tempuserstopresent)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     loaduserstopresent()
-    // }, [props.users,props.jobs]);
-
-    // useEffect(() => {
-    //     loadjobs();
-    // }, []);
-
-    // const loadjobs = async () => {
-    //     await axios.get(`http://localhost:8000/api/smartjobs`)
-    //         .then(response => {
-    //             setJobs(response.data, loaduserstopresent);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         })
-    // }
 
     return (
         props.mahzordata.population != undefined ?
@@ -123,7 +86,6 @@ const MahzorCandidates3 = (props) => {
                                                 <Button value={user._id} onClick={Toggle} style={{ width: '100%' }}>
                                                     {user.name} {user.lastname}
                                                 </Button>
-                                                {/* <h5 style={{ color: 'white', textAlign: 'center' }}>{user.jobtopresent.unit.name}/{user.jobtopresent.jobname}</h5> */}
                                                 <Input style={{ color: 'white', textAlign: 'center' }} type="select" name={userindex} value={user.movement} onChange={props.handleChangeUser}>
                                                     {props.movement.map((movement, index) => (
                                                         <option style={{ textAlign: 'center' }} key={index} value={movement._id}>{movement.name}</option>

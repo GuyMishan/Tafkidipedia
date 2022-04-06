@@ -135,9 +135,10 @@ const EditUserForm = ({ match }) => {
     event.preventDefault();
     if (data.role === "0") {
       delete data.unitid;
+      delete data.job;
     }
     if (data.role === "1") {
-
+      delete data.job;
     }
     if (data.role === "2") {
       delete data.unitid;
@@ -153,6 +154,7 @@ const EditUserForm = ({ match }) => {
       password: data.password,
       personalnumber: data.personalnumber,
       unitid: data.unitid,
+      job: data.job,
       role: data.role,
       validated: data.validated,
       migzar: data.migzar,
@@ -163,24 +165,31 @@ const EditUserForm = ({ match }) => {
 
     axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
       .then(response => {
-        let jobid=data.job;
-        axios.get(`http://localhost:8000/api/job/${jobid}`)
+        let jobid = user.job;
+        if(jobid)
+        {
+          axios.get(`http://localhost:8000/api/job/${jobid}`)
           .then(response => {
-            let jobtoupdate=response.data;
-            jobtoupdate.meaish=userid;
+            let jobtoupdate = response.data;
+            jobtoupdate.meaish = userid;
             axios.put(`http://localhost:8000/api/job/update/${jobid}`, jobtoupdate)
-            .then(response => {
-              // console.log(response);
-            toast.success(`המשתמש עודכן בהצלחה`);
-            history.push(`/manageusers`);
-            })
-            .catch((error) => {
-              console.log(error);
-            })
+              .then(response => {
+                // console.log(response);
+                toast.success(`המשתמש עודכן בהצלחה`);
+                history.push(`/manageusers`);
+              })
+              .catch((error) => {
+                console.log(error);
+              })
           })
           .catch((error) => {
             console.log(error);
           })
+        }
+        else{
+          toast.success(`המשתמש עודכן בהצלחה`);
+          history.push(`/manageusers`);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -295,20 +304,6 @@ const EditUserForm = ({ match }) => {
                       </Input>
                     </FormGroup>
 
-                    <div style={{ textAlign: "right", paddingTop: "10px" }}>תפקיד</div>
-                    <FormGroup dir="rtl">
-                      <Input
-                        type="select"
-                        name="population"
-                        value={data.job}
-                        onChange={handleChange}>
-                        <option value={"בחר"}>בחר</option>
-                        {jobs ? jobs.map((job, index) => (
-                          <option value={job._id}>{job.jobname} / {job.unit.name} / {job.jobcode}</option>
-                        )) : null}
-                      </Input>
-                    </FormGroup>
-
                     <div style={{ textAlign: 'right', paddingTop: '10px' }}>הרשאה</div>
                     <FormGroup dir="rtl" >
                       <Input type="select" name="role" value={data.role} onChange={handleChange}>
@@ -323,9 +318,7 @@ const EditUserForm = ({ match }) => {
                       <div>מנהל מערכת</div>
                     ) : data.role === "1" ? (
                       <>
-                        <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                          יחידה
-                        </div>
+                        <div style={{ textAlign: "right", paddingTop: "10px" }}>יחידה</div>
                         <FormGroup dir="rtl">
                           <Input
                             type="select"
@@ -337,6 +330,22 @@ const EditUserForm = ({ match }) => {
                             {units.map((unit, index) => (
                               <option value={unit._id}>{unit.name}</option>
                             ))}
+                          </Input>
+                        </FormGroup>
+                      </>
+                    ) : data.role === "2" ? (
+                      <>
+                        <div style={{ textAlign: "right", paddingTop: "10px" }}>תפקיד</div>
+                        <FormGroup dir="rtl">
+                          <Input
+                            type="select"
+                            name="job"
+                            value={data.job}
+                            onChange={handleChange}>
+                            <option value={"בחר"}>בחר</option>
+                            {jobs ? jobs.map((job, index) => (
+                              <option value={job._id}>{job.jobname} / {job.unit.name} / {job.jobcode}</option>
+                            )) : null}
                           </Input>
                         </FormGroup>
                       </>

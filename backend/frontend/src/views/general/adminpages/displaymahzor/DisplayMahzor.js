@@ -20,13 +20,19 @@ import axios from 'axios';
 
 import PanelHeader from "components/general/PanelHeader/PanelHeader";
 
-import MahzorCandidatesPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesPreferencesSortingTable/SortingTable'
+// import MahzorCandidatesPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesPreferencesSortingTable/SortingTable'
 import MahzorUnitsPreferencesSortingTable from 'components/tafkidipedia/MahzorUnitsPreferencesSortingTable/SortingTable'
 import MahzorCandidatesWithoutPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesWithoutPreferencesSortingTable/SortingTable'
+import MahzorCandidatesWithPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesWithPreferencesSortingTable/SortingTable'
 
+// import MahzorFinalCandidatesPreferencesSortingTable from 'components/tafkidipedia/MahzorFinalCandidatesPreferencesSortingTable/SortingTable'
 import MahzorFinalUnitsPreferencesSortingTable from 'components/tafkidipedia/MahzorFinalUnitsPreferencesSortingTable/SortingTable'
-import MahzorFinalCandidatesPreferencesSortingTable from 'components/tafkidipedia/MahzorFinalCandidatesPreferencesSortingTable/SortingTable'
 import MahzorCandidatesWithoutFinalPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesWithoutFinalPreferencesSortingTable/SortingTable'
+import MahzorCandidatesWithFinalPreferencesSortingTable from 'components/tafkidipedia/MahzorCandidatesWithFinalPreferencesSortingTable/SortingTable'
+
+
+import MahzorUnitsWithPreferencesSortingTable from 'components/tafkidipedia/MahzorUnitsWithPreferencesSortingTable/SortingTable'
+import MahzorUnitsWithFinalPreferencesSortingTable from 'components/tafkidipedia/MahzorUnitsWithFinalPreferencesSortingTable/SortingTable'
 
 import DisplayMahzorEshkol from './DisplayMahzorEshkol';
 import DisplayMahzorFinalEshkol from './DisplayMahzorFinalEshkol';
@@ -97,22 +103,26 @@ function DisplayMahzor({ match }) {
         <>
           <Card style={{ marginTop: '30px' }}>
             <CardBody>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות מועמדים</h3>
-              <MahzorCandidatesPreferencesSortingTable />
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שלא מילאו העדפה</h3>
+              <MahzorCandidatesWithoutPreferencesSortingTable />
             </CardBody>
           </Card>
 
           <Card style={{ marginTop: '30px' }}>
             <CardBody>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שלא מילאו העדפה</h3>
-              <MahzorCandidatesWithoutPreferencesSortingTable />
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שמילאו העדפה</h3>
+              {/* <MahzorCandidatesPreferencesSortingTable /> */}
+
+              <MahzorCandidatesWithPreferencesSortingTable />
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
               <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות יחידות</h3>
-              <MahzorUnitsPreferencesSortingTable />
+              {/* <MahzorUnitsPreferencesSortingTable /> */}
+
+              <MahzorUnitsWithPreferencesSortingTable/>
             </CardBody>
           </Card>
         </> : null}
@@ -135,22 +145,25 @@ function DisplayMahzor({ match }) {
         <>
           <Card style={{ marginTop: '30px' }}>
             <CardBody>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות מועמדים - לאחר ראיונות</h3>
-              <MahzorFinalCandidatesPreferencesSortingTable />
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שלא מילאו העדפה</h3>
+              <MahzorCandidatesWithoutFinalPreferencesSortingTable />
             </CardBody>
           </Card>
 
           <Card style={{ marginTop: '30px' }}>
             <CardBody>
-              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שלא מילאו העדפה</h3>
-              <MahzorCandidatesWithoutFinalPreferencesSortingTable />
+              <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת מועמדים שמילאו העדפה - לאחר ראיונות</h3>
+              {/* <MahzorFinalCandidatesPreferencesSortingTable /> */}
+              <MahzorCandidatesWithFinalPreferencesSortingTable/>
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
               <h3 style={{ textAlign: 'right', fontWeight: 'bold' }}>טבלת העדפות יחידות - לאחר ראיונות</h3>
-              <MahzorFinalUnitsPreferencesSortingTable />
+              {/* <MahzorFinalUnitsPreferencesSortingTable /> */}
+
+              <MahzorUnitsWithFinalPreferencesSortingTable/>
             </CardBody>
           </Card>
         </> : null}

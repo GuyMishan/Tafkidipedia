@@ -9,14 +9,18 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import CandidatePreferenceFilter from 'components/tafkidipedia/Filters/CandidatePreferenceFilter';
 
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
+  const [originaldata, setOriginalData] = useState([])
   const [data, setData] = useState([])
 
   const [certheaderspan, setCertheaderspan] = useState(0)
   const [noncertheaderspan, setNoncertheaderspan] = useState(0)
+
+  const [candidatepreferencefilter, setCandidatepreferencefilter] = useState({})
 
   function init() {
     getMahzorCabdidatePreferences();
@@ -70,6 +74,7 @@ const SortingTable = ({ match }) => {
           }
         }
         setData(tempcandidatepreferences)
+        setOriginalData(tempcandidatepreferences)
         CalculateHeaderSpan(tempcandidatepreferences)
       })
       .catch((error) => {
@@ -92,6 +97,103 @@ const SortingTable = ({ match }) => {
     setCertheaderspan(tempcertheaderspan);
     setNoncertheaderspan(tempnoncertheaderspan);
   }
+
+  const setfilter = (evt) => {
+    if (evt.currentTarget.name == 'movement') {
+      if (candidatepreferencefilter.movementfilter) {
+        let tempmovementfilter = [...candidatepreferencefilter.movementfilter]
+        const index = tempmovementfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmovementfilter.splice(index, 1);
+        }
+        else {
+          tempmovementfilter.push(evt.currentTarget.value)
+        }
+        setCandidatepreferencefilter({ ...candidatepreferencefilter, movementfilter: tempmovementfilter })
+      }
+      else {
+        setCandidatepreferencefilter({ ...candidatepreferencefilter, movementfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'unit') {
+      if (candidatepreferencefilter.unitfilter) {
+        let tempunitfilter = [...candidatepreferencefilter.unitfilter]
+        const index = tempunitfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempunitfilter.splice(index, 1);
+        }
+        else {
+          tempunitfilter.push(evt.currentTarget.value)
+        }
+        setCandidatepreferencefilter({ ...candidatepreferencefilter, unitfilter: tempunitfilter })
+      }
+      else {
+        setCandidatepreferencefilter({ ...candidatepreferencefilter, unitfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'migzar') {
+      if (candidatepreferencefilter.migzarfilter) {
+        let tempmigzarfilter = [...candidatepreferencefilter.migzarfilter]
+        const index = tempmigzarfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmigzarfilter.splice(index, 1);
+        }
+        else {
+          tempmigzarfilter.push(evt.currentTarget.value)
+        }
+        setCandidatepreferencefilter({ ...candidatepreferencefilter, migzarfilter: tempmigzarfilter })
+      }
+      else {
+        setCandidatepreferencefilter({ ...candidatepreferencefilter, migzarfilter: [evt.currentTarget.value] })
+      }
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayUnitFiltered = [];
+    if (candidatepreferencefilter.unitfilter && candidatepreferencefilter.unitfilter.length > 0) {
+      myArrayUnitFiltered = tempdatabeforefilter.filter((el) => {
+        return candidatepreferencefilter.unitfilter.some((f) => {
+          return f === el.candidate.user.job.unit._id;
+        });
+      });
+    }
+    else {
+      myArrayUnitFiltered = originaldata;
+    }
+
+    let myArrayUnitAndMovementFiltered = [];
+    if (candidatepreferencefilter.movementfilter && candidatepreferencefilter.movementfilter.length > 0) {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered.filter((el) => {
+        return candidatepreferencefilter.movementfilter.some((f) => {
+          return f === el.candidate.movement._id;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementFiltered = myArrayUnitFiltered;
+    }
+
+    let myArrayUnitAndMovementAndMigzarFiltered = [];
+    if (candidatepreferencefilter.migzarfilter && candidatepreferencefilter.migzarfilter.length > 0) {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered.filter((el) => {
+        return candidatepreferencefilter.migzarfilter.some((f) => {
+          return f === el.candidate.user.migzar;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndMovementAndMigzarFiltered = myArrayUnitAndMovementFiltered;
+    }
+
+    setData(myArrayUnitAndMovementAndMigzarFiltered)
+  }
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [candidatepreferencefilter]);
 
   useEffect(() => {
     init();
@@ -122,6 +224,7 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <CandidatePreferenceFilter originaldata={originaldata} candidatepreferencefilter={candidatepreferencefilter} setfilter={setfilter} />
       <div style={{ float: 'right' }}>
         <ReactHTMLTableToExcel
           id="test-table-xls-button"
@@ -138,6 +241,9 @@ const SortingTable = ({ match }) => {
             <thead style={{ backgroundColor: '#4fff64' }}>
               <tr>
                 <th colSpan="1" style={{ borderLeft: "1px solid white" }}>שם מתמודד</th>
+                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>יחידה</th>
+                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>תנועה</th>
+                <th colSpan="1" style={{ borderLeft: "1px solid white" }}>מגזר</th>
                 {certheaderspan != 0 ? <th colSpan={certheaderspan} style={{ borderLeft: "1px solid white" }}>תפקידים ודאי</th>
                   : null}
                 {noncertheaderspan != 0 ? <th colSpan={noncertheaderspan}>תפקידים אופציה</th>
@@ -154,17 +260,26 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "candidate.user.name") {
-                          return <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
+                          return <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${row.original.candidate.user._id}`}>{cell.value}{" "}{row.original.candidate.user.lastname}</Link></td>
+                        }
+                        if (cell.column.id == "candidate.user.job.unit") {
+                          return <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}>{cell.value.name}</td>
+                        }
+                        if (cell.column.id == "candidate.movement") {
+                          return <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}>{cell.value.name}</td>
+                        }
+                        if (cell.column.id == "candidate.user.migzar") {
+                          return <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}>{cell.value}</td>
                         }
                         if (cell.column.id == "certjobpreferences") {
                           return [...Array(certheaderspan)].map((x, i) =>
-                            cell.value[i] ? <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                              : <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}></td>)
+                            cell.value[i] ? <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                              : <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}></td>)
                         }
                         if (cell.column.id == "noncertjobpreferences") {
                           return [...Array(noncertheaderspan)].map((x, i) =>
-                            cell.value[i] ? <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
-                              : <td style={{width:`${100/(certheaderspan+noncertheaderspan+1)}%`,minWidth:'125px'}}></td>)
+                            cell.value[i] ? <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${cell.value[i].jobinmahzor.job._id}`}> {cell.value[i].jobinmahzor.job.jobname}/{cell.value[i].jobinmahzor.job.unit.name}</Link>({cell.value[i].rank})</td>
+                              : <td style={{width:`${100/(certheaderspan+noncertheaderspan+4)}%`,minWidth:'125px'}}></td>)
                         }
                       })
                     }

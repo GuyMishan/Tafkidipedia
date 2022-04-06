@@ -39,6 +39,9 @@ import ProfilePage from "views/general/generalpages/profilepage/ProfilePage";
 import Exceluploadusers from "views/general/excelpages/ExcelUploadUsers"
 import Exceluploadjobs from "views/general/excelpages/ExcelUploadJobs"
 
+import Mahzorcandidatespreferecespage from "views/general/adminpages/mahzorcandidatespreferencepage/mahzorcandidatespreferencepage";
+import Mahzorcunitspreferecespage from "views/general/adminpages/mahzorunitspreferencespage/mahzorunitspreferencespage";
+
 const routesgeneral =
     (
         <>
@@ -77,6 +80,9 @@ const routesgeneral =
 
             <AdminRoute path="/editeshkol/:iseshkol/:eshkolid" exact component={EditEshkolForm} />
             <Route path="/displaymahzoreshkols/:iseshkols/:mahzorid" exact component={DisplayMahzorEshkols} />
+
+            <AdminRoute path="/mahzorcandidatespreferecespage/:mahzorid" exact component={Mahzorcandidatespreferecespage} />
+            <AdminRoute path="/mahzorunitspreferecespage/:mahzorid" exact component={Mahzorcunitspreferecespage} />
             {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
 
             {/*////////////////////////////////////////Unit User//////////////////////////////////////////////////*/}
