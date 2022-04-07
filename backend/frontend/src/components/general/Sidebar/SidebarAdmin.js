@@ -96,7 +96,7 @@ function SidebarAdmin() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/fml" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/tafkidipedia" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
             <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
                 <img src={people} style={{ height: "20px" }}></img>

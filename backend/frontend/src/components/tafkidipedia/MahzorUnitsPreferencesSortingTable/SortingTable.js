@@ -9,13 +9,17 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import UnitPreferenceFilter from "../Filters/UnitPreferenceFilter";
 
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
+  const [originaldata, setOriginalData] = useState([])
   const [data, setData] = useState([])
 
   const [headerspan, setheaderspan] = useState(0)
+
+  const [unitpreferencefilter, setUnitpreferencefilter] = useState({})
 
   function init() {
     getMahzorUnitsPreferences();
@@ -47,6 +51,7 @@ const SortingTable = ({ match }) => {
           }
         }
         setData(tempunitspreferences)
+        setOriginalData(tempunitspreferences)
         CalculateHeaderSpan(tempunitspreferences)
       })
       .catch((error) => {
@@ -64,6 +69,76 @@ const SortingTable = ({ match }) => {
     }
     setheaderspan(tempheaderspan);
   }
+
+  const setfilter = (evt) => {
+    if (evt.currentTarget.name == 'unit') {
+      if (unitpreferencefilter.unitfilter) {
+        let tempunitfilter = [...unitpreferencefilter.unitfilter]
+        const index = tempunitfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempunitfilter.splice(index, 1);
+        }
+        else {
+          tempunitfilter.push(evt.currentTarget.value)
+        }
+        setUnitpreferencefilter({ ...unitpreferencefilter, unitfilter: tempunitfilter })
+      }
+      else {
+        setUnitpreferencefilter({ ...unitpreferencefilter, unitfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'certain') {
+      if (unitpreferencefilter.certainfilter) {
+        let tempcertainfilter = [...unitpreferencefilter.certainfilter]
+        const index = tempcertainfilter.indexOf(evt.currentTarget.value);
+        console.log(index)
+        if (index > -1) {
+          tempcertainfilter.splice(index, 1);
+        }
+        else {
+          tempcertainfilter.push(evt.currentTarget.value)
+        }
+        setUnitpreferencefilter({ ...unitpreferencefilter, certainfilter: tempcertainfilter })
+      }
+      else {
+        setUnitpreferencefilter({ ...unitpreferencefilter, certainfilter: [evt.currentTarget.value] })
+      }
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayUnitFiltered = [];
+    if (unitpreferencefilter.unitfilter && unitpreferencefilter.unitfilter.length > 0) {
+      myArrayUnitFiltered = tempdatabeforefilter.filter((el) => {
+        return unitpreferencefilter.unitfilter.some((f) => {
+          return f === el.jobinmahzor.job.unit._id;
+        });
+      });
+    }
+    else {
+      myArrayUnitFiltered = originaldata;
+    }
+
+    let myArrayUnitAndCertainFiltered = [];
+    if (unitpreferencefilter.certainfilter && unitpreferencefilter.certainfilter.length > 0) {
+      myArrayUnitAndCertainFiltered = myArrayUnitFiltered.filter((el) => {
+        return unitpreferencefilter.certainfilter.some((f) => {
+          return f === el.jobinmahzor.certain;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndCertainFiltered = myArrayUnitFiltered;
+    }
+
+    setData(myArrayUnitAndCertainFiltered)
+  }
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [unitpreferencefilter]);
 
   useEffect(() => {
     init();
@@ -94,6 +169,7 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <UnitPreferenceFilter originaldata={originaldata} unitpreferencefilter={unitpreferencefilter} setfilter={setfilter} />
       <div style={{ float: 'right' }}>
         <ReactHTMLTableToExcel
           id="test-table-xls-button"
@@ -108,6 +184,7 @@ const SortingTable = ({ match }) => {
         <table {...getTableProps()} id="table-to-xls">
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
+            <th colSpan="1">יחידה</th>
               <th colSpan="1">תפקיד</th>
               <th colSpan="1">ודאי/אופציה</th>
               <th colSpan="100%">מועמדים</th>
@@ -121,19 +198,22 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
+                        if (cell.column.id == "jobinmahzor.job.unit.name") {
+                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}>{cell.value}</td>
+                        }
                         if (cell.column.id == "jobinmahzor.job.jobname") {
-                          return <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
+                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}</Link></td>
                         }
                         if (cell.column.id == "jobinmahzor.certain") {
-                          return <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}>{cell.value}</td>
+                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}>{cell.value}</td>
                         }
                         if (cell.column.id == "preferencerankings") {
                           // return <> {cell.value.map((preferenceranking, index) => (
                           //   <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${preferenceranking.candidate.user._id}`}>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname}</Link> ({preferenceranking.rank})</td>
                           // ))}</>
                           return [...Array(headerspan)].map((x, i) =>
-                          cell.value[i] ? <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value[i].candidate.user._id}`}>{cell.value[i].candidate.user.name} {cell.value[i].candidate.user.lastname}</Link> ({cell.value[i].rank})</td>
-                            : <td tyle={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}></td>)
+                          cell.value[i] ? <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value[i].candidate.user._id}`}>{cell.value[i].candidate.user.name} {cell.value[i].candidate.user.lastname}</Link> ({cell.value[i].rank})</td>
+                            : <td tyle={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}></td>)
                         }
                       })
                     }

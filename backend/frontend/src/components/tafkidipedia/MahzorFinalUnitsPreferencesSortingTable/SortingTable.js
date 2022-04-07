@@ -108,6 +108,7 @@ const SortingTable = ({ match }) => {
         <table {...getTableProps()} id="table-to-xls">
           <thead style={{ backgroundColor: '#4fff64' }}>
             <tr>
+              <th colSpan="1">יחידה</th>
               <th colSpan="1">תפקיד</th>
               <th colSpan="1">ודאי/אופציה</th>
               <th colSpan="100%">מועמדים</th>
@@ -121,19 +122,22 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                          if (cell.column.id == "jobinmahzor.job.jobname") {
-                            return <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}{"/"}{row.original.jobinmahzor.job.unit.name}</Link></td>
-                          }
-                          if (cell.column.id == "jobinmahzor.certain") {
-                            return <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}>{cell.value}</td>
-                          }
+                        if (cell.column.id == "jobinmahzor.job.unit.name") {
+                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}>{cell.value}</td>
+                        }
+                        if (cell.column.id == "jobinmahzor.job.jobname") {
+                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}</Link></td>
+                        }
+                        if (cell.column.id == "jobinmahzor.certain") {
+                          return <td style={{ width: `${100 / (headerspan + 3)}%`, minWidth: '125px' }}>{cell.value}</td>
+                        }
                         if (cell.column.id == "preferencerankings") {
                           // return <> {cell.value.map((preferenceranking, index) => (
                           //   <td><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${preferenceranking.candidate.user._id}`}>{preferenceranking.candidate.user.name} {preferenceranking.candidate.user.lastname}</Link> ({preferenceranking.rank})</td>
                           // ))}</>
                           return [...Array(headerspan)].map((x, i) =>
-                          cell.value[i] ? <td style={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value[i].candidate.user._id}`}>{cell.value[i].candidate.user.name} {cell.value[i].candidate.user.lastname}</Link> ({cell.value[i].rank})</td>
-                            : <td tyle={{width:`${100/(headerspan+2)}%`,minWidth:'125px'}}></td>)
+                            cell.value[i] ? <td style={{ width: `${100 / (headerspan + 3)}%`, minWidth: '125px' }}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/profilepage/${cell.value[i].candidate.user._id}`}>{cell.value[i].candidate.user.name} {cell.value[i].candidate.user.lastname}</Link> ({cell.value[i].rank})</td>
+                              : <td tyle={{ width: `${100 / (headerspan + 3)}%`, minWidth: '125px' }}></td>)
                         }
                       })
                     }

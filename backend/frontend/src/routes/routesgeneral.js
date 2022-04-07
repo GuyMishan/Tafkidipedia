@@ -35,6 +35,7 @@ import EditEshkolForm from "views/general/adminpages/editeshkol/EditEshkolForm";
 import DisplayMahzorEshkols from "views/general/adminpages/displaymahzoreshkols/DisplayMahzorEshkols";
 
 import ProfilePage from "views/general/generalpages/profilepage/ProfilePage";
+import TafkidipediaPage from "views/general/generalpages/tafkidipediapage/tafkidipediapage";
 
 import Exceluploadusers from "views/general/excelpages/ExcelUploadUsers"
 import Exceluploadjobs from "views/general/excelpages/ExcelUploadJobs"
@@ -61,6 +62,7 @@ const routesgeneral =
             <LoggedinRoute path="/displayjob/:jobid" exact component={DisplayJob} />
 
             <LoggedinRoute path="/profilepage/:userid" exact component={ProfilePage} />
+            <LoggedinRoute path="/tafkidipedia" exact component={TafkidipediaPage} />
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
             {/*///////////////////////////////////////////Form Routes/////////////////////////////////////////////////*/}
