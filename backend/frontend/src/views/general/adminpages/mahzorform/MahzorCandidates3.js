@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, withRouter, Redirect } from "react-router-dom";
-import SimpleReactValidator from 'simple-react-validator';
 // reactstrap components
 import { OutTable, ExcelRenderer } from 'react-excel-renderer';
 import { Card, CardHeader, CardBody, CardTitle, Col, Input, InputGroup, InputGroupAddon, FormGroup, Label, Button, Fade, FormFeedback, Container, Row } from 'reactstrap';
 import axios from 'axios';
 import history from 'history.js'
-import { produce } from 'immer'
-import { generate } from 'shortid'
 import { toast } from "react-toastify";
 
 import soldier from "assets/img/soldier.png";

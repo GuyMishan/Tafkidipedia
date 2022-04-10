@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, withRouter, Redirect } from "react-router-dom";
-import SimpleReactValidator from 'simple-react-validator';
 // reactstrap components
 import {
   Button,
@@ -25,8 +24,6 @@ import {
 } from "reactstrap";
 import axios from 'axios';
 import history from 'history.js'
-import { produce } from 'immer'
-import { generate } from 'shortid'
 import { toast } from "react-toastify";
 
 import Select from 'components/tafkidipedia/Select/EshkolAnimatedMultiSelect'

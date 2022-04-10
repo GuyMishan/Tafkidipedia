@@ -19,6 +19,7 @@ import {
 import axios from 'axios';
 
 import PanelHeader from "components/general/PanelHeader/PanelHeader";
+import LiquidFillGauge from 'components/tafkidipedia/LiquidFillGauge/LiquidFillGauge';
 
 function DisplayJob({ match }) {
   //mahzor
@@ -203,6 +204,21 @@ function DisplayJob({ match }) {
                   </Card>
                 </Col>
               </Row>
+            </Col>
+          </Row>
+
+          <Row style={{ direction: "rtl"}}>
+            <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
+                <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - הנדסי</h4>
+                <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_handasi * 16.6} text={jobdata.grade_handasi} color={'red'} />
+            </Col>
+            <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
+                <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</h4>
+                <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_nihuli * 16.6} text={jobdata.grade_nihuli} color={'green'} />
+            </Col>
+            <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
+                <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - פיקודי</h4>
+                <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_pikudi * 16.6} text={jobdata.grade_pikudi} color={'blue'} />
             </Col>
           </Row>
         </Container >

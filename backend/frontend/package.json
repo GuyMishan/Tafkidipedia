@@ -8,12 +8,12 @@
     "bootstrap": "4.5.0",
     "chart.js": "^3.3.2",
     "history": "^4.10.1",
-    "immer": "^9.0.3",
     "react": "16.13.1",
     "react-chartjs-2": "^3.0.3",
     "react-dom": "16.13.1",
     "react-excel-renderer": "^1.1.0",
     "react-html-table-to-excel": "^2.0.0",
+    "react-liquid-gauge": "^1.2.4",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
@@ -22,8 +22,6 @@
     "react-toastify": "^7.0.4",
     "react-toggle-button": "^2.2.0",
     "reactstrap": "8.4.1",
-    "shortid": "^2.2.16",
-    "simple-react-validator": "^1.6.1",
     "webpack": "4.42.0"
   },
   "scripts": {

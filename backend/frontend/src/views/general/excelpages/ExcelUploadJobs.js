@@ -89,6 +89,10 @@ function ExcelUploadJobs() {
       let response2 = await axios.get(`http://localhost:8000/api/unit`)
       let tempunits = response2.data;
 
+      //get all populations
+      let response3 = await axios.get(`http://localhost:8000/api/population`)
+      let temppopulations = response3.data;
+
       //run over tabledata-> if personal number doesnt exists=> add him / else => present an error with the name of person
       for (let i = 0; i < tablebody.length; i++) {
         let isjobalreadyexists = false;
@@ -101,11 +105,16 @@ function ExcelUploadJobs() {
         {
           for (let k = 0; k < tempunits.length; k++) {
             if (tablebody[i].unit == tempunits[k].name) {
-              tablebody[i].unit=tempunits[k]._id;
-              let response1 = await axios.post(`http://localhost:8000/api/job`, tablebody[i])
-              // let tempdata = response1.data;
+              tablebody[i].unit = tempunits[k]._id;
             }
           }
+          //to find population of user
+          for (let l = 0; l < temppopulations.length; l++) {
+            if (tablebody[i].population == temppopulations[l].name) {
+              tablebody[i].population = temppopulations[l]._id;
+            }
+          }
+          let response1 = await axios.post(`http://localhost:8000/api/job`, tablebody[i])
         }
       }
     }

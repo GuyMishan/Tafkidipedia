@@ -187,7 +187,7 @@ const EditJobForm = ({ match }) => {
                     </> :
                     <>
                       <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תפקיד</div>
-                      <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} disabled />
+                      <Input placeholder="שם תפקיד" type="string" name="jobname" value={job.jobname} onChange={handleChange} />
 
                       <div style={{ textAlign: 'right', paddingTop: '10px' }}>קוד תפקיד</div>
                       <Input placeholder="קוד תפקיד" type="number" name="jobcode" value={job.jobcode} onChange={handleChange} disabled />
@@ -212,7 +212,6 @@ const EditJobForm = ({ match }) => {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>יחידה</div>
                       <FormGroup dir="rtl">
                         <Input
-                          disabled
                           type="select"
                           name="unit"
                           value={job.unit._id}
@@ -344,7 +343,46 @@ const EditJobForm = ({ match }) => {
                     <option value={'סודי ביותר'}>סודי ביותר</option>
                   </Input>
 
-                  <div className="text-center">
+                  <Row style={{ direction: "rtl", paddingTop: '10px' }}>
+                    <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>ניקוד תפקיד - הנדסי</div>
+                      <Input placeholder='ניקוד תפקיד - הנדסי' type="select" name="grade_handasi" value={job.grade_handasi} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                        <option value={6}>6</option>
+                      </Input>
+                    </Col>
+                    <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</div>
+                      <Input placeholder='ניקוד תפקיד - הנדסי' type="select" name="grade_nihuli" value={job.grade_nihuli} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                        <option value={6}>6</option>
+                      </Input>
+                    </Col>
+                    <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</div>
+                      <Input placeholder='ניקוד תפקיד - הנדסי' type="select" name="grade_pikudi" value={job.grade_pikudi} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                        <option value={6}>6</option>
+                      </Input>
+                    </Col>
+                  </Row>
+                  
+                  <div className="text-center" style={{ paddingTop: '10px' }}>
                     <button onClick={clickSubmit} className="btn">עדכן</button>
                   </div>
                 </Form>

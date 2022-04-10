@@ -33,6 +33,11 @@ const jobSchema = new mongoose.Schema({
     management_ability:{type:String},
     leadership_ability:{type:String},
     sivug:{type:String},
+    //10/4
+    population:{type:ObjectId,ref:'Population'},
+    grade_handasi:{type:Number},
+    grade_nihuli:{type:Number},
+    grade_pikudi:{type:Number},
 });
 
 const Job = mongoose.model('Job', jobSchema);

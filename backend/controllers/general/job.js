@@ -35,6 +35,17 @@ let readtipul = [
   {
     $unwind: "$commander"
   },
+  {
+    $lookup: {
+      from: "populations",
+      localField: "population",
+      foreignField: "_id",
+      as: "population"
+    }
+  },
+  {
+    $unwind: "$population"
+  },
 ];
 
 let readtipul2 = [
@@ -48,6 +59,17 @@ let readtipul2 = [
   },
   {
     $unwind: "$unit"
+  },
+  {
+    $lookup: {
+      from: "populations",
+      localField: "population",
+      foreignField: "_id",
+      as: "population"
+    }
+  },
+  {
+    $unwind: "$population"
   },
 ];
 
