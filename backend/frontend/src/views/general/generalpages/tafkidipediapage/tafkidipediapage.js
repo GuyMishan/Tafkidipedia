@@ -176,8 +176,8 @@ function Tafkidipediapage() {
                         </Row>
                         <Row style={{ direction: "rtl", paddingTop: '10px' }}>
                             {jobs ? jobs.map((job, index) => (
-                                <Col xs={12} md={3} style={{ alignSelf: 'center'}}>
-                                    <Card style={{ direction: 'ltr', background: 'linear-gradient(0deg, rgb(27 42 54) 0%, rgb(12,31,45) 100%)',height:'200px' }}>
+                                <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
+                                    <Card style={{ direction: 'ltr', background: 'linear-gradient(0deg, rgb(27 42 54) 0%, rgb(12,31,45) 100%)', height: '200px' }}>
                                         <CardBody style={{ direction: 'rtl' }}>
                                             <Row>
                                                 <Col xs={12} md={5}>
@@ -191,13 +191,12 @@ function Tafkidipediapage() {
                                                     </Link>
                                                     <h3 style={{ color: 'grey', marginBottom: '10px', textAlign: 'center' }}>{job.unit.name}</h3>
                                                     {job.meaish ?
-                                                        <button className="btn-empty"/*value={user._id} onClick={Toggle}*/ style={{ width: '100%' }}>
-                                                            <h4 style={{ color: 'gray', marginBottom: '10px' }}>{job.meaish.name ? job.meaish.name : null} {job.meaish.lastname ? job.meaish.lastname : null}</h4>
-                                                        </button> :
-                                                        <button className="btn-empty"/*value={user._id} onClick={Toggle}*/ style={{ width: '100%' }}>
-                                                            <h4 style={{ color: 'gray', marginBottom: '10px' }}> </h4>
-                                                        </button>}
-
+                                                        // <Link to={`/profilepage/${job.meaish._id}`}>
+                                                        <h4 style={{ color: 'gray', marginBottom: '10px', textAlign: 'center' }}>{job.meaish.name ? job.meaish.name : null} {job.meaish.lastname ? job.meaish.lastname : null}</h4>
+                                                        // </Link> 
+                                                        :
+                                                        <h4 style={{ color: 'gray', marginBottom: '10px', textAlign: 'center' }}> </h4>
+                                                    }
                                                 </Col>
                                             </Row>
                                         </CardBody>

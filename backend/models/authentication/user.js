@@ -19,6 +19,29 @@ const userSchema = new mongoose.Schema({
     //17.2
     population:{type:ObjectId,ref:'Population'},
     job:{type:ObjectId,ref:'Job'},
+    //11.4
+    user_grade_handasi:{type:Number},
+    user_grade_nihuli:{type:Number},
+    user_grade_pikudi:{type:Number},
+    //
+    birthdate:{type:Date},
+    residence:{type:String},
+    marital_status:{type:String},
+    education:{type:String},
+    curr_tatash:{type:Date},
+    promotion_date:{type:Date},
+    keva_entry:{type:Date},
+    service_model:{type:String},
+    jobs_in_rank:{type:String},
+    sigli_data:{type:Array},
+    taal_excellence:{type:String,default:"לא"},
+    ayen_tik:{type:String,default:"לא"},
+    mezah:{type:String,default:"לא"},
+    tlunot:{type:String,default:"לא"},
+    tamriz:{type:String,default:"לא"},
+    tziun_mh:{type:Number},
+    sivug:{type:String,default:"שמור"},
+    comment:{type:String},
 }, {timestamps: true})
 
 // virtual field

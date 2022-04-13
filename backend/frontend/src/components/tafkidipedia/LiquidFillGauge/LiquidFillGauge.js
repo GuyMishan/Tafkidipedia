@@ -56,7 +56,7 @@ const Gauge = ({ radius = 200, value = 60, ...props }) => {
             riseAnimation
             waveAnimation
             waveFrequency={1}
-            waveAmplitude={3}
+            waveAmplitude={1}
             gradient
             gradientStops={gradientStops}
             circleStyle={{

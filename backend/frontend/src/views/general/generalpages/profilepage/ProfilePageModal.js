@@ -24,6 +24,7 @@ import UserInfoCardGeneral from './UserInfoCardGeneral';
 import UserInfoCardPicture from './UserInfoCardPicture';
 import UserInfoCardSigli from './UserInfoCardSigli';
 import UserInfoCardExtra from './UserInfoCardExtra';
+import UserInfoCardUserGrade from './UserInfoCardUserGrade';
 
 function ProfilePageModal(props) {
   //user
@@ -57,7 +58,7 @@ function ProfilePageModal(props) {
         toggle={props.Toggle}>
         <ModalBody>
           <Row>
-            <Col xs={12} md={9}>
+            <Col xs={12} md={8}>
               <UserInfoCardGeneral user={user} />
 
               <UserInfoCardSigli user={user} />
@@ -65,8 +66,10 @@ function ProfilePageModal(props) {
               <UserInfoCardExtra user={user} />
             </Col>
 
-            <Col xs={12} md={3}>
+            <Col xs={12} md={4}>
               <UserInfoCardPicture user={user} />
+
+              <UserInfoCardUserGrade user={user}/>
             </Col>
           </Row>  </ModalBody>
       </Modal> : null

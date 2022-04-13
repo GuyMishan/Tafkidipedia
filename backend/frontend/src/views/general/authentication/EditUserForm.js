@@ -180,6 +180,8 @@ const EditUserForm = ({ match }) => {
               })
               .catch((error) => {
                 console.log(error);
+                toast.success(`המשתמש עודכן בהצלחה-תפקיד לא שונה`);
+                history.push(`/manageusers`);
               })
           })
           .catch((error) => {

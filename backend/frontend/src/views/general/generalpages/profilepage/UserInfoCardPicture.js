@@ -23,12 +23,12 @@ function UserInfoCardPicture(props) {
     return (
         <Card>
             <CardBody>
-                <Container>
-                <img src={soldierphoto}></img>
-                <h2 style={{ textAlign: 'center', fontWeight: 'bold',margin:'0px' }}>{props.user.name} {props.user.lastname}</h2>
-                <h4 style={{ textAlign: 'center',color:'gray',margin:'0px'}}>{props.user.personalnumber}</h4>
-                <h4 style={{ textAlign: 'center',color:'gray',margin:'0px'}}>מתכנת</h4>
-                <h4 style={{ textAlign: 'center',color:'gray',margin:'0px'}}>מקטנא"ר 58</h4>
+                <Container style={{textAlign:'center'}}>
+                    <img src={soldierphoto}></img>
+                    <h2 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>{props.user.name} {props.user.lastname}</h2>
+                    <h4 style={{ textAlign: 'center', color: 'gray', margin: '0px' }}>{props.user.personalnumber}</h4>
+                    <h4 style={{ textAlign: 'center', color: 'gray', margin: '0px' }}>{props.user.job ? props.user.job.jobname : null}</h4>
+                    <h4 style={{ textAlign: 'center', color: 'gray', margin: '0px' }}>{props.user.job.unit ? props.user.job.unit.name : null}</h4>
                 </Container>
             </CardBody>
         </Card>

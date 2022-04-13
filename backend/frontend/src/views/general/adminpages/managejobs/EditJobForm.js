@@ -215,6 +215,7 @@ const EditJobForm = ({ match }) => {
                           type="select"
                           name="unit"
                           value={job.unit._id}
+                          disabled
                           onChange={handleChange}>
                           <option value={"בחר"}>בחר</option>
                           {units ? units.map((unit, index) => (
