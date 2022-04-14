@@ -44,7 +44,9 @@ const UserCard = (props) => {
             <CardBody style={{ padding: "0px" }}>
                 <Row style={{ margin: 'auto' }}>
                     <Col lg="12" style={{ padding: "0px", direction: 'ltr' }}>
-                        <UserCarousel />
+                        <div style={{filter:'brightness(50%)'}}>
+                            <UserCarousel />
+                        </div>
                     </Col>
                 </Row>
             </CardBody>
