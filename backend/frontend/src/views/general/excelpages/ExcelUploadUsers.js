@@ -98,10 +98,11 @@ function ExcelUploadUsers() {
         let isuseralreadyexists = false;
         for (let j = 0; j < tempusers.length; j++) {
           if (tablebody[i].personalnumber == tempusers[j].personalnumber) {
+            tablebody[i].tempid=tempusers[j]._id;
             isuseralreadyexists = true;
           }
         }
-        if (isuseralreadyexists == false)//modify the user to enter DB
+        if (isuseralreadyexists == false)//modify the user + post to DB
         {
           tablebody[i].validated = true;
           tablebody[i].role = '2';
@@ -168,6 +169,75 @@ function ExcelUploadUsers() {
 
           //may have a problem if job isnt found->user inserted with no job.. / population
           let response1 = await axios.post(`http://localhost:8000/api/signup`, tablebody[i])
+        }
+        else{ //modify the user + update user in DB
+          //יש בעיה עם עדכון יוזרים
+          //עם עדכון תפקיד של יוזר- אם התפקיד השתנה צריך לעדכן את התפקיד עצמו גם (מסובך)
+          tablebody[i].validated = true;
+          tablebody[i].role = '2';
+          tablebody[i].password = tablebody[i].personalnumber;
+
+          //to find job of user
+          for (let k = 0; k < tempjobs.length; k++) {
+            if (tablebody[i].jobcode == tempjobs[k].jobcode) {
+              tablebody[i].job = tempjobs[k]._id;
+            }
+          }
+          delete tablebody[i].jobcode;
+
+          //to find population of user
+          for (let l = 0; l < temppopulations.length; l++) {
+            if (tablebody[i].population == temppopulations[l].name) {
+              tablebody[i].population = temppopulations[l]._id;
+            }
+          }
+
+          let dateParts =  tablebody[i].birthdate.split("/");
+          tablebody[i].birthdate = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]+1);
+          let dateParts1 =  tablebody[i].curr_tatash.split("/");
+          tablebody[i].curr_tatash = new Date(+dateParts1[2], dateParts1[1] - 1, +dateParts1[0]+1);
+          let dateParts2 =  tablebody[i].promotion_date.split("/");
+          tablebody[i].promotion_date = new Date(+dateParts2[2], dateParts2[1] - 1, +dateParts2[0]+1);
+          let dateParts3 =  tablebody[i].keva_entry.split("/");
+          tablebody[i].keva_entry = new Date(+dateParts3[2], dateParts3[1] - 1, +dateParts3[0]+1);
+
+          let temp_sigli_data = [];
+
+          let temp_sigli_data_1 = {};
+          temp_sigli_data_1.year='2019'
+          temp_sigli_data_1.socio=tablebody[i].socio_1
+          temp_sigli_data_1.hili_ranking=tablebody[i].hili_ranking_1
+          temp_sigli_data_1.promo_ready=tablebody[i].promo_ready_1
+          temp_sigli_data_1.long_term=tablebody[i].long_term_1
+          temp_sigli_data_1.job_success=tablebody[i].job_success_1
+          temp_sigli_data_1.outstanding=tablebody[i].outstanding_1
+
+          let temp_sigli_data_2 = {};
+          temp_sigli_data_2.year='2020'
+          temp_sigli_data_2.socio=tablebody[i].socio_2
+          temp_sigli_data_2.hili_ranking=tablebody[i].hili_ranking_2
+          temp_sigli_data_2.promo_ready=tablebody[i].promo_ready_2
+          temp_sigli_data_2.long_term=tablebody[i].long_term_2
+          temp_sigli_data_2.job_success=tablebody[i].job_success_2
+          temp_sigli_data_2.outstanding=tablebody[i].outstanding_2
+
+          let temp_sigli_data_3 = {};
+          temp_sigli_data_3.year='2021'
+          temp_sigli_data_3.socio=tablebody[i].socio_3
+          temp_sigli_data_3.hili_ranking=tablebody[i].hili_ranking_3
+          temp_sigli_data_3.promo_ready=tablebody[i].promo_ready_3
+          temp_sigli_data_3.long_term=tablebody[i].long_term_3
+          temp_sigli_data_3.job_success=tablebody[i].job_success_3
+          temp_sigli_data_3.outstanding=tablebody[i].outstanding_3
+
+          temp_sigli_data.push(temp_sigli_data_1)
+          temp_sigli_data.push(temp_sigli_data_2)
+          temp_sigli_data.push(temp_sigli_data_3)
+
+          tablebody[i].sigli_data = temp_sigli_data;
+
+          //may have a problem if job isnt found->user inserted with no job.. / population
+          let response1 = await axios.put(`http://localhost:8000/api/user/update/${tablebody[i].tempid}`, tablebody[i])
         }
       }
     }
