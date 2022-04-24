@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { create, find, update, remove, findById,smartjobbyid,smartjobs,jobsbymahzorid,smartjobs2} = require('../../controllers/general/job');
+const { create, find, update, remove, findById,smartjobbyid,smartjobs,jobsbymahzorid,smartjobs2,smartjobs3} = require('../../controllers/general/job');
 
 // find spec 
 router.get('/job/:id', findById)
@@ -21,5 +21,7 @@ router.get('/smartjobs',smartjobs);
 router.get('/jobsbymahzorid/:mahzorid',jobsbymahzorid); 
 
 router.get('/smartjobs2',smartjobs2); 
+
+router.get('/smartjobs3',smartjobs3); 
 
 module.exports = router;

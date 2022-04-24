@@ -73,6 +73,20 @@ let readtipul2 = [
   },
 ];
 
+let readtipul3 = [
+  {
+    $lookup: {
+      from: "units",
+      localField: "unit",
+      foreignField: "_id",
+      as: "unit"
+    }
+  },
+  {
+    $unwind: "$unit"
+  }
+];
+
 exports.findById = async(req, res) => {
   let tipulfindquerry = readtipul2.slice();
   let finalquerry = tipulfindquerry;
@@ -214,6 +228,19 @@ exports.jobsbymahzorid = async(req, res) => {
 
  exports.smartjobs2 = async(req, res) => {
   let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  Job.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+ }
+
+ exports.smartjobs3 = async(req, res) => {
+  let tipulfindquerry = readtipul3.slice();
   let finalquerry = tipulfindquerry;
 
   Job.aggregate(finalquerry)

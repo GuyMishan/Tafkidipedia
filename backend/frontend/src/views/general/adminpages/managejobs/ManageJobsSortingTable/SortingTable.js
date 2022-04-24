@@ -21,7 +21,7 @@ const SortingTable = ({ match }) => {
   // }
 
   const loadJobs = () => {
-    axios.get("http://localhost:8000/api/smartjobs")
+    axios.get("http://localhost:8000/api/smartjobs3")
       .then(response => {
         setData(response.data);
       })

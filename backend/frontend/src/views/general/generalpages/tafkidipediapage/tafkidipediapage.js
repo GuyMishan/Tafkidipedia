@@ -22,7 +22,7 @@ import {
 } from "reactstrap";
 import axios from 'axios';
 
-import soldier from "assets/img/soldier.png";
+import tzahalpng from "assets/img/unitsimg/defaultTzahal.png";
 import JobFilter from "components/tafkidipedia/Filters/JobFilter";
 
 function Tafkidipediapage() {
@@ -181,7 +181,8 @@ function Tafkidipediapage() {
                                         <CardBody style={{ direction: 'rtl' }}>
                                             <Row>
                                                 <Col xs={12} md={5}>
-                                                    {job.unit.englishname ? CheckImgPath(job.unit.englishname) == true ? <img src={require(`assets/img/unitsimg/${job.unit.englishname}.png`)}></img> : <img src={soldier}></img> : <img src={soldier}></img>}
+                                                    {job.unit.englishname ? CheckImgPath(job.unit.englishname) == true ? <img src={require(`assets/img/unitsimg/${job.unit.englishname}.png`)}></img> : <img src={tzahalpng}></img> : <img src={tzahalpng}></img>}
+                                                    {/*job.unit.englishname ? CheckImgPath(job.unit.englishname) == true ? <img src={require(`assets/img/unitsimg/${job.unit.englishname}.png`).default}></img> : <img src={tzahalpng}></img> : <img src={tzahalpng}></img>*/} 
                                                 </Col>
                                                 <Col xs={12} md={7} style={{ padding: '0px' }}>
                                                     <Link to={`/displayjob/${job._id}`}>
