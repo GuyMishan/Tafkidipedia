@@ -31,7 +31,18 @@ const EditJobForm = ({ match }) => {
   const [job, setJob] = useState({});
 
   const [units, setUnits] = useState(undefined);
+  const [populations, setPopulations] = useState(undefined);
   const [users, setUsers] = useState(undefined);
+
+  const loadPopulations = () => {
+    axios.get(`http://localhost:8000/api/population`)
+      .then((response) => {
+        setPopulations(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const loadUsers = () => {
     let candidaterole = '2'
@@ -158,6 +169,7 @@ const EditJobForm = ({ match }) => {
     }
     loadUnits();
     loadUsers();
+    loadPopulations();
   }
 
   useEffect(() => {
@@ -220,6 +232,37 @@ const EditJobForm = ({ match }) => {
                           <option value={"בחר"}>בחר</option>
                           {units ? units.map((unit, index) => (
                             <option value={unit._id}>{unit.name}</option>
+                          )) : null}
+                        </Input>
+                      </FormGroup>
+                    </> : null}
+
+                    {populations != undefined && match.params.jobid == '0' ? <>
+                    <div style={{ textAlign: "right", paddingTop: "10px" }}>אוכלוסייה</div>
+                    <FormGroup dir="rtl">
+                      <Input
+                        type="select"
+                        name="unit"
+                        value={job.population}
+                        onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        {populations ? populations.map((population, index) => (
+                          <option value={population._id}>{population.name}</option>
+                        )) : null}
+                      </Input>
+                    </FormGroup>
+                  </> :
+                    populations != undefined && match.params.jobid != '0' && job.population ? <>
+                      <div style={{ textAlign: "right", paddingTop: "10px" }}>אוכלוסייה</div>
+                      <FormGroup dir="rtl">
+                        <Input
+                          type="select"
+                          name="population"
+                          value={job.population._id}
+                          onChange={handleChange}>
+                          <option value={"בחר"}>בחר</option>
+                          {populations ? populations.map((population, index) => (
+                            <option value={population._id}>{population.name}</option>
                           )) : null}
                         </Input>
                       </FormGroup>
@@ -358,7 +401,7 @@ const EditJobForm = ({ match }) => {
                       </Input>
                     </Col>
                     <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</div>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</div>
                       <Input placeholder='ניקוד תפקיד - הנדסי' type="select" name="grade_nihuli" value={job.grade_nihuli} onChange={handleChange}>
                         <option value={"בחר"}>בחר</option>
                         <option value={1}>1</option>
@@ -370,7 +413,7 @@ const EditJobForm = ({ match }) => {
                       </Input>
                     </Col>
                     <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</div>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</div>
                       <Input placeholder='ניקוד תפקיד - הנדסי' type="select" name="grade_pikudi" value={job.grade_pikudi} onChange={handleChange}>
                         <option value={"בחר"}>בחר</option>
                         <option value={1}>1</option>
@@ -382,7 +425,7 @@ const EditJobForm = ({ match }) => {
                       </Input>
                     </Col>
                   </Row>
-                  
+
                   <div className="text-center" style={{ paddingTop: '10px' }}>
                     <button onClick={clickSubmit} className="btn">עדכן</button>
                   </div>

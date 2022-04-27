@@ -178,13 +178,13 @@ function Tafkidipediapage() {
                             {jobs ? jobs.map((job, index) => (
                                 <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                                     <Card style={{ direction: 'ltr', background: 'linear-gradient(0deg, rgb(27 42 54) 0%, rgb(12,31,45) 100%)', height: '200px' }}>
-                                        <CardBody style={{ direction: 'rtl' }}>
-                                            <Row>
-                                                <Col xs={12} md={5}>
+                                        <CardBody style={{ direction: 'rtl',padding:'0px'}}>
+                                            <Row style={{height: '200px',width:'100%',margin:'0px'}}>
+                                                <Col xs={12} md={5} style={{margin:'auto'}}>
                                                     {job.unit.englishname ? CheckImgPath(job.unit.englishname) == true ? <img src={require(`assets/img/unitsimg/${job.unit.englishname}.png`)}></img> : <img src={tzahalpng}></img> : <img src={tzahalpng}></img>}
                                                     {/*job.unit.englishname ? CheckImgPath(job.unit.englishname) == true ? <img src={require(`assets/img/unitsimg/${job.unit.englishname}.png`).default}></img> : <img src={tzahalpng}></img> : <img src={tzahalpng}></img>*/} 
                                                 </Col>
-                                                <Col xs={12} md={7} style={{ padding: '0px' }}>
+                                                <Col xs={12} md={7} style={{ padding: '0px',overflow:'auto',maxHeight:'200px'}}>
                                                     <Link to={`/displayjob/${job._id}`}>
                                                         <button className="btn-empty"/*value={user._id} onClick={Toggle}*/ style={{ width: '100%' }}>
                                                             <h2 style={{ color: 'white', marginBottom: '10px' }}>{job.jobname}</h2>
