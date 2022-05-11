@@ -14,7 +14,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePageModal';
 
-const MahzorCandidates3 = (props) => {
+const MahzorCandidates3Kidum = (props) => {
     const [tempjobcode, setTempjobcode] = useState("");
 
     const [units, setUnits] = useState([]);
@@ -30,7 +30,7 @@ const MahzorCandidates3 = (props) => {
     function handleChangetempjobcode(evt) {
         const value = evt.target.value;
         setTempjobcode(value);
-    }
+      }
 
     const loadunits = async () => {
         await axios.get(`http://localhost:8000/api/unit`)
@@ -126,79 +126,90 @@ const MahzorCandidates3 = (props) => {
                     </CardBody>
                 </Card>
 
-                {props.mahzordata._id != undefined ?
-                    <>
-                        <Card>
-                            <CardHeader style={{ direction: 'rtl' }}>
-                                <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>תפקידים חדשים</CardTitle>{/*headline*/}
+                <Card>
+                    <CardHeader style={{ direction: 'rtl' }}>
+                        <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>תפקידים</CardTitle>{/*headline*/}
+                        {props.mahzordata._id == undefined ?
+                            <>
+                                <div style={{ textAlign: 'center', paddingTop: '10px' }}>אוכלוסייה</div>
                                 <FormGroup dir="rtl" >
-                                    <Row>
-                                        <Col xs={12} md={3} style={{ display: 'flex', justifyContent: 'center' }}>
-                                        </Col>
-                                        <Col xs={12} md={4} style={{ margin: 'auto' }}>
-                                            {/* <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף תפקיד</div> */}
-                                            <Input type="number" value={tempjobcode} placeholder={'הכנס קוד תפקיד'} onChange={handleChangetempjobcode}></Input>
-                                        </Col>
-                                        <Col xs={12} md={2} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <Button type="primary" onClick={() => props.SerachAndAddJobToJobsList(tempjobcode)}>חפש תפקיד והוסף</Button>
-                                        </Col>
-                                        <Col xs={12} md={3} style={{ display: 'flex', justifyContent: 'center' }}>
-                                        </Col>
-                                    </Row>
+                                    <Input type="select" name="population" onChange={props.handleChangeKidumPopulation}>
+                                        <option value={"בחר"}>{"בחר"}</option>
+                                        {props.population.map((population, index) => (
+                                            <option key={index} value={population._id}>{population.name}</option>
+                                        ))}
+                                    </Input>
                                 </FormGroup>
-                            </CardHeader>
-                            <CardBody style={{ direction: 'ltr' }}>
-                                <Container>
-                                    <Row style={{ direction: "rtl", paddingTop: '10px' }} >
-                                        <div style={{ float: 'right' }}>
-                                            <ReactHTMLTableToExcel
-                                                id="test-table-xls-button"
-                                                className="btn-green"
-                                                table="table-to-xls"
-                                                filename="קובץ - מתמודדים במחזור"
-                                                sheet="קובץ - מתמודדים במחזור"
-                                                buttonText="הורד כקובץ אקסל" />
-                                        </div>
-                                        <table id="table-to-xls">
-                                            <thead>
-                                                <tr>
-                                                    <th>שם תפקיד</th>
-                                                    <th>קוד תפקיד</th>
-                                                    <th>יחידה</th>
-                                                    <th>תנועה</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {props.jobs ? props.jobs.map((job, jobindex) => !job.meaish?(
-                                                    <tr>
-                                                        <td style={{ textAlign: "center" }}>{job.jobname}</td>
-                                                        <td style={{ textAlign: "center" }}>{job.jobcode}</td>
-                                                        <td style={{ textAlign: "center" }}>
-                                                            <Input type="select" value={job.unit} disabled>
-                                                                {units.map((unit, index) => (
-                                                                    <option key={index} value={unit._id}>{unit.name}</option>
-                                                                ))}
-                                                            </Input>
-                                                        </td>
-                                                        <td style={{ textAlign: "center" }}>
-                                                            <Input type="select" value={job.certain} name={jobindex} onChange={props.handleChangeJobCertain}>
-                                                                <option value={'ודאי'}>ודאי</option>
-                                                                <option value={'אופציה'}>אופציה</option>
-                                                            </Input>
-                                                        </td>
-                                                        <td style={{ textAlign: "center" }}>
-                                                            <Button onClick={() => props.deletejobfromjobs(jobindex)}>מחק</Button>
-                                                        </td>
-                                                    </tr>
-                                                ):null) : null}
-                                            </tbody>
-                                        </table>
-                                    </Row>
-                                </Container>
-                            </CardBody>
-                        </Card></> : null}
+                            </> : null}
+                        
+                        <FormGroup dir="rtl" >
+                            <Row>
+                            <Col xs={12} md={3} style={{ display: 'flex', justifyContent: 'center' }}>
+                                </Col>
+                                <Col xs={12} md={4} style={{margin:'auto'}}>
+                                {/* <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף תפקיד</div> */}
+                                    <Input type="number" value={tempjobcode} placeholder={'הכנס קוד תפקיד'} onChange={handleChangetempjobcode}></Input>
+                                </Col>
+                                <Col xs={12} md={2} style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Button type="primary" onClick={() => props.SerachAndAddJobToJobsList(tempjobcode)}>חפש תפקיד והוסף</Button>
+                                </Col>
+                                <Col xs={12} md={3} style={{ display: 'flex', justifyContent: 'center' }}>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </CardHeader>
+                    <CardBody style={{ direction: 'ltr' }}>
+                        <Container>
+                            <Row style={{ direction: "rtl", paddingTop: '10px' }} >
+                                <div style={{ float: 'right' }}>
+                                    <ReactHTMLTableToExcel
+                                        id="test-table-xls-button"
+                                        className="btn-green"
+                                        table="table-to-xls"
+                                        filename="קובץ - מתמודדים במחזור"
+                                        sheet="קובץ - מתמודדים במחזור"
+                                        buttonText="הורד כקובץ אקסל" />
+                                </div>
+                                <table id="table-to-xls">
+                                    <thead>
+                                        <tr>
+                                            <th>שם תפקיד</th>
+                                            <th>קוד תפקיד</th>
+                                            <th>יחידה</th>
+                                            <th>תנועה</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {props.jobs ? props.jobs.map((job, jobindex) => (
+                                            <tr>
+                                                <td style={{ textAlign: "center" }}>{job.jobname}</td>
+                                                <td style={{ textAlign: "center" }}>{job.jobcode}</td>
+                                                <td style={{ textAlign: "center" }}>
+                                                    <Input type="select" value={job.unit} disabled>
+                                                        {units.map((unit, index) => (
+                                                            <option key={index} value={unit._id}>{unit.name}</option>
+                                                        ))}
+                                                    </Input>
+                                                </td>
+                                                <td style={{ textAlign: "center" }}>
+                                                    <Input type="select" value={job.certain} name={jobindex} onChange={props.handleChangeJobCertain}>
+                                                        <option value={'ודאי'}>ודאי</option>
+                                                        <option value={'אופציה'}>אופציה</option>
+                                                    </Input>
+                                                </td>
+                                                <td style={{ textAlign: "center" }}>
+                                                    <Button onClick={() => props.deletejobfromjobs(jobindex)}>מחק</Button>
+                                                </td>
+                                            </tr>
+                                        )) : null}
+                                    </tbody>
+                                </table>
+                            </Row>
+                        </Container>
+                    </CardBody>
+                </Card>
             </> : null
     );
 }
-export default withRouter(MahzorCandidates3);;
+export default withRouter(MahzorCandidates3Kidum);;

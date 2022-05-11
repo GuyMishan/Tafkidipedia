@@ -204,6 +204,7 @@ function ExcelUploadUsers() {
           let temp_sigli_data = [];
 
           let temp_sigli_data_1 = {};
+          temp_sigli_data_1.id='1'
           temp_sigli_data_1.year='2019'
           temp_sigli_data_1.socio=tablebody[i].socio_1
           temp_sigli_data_1.hili_ranking=tablebody[i].hili_ranking_1
@@ -214,6 +215,7 @@ function ExcelUploadUsers() {
 
           let temp_sigli_data_2 = {};
           temp_sigli_data_2.year='2020'
+          temp_sigli_data_2.id='2'
           temp_sigli_data_2.socio=tablebody[i].socio_2
           temp_sigli_data_2.hili_ranking=tablebody[i].hili_ranking_2
           temp_sigli_data_2.promo_ready=tablebody[i].promo_ready_2
@@ -223,6 +225,7 @@ function ExcelUploadUsers() {
 
           let temp_sigli_data_3 = {};
           temp_sigli_data_3.year='2021'
+          temp_sigli_data_3.id='3'
           temp_sigli_data_3.socio=tablebody[i].socio_3
           temp_sigli_data_3.hili_ranking=tablebody[i].hili_ranking_3
           temp_sigli_data_3.promo_ready=tablebody[i].promo_ready_3

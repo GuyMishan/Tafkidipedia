@@ -38,6 +38,8 @@ const jobSchema = new mongoose.Schema({
     grade_handasi:{type:Number},
     grade_nihuli:{type:Number},
     grade_pikudi:{type:Number},
+    //8/5
+    status:{type:String,default:"פעיל"},// פעיל/לא פעיל/חיצוני
 });
 
 const Job = mongoose.model('Job', jobSchema);

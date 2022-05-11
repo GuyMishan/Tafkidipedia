@@ -8,6 +8,7 @@
     "bootstrap": "4.5.0",
     "chart.js": "^3.3.2",
     "history": "^4.10.1",
+    "immer": "^9.0.3",
     "react": "16.13.1",
     "react-chartjs-2": "^3.0.3",
     "react-dom": "16.13.1",
@@ -22,6 +23,7 @@
     "react-toastify": "^7.0.4",
     "react-toggle-button": "^2.2.0",
     "reactstrap": "8.4.1",
+    "shortid": "^2.2.16",
     "webpack": "4.42.0"
   },
   "scripts": {

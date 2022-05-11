@@ -27,6 +27,9 @@ import { toast } from "react-toastify";
 import MahzorUnitsPreferencesSortingTable from 'components/tafkidipedia/MahzorUnitsPreferencesSortingTable/SortingTable'
 import MahzorFinalUnitsPreferencesSortingTable from 'components/tafkidipedia/MahzorFinalUnitsPreferencesSortingTable/SortingTable'
 
+import MahzorUnitsJobsWithoutPreferencesSortingTable from 'components/tafkidipedia/MahzorUnitsJobsWithoutPreferencesSortingTable/SortingTable'
+import MahzorUnitsJobsWithoutFinalPreferencesSortingTable from 'components/tafkidipedia/MahzorUnitsJobsWithoutFinalPreferencesSortingTable/SortingTable'
+
 const Mahzorunitspreferencespage = ({ match }) => {
     //mahzor
     const [mahzordata, setMahzorData] = useState({})
@@ -61,6 +64,12 @@ const Mahzorunitspreferencespage = ({ match }) => {
                                 <MahzorUnitsPreferencesSortingTable />
                             </CardBody>
                         </Card>
+
+                        <Card style={{ marginTop: '30px' }}>
+                            <CardBody>
+                                <MahzorUnitsJobsWithoutPreferencesSortingTable />
+                            </CardBody>
+                        </Card>
                     </> : null}
 
                 {mahzordata.status == 4 || mahzordata.status == 5 || mahzordata.status == 6 ?
@@ -68,6 +77,12 @@ const Mahzorunitspreferencespage = ({ match }) => {
                         <Card style={{ marginTop: '30px' }}>
                             <CardBody>
                                 <MahzorFinalUnitsPreferencesSortingTable />
+                            </CardBody>
+                        </Card>
+
+                        <Card style={{ marginTop: '30px' }}>
+                            <CardBody>
+                                <MahzorUnitsJobsWithoutFinalPreferencesSortingTable />
                             </CardBody>
                         </Card>
                     </> : null}

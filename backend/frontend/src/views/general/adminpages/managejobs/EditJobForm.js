@@ -103,6 +103,10 @@ const EditJobForm = ({ match }) => {
       flag = false;
       ErrorReason += "יחידה ריקה \n";
     }
+    if (!job.population) {
+      flag = false;
+      ErrorReason += "אוכלוסיה ריקה \n";
+    }
 
     if (flag == true) {
       if (match.params.jobid != '0') {
@@ -155,12 +159,17 @@ const EditJobForm = ({ match }) => {
     let result = await axios.post(`http://localhost:8000/api/job`, job);
     var userid = job.meaish;
     let jobid = result.data._id;
-    let result2 = await axios.post("http://localhost:8000/api/getuserbyid", { userid })
-    let user = result2.data;
-    user.job = jobid;
-    let result3 = await axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
-    toast.success(`תפקיד עודכן בהצלחה`);
-    history.push(`/managejobs`);
+    try {
+      let result2 = await axios.post("http://localhost:8000/api/getuserbyid", { userid })
+      let user = result2.data;
+      user.job = jobid;
+      let result3 = await axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
+      toast.success(`תפקיד עודכן בהצלחה`);
+      history.push(`/managejobs`);
+    } catch (err) {
+      toast.success(`תפקיד עודכן בהצלחה`);
+      history.push(`/managejobs`);
+    }
   }
 
   const init = () => {
@@ -237,12 +246,12 @@ const EditJobForm = ({ match }) => {
                       </FormGroup>
                     </> : null}
 
-                    {populations != undefined && match.params.jobid == '0' ? <>
+                  {populations != undefined && match.params.jobid == '0' ? <>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>אוכלוסייה</div>
                     <FormGroup dir="rtl">
                       <Input
                         type="select"
-                        name="unit"
+                        name="population"
                         value={job.population}
                         onChange={handleChange}>
                         <option value={"בחר"}>בחר</option>

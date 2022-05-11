@@ -195,3 +195,9 @@ exports.jobinmahzorbyjobidandmahzorid = (req, res) => {
   .then((jobinmahzor) => res.json(jobinmahzor))
   .catch((err) => res.status(400).json("Error: " + err));
 };
+
+exports.jobinmahzorsbymahzorid2 = async(req, res) => {
+  Jobinmahzor.find({mahzor: req.params.mahzorid})
+  .then((jobinmahzor) => res.json(jobinmahzor))
+  .catch((err) => res.status(400).json("Error: " + err));
+ }

@@ -21,7 +21,8 @@ import {
   Label,
   Col
 } from "reactstrap";
-import ToggleButton from "react-toggle-button";
+import { produce } from 'immer'
+import { generate } from 'shortid'
 import axios from 'axios';
 import history from 'history.js'
 import { toast } from "react-toastify";
@@ -39,6 +40,8 @@ const EditUserForm = ({ match }) => {
     cellphone: "",
     rank: "",
   });
+
+  const [finalspecialkeytwo, setFinalSpecialKeytwo] = useState([])
 
   const [units, setUnits] = useState([]);
 
@@ -161,34 +164,52 @@ const EditUserForm = ({ match }) => {
       gender: data.gender,
       cellphone: data.cellphone,
       rank: data.rank,
+      // new
+      birthdate: data.birthdate,
+      residence: data.residence,
+      marital_status: data.marital_status,
+      education: data.education,
+      curr_tatash: data.curr_tatash,
+      promotion_date: data.promotion_date,
+      keva_entry: data.keva_entry,
+      service_model: data.service_model,
+      jobs_in_rank: data.jobs_in_rank,
+      sigli_data: finalspecialkeytwo, //ARRAY!
+      taal_excellence: data.taal_excellence,
+      ayen_tik: data.ayen_tik,
+      mezah: data.mezah,
+      tlunot: data.tlunot,
+      tamriz: data.tamriz,
+      tziun_mh: data.tziun_mh,
+      sivug: data.sivug,
+      comment: data.comment,
     };
 
     axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
       .then(response => {
         let jobid = user.job;
-        if(jobid)
-        {
+        if (jobid) {
           axios.get(`http://localhost:8000/api/job/${jobid}`)
-          .then(response => {
-            let jobtoupdate = response.data;
-            jobtoupdate.meaish = userid;
-            axios.put(`http://localhost:8000/api/job/update/${jobid}`, jobtoupdate)
-              .then(response => {
-                // console.log(response);
-                toast.success(`המשתמש עודכן בהצלחה`);
-                history.push(`/manageusers`);
-              })
-              .catch((error) => {
-                console.log(error);
-                toast.success(`המשתמש עודכן בהצלחה-תפקיד לא שונה`);
-                history.push(`/manageusers`);
-              })
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+            .then(response => {
+              let jobtoupdate = response.data;
+              jobtoupdate.meaish = userid;
+              axios.put(`http://localhost:8000/api/job/update/${jobid}`, jobtoupdate)
+                .then(response => {
+                  // console.log(response);
+                  toast.success(`המשתמש עודכן בהצלחה`);
+                  history.push(`/manageusers`);
+                })
+                .catch((error) => {
+                  console.log(error);
+                  toast.success(`המשתמש עודכן בהצלחה-תפקיד לא שונה`);
+                  history.push(`/manageusers`);
+                })
+            })
+            .catch((error) => {
+              console.log(error);
+            })
         }
-        else{
+        else {
           toast.success(`המשתמש עודכן בהצלחה`);
           history.push(`/manageusers`);
         }
@@ -202,7 +223,13 @@ const EditUserForm = ({ match }) => {
     var userid = match.params.userid;
     axios.post("http://localhost:8000/api/getuserbyid", { userid })
       .then(response => {
-        setData(response.data);
+        let tempuser = { ...response.data };
+        tempuser.birthdate = tempuser.birthdate.slice(0, 10);
+        tempuser.curr_tatash = tempuser.curr_tatash.slice(0, 10);
+        tempuser.promotion_date = tempuser.promotion_date.slice(0, 10);
+        tempuser.keva_entry = tempuser.keva_entry.slice(0, 10);
+        setData(tempuser);
+        setFinalSpecialKeytwo(tempuser.sigli_data);
       })
       .catch((error) => {
         console.log(error);
@@ -291,6 +318,293 @@ const EditUserForm = ({ match }) => {
                         <option value={'נגדים'}>נגדים</option>
                       </Input>
                     </FormGroup>
+
+                    {/* new */}
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תאריך לידה</div>
+                    <FormGroup>
+                      <Input type="date" name="birthdate" value={data.birthdate} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>כתובת מגורים</div>
+                    <FormGroup>
+                      <Input placeholder="כתובת מגורים" type="string" name="residence" value={data.residence} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מצב משפחתי</div>
+                    <FormGroup >
+                      <Input placeholder='מצב משפחתי' type="select" name="marital_status" value={data.marital_status} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={'רווק'}>רווק</option>
+                        <option value={'נשוי'}>נשוי</option>
+                        <option value={'גרוש'}>גרוש</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>השכלה</div>
+                    <FormGroup >
+                      <Input placeholder='השכלה' type="select" name="education" value={data.education} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={'יסודית'}>יסודית</option>
+                        <option value={'תיכונית'}>תיכונית</option>
+                        <option value={'על-תיכונית'}>על-תיכונית</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תת"ש נוכחי</div>
+                    <FormGroup>
+                      <Input type="date" name="curr_tatash" value={data.curr_tatash} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תאריך קידום</div>
+                    <FormGroup>
+                      <Input type="date" name="promotion_date" value={data.promotion_date} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תאריך כניסה לקבע</div>
+                    <FormGroup>
+                      <Input type="date" name="keva_entry" value={data.keva_entry} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מודל שירות</div>
+                    <FormGroup >
+                      <Input placeholder='השכלה' type="select" name="service_model" value={data.service_model} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value={'2016'}>2016</option>
+                        {/* <option value={'תיכונית'}>תיכונית</option>
+                        <option value={'על-תיכונית'}>על-תיכונית</option> */}
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תפקידים בדרגה</div>
+                    <FormGroup>
+                      <Input type="string" name="jobs_in_rank" value={data.jobs_in_rank} onChange={handleChange} disabled />
+                    </FormGroup>
+
+                    {/* sigli_data???? */}
+                    <div style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>נתונים סגליים</div>
+
+                    <div>
+                      {finalspecialkeytwo.length == 0 ?
+                        <Row>
+                          <Button style={{ float: "right" }} type="button" onClick={() => {
+                            setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate() }])
+                          }}>
+                            הוסף נתונים
+                          </Button>
+                        </Row>
+                        : finalspecialkeytwo.map((p, index) => {
+                          return (
+                            <div>
+                              {index == 0 ?
+                                <Row>
+                                  <Button style={{ float: "right" }} type="button" onClick={() => { 
+                                    if(finalspecialkeytwo.length<3)
+                                    setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate() }]) 
+                                    }}>
+                                    הוסף נתונים
+                                  </Button>
+                                </Row>
+                                : null}
+
+                              <Row>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>שנה</p>
+                                    <Input onChange={(e) => {
+                                      const year = e.target.value;
+                                      if(e.target.value!="בחר")
+                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].year = year }))
+                                    }}
+                                      value={p.year} type="select" placeholder="שנה">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"2018"}>{"2018"}</option>
+                                      <option value={"2019"}>{"2019"}</option>
+                                      <option value={"2020"}>{"2020"}</option>
+                                      <option value={"2021"}>{"2021"}</option>
+                                      <option value={"2022"}>{"2022"}</option>
+                                      <option value={"2023"}>{"2023"}</option>
+                                      <option value={"2024"}>{"2024"}</option>
+                                      <option value={"2025"}>{"2025"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>סוצימטרי</p>
+                                    <Input onChange={(e) => {
+                                      const socio = e.target.value;
+                                      if(e.target.value!="בחר")
+                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].socio = socio }))
+                                    }}
+                                      value={p.socio} type="number" placeholder="סוצימטרי" />
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>דירוג חילי</p>
+                                    <Input onChange={(e) => {
+                                      const hili_ranking = e.target.value;
+                                      if(e.target.value!="בחר")
+                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].hili_ranking = hili_ranking }))
+                                    }}
+                                      value={p.hili_ranking} type="select" placeholder="דירוג חילי">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"א"}>{"א"}</option>
+                                      <option value={"ב"}>{"ב"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>בשל לקידום</p>
+                                    <Input onChange={(e) => {
+                                      const promo_ready = e.target.value;
+                                      if(e.target.value!="בחר")
+                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].promo_ready = promo_ready }))
+                                    }}
+                                      value={p.promo_ready} type="select" placeholder="בשל לקידום">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"כן"}>{"כן"}</option>
+                                      <option value={"לא"}>{"לא"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>פוטנציאל קבע ארוך</p>
+                                    <Input onChange={(e) => {
+                                      const long_term = e.target.value;
+                                      if(e.target.value!="בחר")
+                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].long_term = long_term }))
+                                    }}
+                                      value={p.long_term} type="select" placeholder="פוטנציאל קבע ארוך">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"1"}>{"1"}</option>
+                                      <option value={"2"}>{"2"}</option>
+                                      <option value={"3"}>{"3"}</option>
+                                      <option value={"4"}>{"4"}</option>
+                                      <option value={"5"}>{"5"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>מידת הצלחה בתפקיד</p>
+                                    <Input onChange={(e) => {
+                                      const job_success = e.target.value;
+                                      if(e.target.value!="בחר")
+                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].job_success = job_success }))
+                                    }}
+                                      value={p.job_success} type="select" placeholder="מידת הצלחה בתפקיד">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"1"}>{"1"}</option>
+                                      <option value={"2"}>{"2"}</option>
+                                      <option value={"3"}>{"3"}</option>
+                                      <option value={"4"}>{"4"}</option>
+                                      <option value={"5"}>{"5"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>בולט לחיוב</p>
+                                    <Input onChange={(e) => {
+                                      const outstanding = e.target.value;
+                                      if(e.target.value!="בחר")
+                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].outstanding = outstanding }))
+                                    }}
+                                      value={p.outstanding} type="select" placeholder="בולט לחיוב">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"כן"}>{"כן"}</option>
+                                      <option value={"לא"}>{"לא"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                              </Row>
+
+                              <Button type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => currentSpec.filter(x => x.id !== p.id)) }}>
+                                x
+                              </Button>
+                            </div>
+                          )
+                        })
+                      }
+                    </div>
+                    {/* sigli_data???? */}
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>הצטיינות תא"ל</div>
+                    <FormGroup dir="rtl" >
+                      <Input type="select" name="taal_excellence" value={data.taal_excellence} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value="לא">לא</option>
+                        <option value="כן">כן</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>עיין תיק</div>
+                    <FormGroup dir="rtl" >
+                      <Input type="select" name="ayen_tik" value={data.ayen_tik} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value="לא">לא</option>
+                        <option value="כן">כן</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מצ"ח</div>
+                    <FormGroup dir="rtl" >
+                      <Input type="select" name="mezah" value={data.mezah} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value="לא">לא</option>
+                        <option value="כן">כן</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תלונות</div>
+                    <FormGroup dir="rtl" >
+                      <Input type="select" name="tlunot" value={data.tlunot} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value="לא">לא</option>
+                        <option value="כן">כן</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>תמריץ</div>
+                    <FormGroup dir="rtl" >
+                      <Input type="select" name="tamriz" value={data.tamriz} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value="לא">לא</option>
+                        <option value="כן">כן</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>ציון מ"ה</div>
+                    <FormGroup >
+                      <Input placeholder='ציון מ"ה' type="number" name="tziun_mh" value={data.tziun_mh} onChange={handleChange} />
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>סיווג</div>
+                    <FormGroup dir="rtl" >
+                      <Input type="select" name="sivug" value={data.sivug} onChange={handleChange}>
+                        <option value={"בחר"}>בחר</option>
+                        <option value="שמור">שמור</option>
+                        <option value="סודי">סודי</option>
+                        <option value="סודי ביותר">סודי ביותר</option>
+                      </Input>
+                    </FormGroup>
+
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>הערות</div>
+                    <FormGroup >
+                      <Input placeholder='הערות' type="string" name="comment" value={data.comment} onChange={handleChange} />
+                    </FormGroup>
+
+                    {/* new */}
 
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>אוכלוסיה</div>
                     <FormGroup dir="rtl">

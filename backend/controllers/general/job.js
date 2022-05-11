@@ -251,3 +251,41 @@ exports.jobsbymahzorid = async(req, res) => {
       res.status(400).json('Error: ' + error);
     });
  }
+
+ exports.jobsbypopulation = (req, res) => {
+  Job.find({population: req.params.population })
+      .then(orders => res.json(orders))
+      .catch(err => res.status(400).json('Error: ' + err));
+}
+
+exports.jobbyjobcode = (req, res) => {
+  // Job.find({jobcode: req.params.jobcode })
+  //     .then(orders => res.json(orders))
+  //     .catch(err => res.status(400).json('Error: ' + err));
+  let tempnumberedjobcode=parseInt(req.params.jobcode)
+  let tipulfindquerry = readtipul3.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //jobcode
+    andquery.push({ "jobcode": tempnumberedjobcode});
+
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+
+  // console.log(matchquerry)
+  // console.log(andquery)
+
+  Job.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+}

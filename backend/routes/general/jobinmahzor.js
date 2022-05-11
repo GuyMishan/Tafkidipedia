@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const { create, find, update, remove, findById,jobinmahzorsbymahzorid,jobinmahzorsbymahzoridandunitid,jobinmahzorbyid,updatejobinmahzorbyjobidandmahzorid,deletejobinmahzorbyjobidandmahzorid,jobinmahzorbyjobidandmahzorid} = require('../../controllers/general/jobinmahzor');
+const { create, find, update, remove, findById,jobinmahzorsbymahzorid,jobinmahzorsbymahzoridandunitid,jobinmahzorbyid,updatejobinmahzorbyjobidandmahzorid,deletejobinmahzorbyjobidandmahzorid,jobinmahzorbyjobidandmahzorid,jobinmahzorsbymahzorid2} = require('../../controllers/general/jobinmahzor');
 
 // find spec 
 router.get('/jobinmahzor/:id', findById)
@@ -25,5 +25,7 @@ router.put('/updatejobinmahzorbyjobidandmahzorid/:jobid/:mahzorid', updatejobinm
 router.delete('/deletejobinmahzorbyjobidandmahzorid/:jobid/:mahzorid', deletejobinmahzorbyjobidandmahzorid )
 
 router.get('/jobinmahzorbyjobidandmahzorid/:jobid/:mahzorid',jobinmahzorbyjobidandmahzorid); 
+
+router.get('/jobinmahzorsbymahzorid2/:mahzorid',jobinmahzorsbymahzorid2); 
 
 module.exports = router;
