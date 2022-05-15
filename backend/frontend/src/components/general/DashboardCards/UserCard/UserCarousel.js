@@ -21,6 +21,7 @@ import tenepic8 from "assets/img/tenepic8.JPG";
 const UserCarousel = (props) => {
   return (
     <UncontrolledCarousel
+    interval='10000'
     items={[
       {
         altText: 'Slide 1',

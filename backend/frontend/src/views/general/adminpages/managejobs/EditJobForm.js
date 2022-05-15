@@ -277,6 +277,14 @@ const EditJobForm = ({ match }) => {
                       </FormGroup>
                     </> : null}
 
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטטוס תפקיד</div>
+                  <Input placeholder='סטטוס תפקיד' type="select" name="status" value={job.status} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={'פעיל'}>פעיל</option>
+                    <option value={'לא פעיל'}>לא פעיל</option>
+                    <option value={'חיצוני'}>חיצוני</option>
+                  </Input>
+
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>מחלקה</div>
                   <Input placeholder="מחלקה" type="string" name="mahlaka" value={job.mahlaka} onChange={handleChange} />
 

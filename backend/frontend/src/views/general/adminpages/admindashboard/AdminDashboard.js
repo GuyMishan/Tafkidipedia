@@ -27,15 +27,11 @@ import SegelMessage from "components/general/DashboardCards/UserCard/SegelMessag
 function AdminDashboard() {
 
   return (
-    <>
-      <Container>
+    <div style={{width:'80%',margin:'auto'}}>
         <UserCard />
-      </Container>
 
-      <Container style={{ paddingTop: '2rem' }}>
         <SegelMessage />
-      </Container>
-    </>
+    </div>
   );
 }
 

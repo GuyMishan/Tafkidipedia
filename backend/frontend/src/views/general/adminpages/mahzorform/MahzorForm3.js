@@ -1145,6 +1145,9 @@ const MahzorForm3 = ({ match }) => {
     }
 
     for (let i = 0; i < notoriginalandnew.length; i++) { //add jobinmahzors thats no in db
+      let tempresult = await axios.get(`http://localhost:8000/api/job/${notoriginalandnew[i].job}`);
+      if(tempresult.data[0] && tempresult.data[0].status == "פעיל")
+      {
       let tempjobinmahzor = {};
       tempjobinmahzor.mahzor = tempmahzordata._id;
       tempjobinmahzor.job = notoriginalandnew[i].job;
@@ -1152,6 +1155,7 @@ const MahzorForm3 = ({ match }) => {
       let result;
       if (tempjobinmahzor.certain != 'לא נפתח')
         result = await axios.post(`http://localhost:8000/api/jobinmahzor`, tempjobinmahzor);
+      }
     }
 
     for (let i = 0; i < originalandnotnew.length; i++) {//delete jobinmahzors thats in db and unwanted
