@@ -85,6 +85,11 @@ const UnitPreferenceForm = ({ match }) => {
     setUnitPreference({ ...unitpreference, preferencerankings: tempunitpreferencepreferencerankings });
   }
 
+  function handleChangePreferenceRemarks(evt) {
+    const value = evt.target.value;
+    setUnitPreference({ ...unitpreference, [evt.target.name]: value });
+  }
+
   const loadmahzordata = async () => {
     //active candidates of mahzor -> beeds to be changed to a func that calcs active candidates if mahzor status == 4
     let result1 = await axios.get(`http://localhost:8000/api/activecandidatesbymahzorid/${match.params.mahzorid}`)
@@ -287,7 +292,7 @@ const UnitPreferenceForm = ({ match }) => {
                       ))}
                     </Input>
                   </FormGroup> */}
-                    <div style={{direction:'rtl',textAlign:'right'}}>
+                    <div style={{ direction: 'rtl', textAlign: 'right' }}>
                       <UnitPreferenceAnimatedMultiSelect data={mahzorcandidates} handleChangCandidatesOfPreference={handleChangCandidatesOfPreference2} />
                     </div>
                   </Col>
@@ -320,6 +325,9 @@ const UnitPreferenceForm = ({ match }) => {
                     </Col>
                   )) : null}
                 </Row>
+
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>הערות</div>
+                <Input placeholder="הערות" type="string" name="remarks" value={unitpreference.remarks} onChange={handleChangePreferenceRemarks} />
 
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                   <button className="btn" onClick={clickSubmit}>עדכן העדפות</button>

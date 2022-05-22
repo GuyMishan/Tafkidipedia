@@ -35,6 +35,7 @@ import {
 
 import { signin, authenticate, isAuthenticated } from 'auth/index';
 import Logo100 from 'assets/img/team100.png';
+import Logo100_white from 'assets/img/team100_white.png';
 
 import SidebarAdmin from 'components/general/Sidebar/SidebarAdmin';
 import SidebarUnit from 'components/general/Sidebar/SidebarUnit';
@@ -66,14 +67,15 @@ function Sidebar() {
 
       <div className="sidebar" style={{ background: color, marginTop: '60px', boxShadow: 'none', borderRadius: '0px', borderLeft: '1px solid lightgray' }}>
         <div className="sidebar-wrapper" style={{ overflow: 'hidden' }}>
-          {user.role === "0" ? <SidebarAdmin /> :
+          {user.role === "0" ? <SidebarAdmin theme={color} /> :
 
-            user.role === "1" ? <SidebarUnit /> :
+            user.role === "1" ? <SidebarUnit theme={color} /> :
 
-              user.role === "2" ? <SidebarCandidate /> : null
+              user.role === "2" ? <SidebarCandidate theme={color} /> : null
           }
           <div style={{ textAlign: 'center', position: 'absolute', bottom: 0, width: '100%', marginBottom: '15px' }}>
-          <img src={Logo100} height='100px'></img>
+          {color == 'white' ? <img src={Logo100} style={{ height: "100px" }}></img>
+                  : <img src={Logo100_white} style={{ height: "100px" }}></img>}
             <Button
               onClick={clickSubmit}
               className="btn"

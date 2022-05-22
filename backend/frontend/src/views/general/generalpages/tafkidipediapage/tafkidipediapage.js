@@ -177,7 +177,7 @@ function Tafkidipediapage() {
                         <Row style={{ direction: "rtl", paddingTop: '10px' }}>
                             {jobs ? jobs.map((job, index) => (
                                 <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                    <Card style={{ direction: 'ltr', background: 'rgb(27 42 54)', height: '200px' }}>
+                                    <Card style={{ direction: 'ltr', background: '#1e1e2f', height: '200px' }}>
                                         <CardBody style={{ direction: 'rtl',padding:'0px'}}>
                                             <Row style={{height: '200px',width:'100%',margin:'0px'}}>
                                                 <Col xs={12} md={5} style={{margin:'auto'}}>

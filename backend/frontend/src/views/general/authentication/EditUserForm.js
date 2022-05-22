@@ -224,10 +224,15 @@ const EditUserForm = ({ match }) => {
     axios.post("http://localhost:8000/api/getuserbyid", { userid })
       .then(response => {
         let tempuser = { ...response.data };
+        if(tempuser.birthdate)
         tempuser.birthdate = tempuser.birthdate.slice(0, 10);
+        if(tempuser.curr_tatash)
         tempuser.curr_tatash = tempuser.curr_tatash.slice(0, 10);
+        if(tempuser.promotion_date)
         tempuser.promotion_date = tempuser.promotion_date.slice(0, 10);
+        if(tempuser.keva_entry)
         tempuser.keva_entry = tempuser.keva_entry.slice(0, 10);
+        
         setData(tempuser);
         setFinalSpecialKeytwo(tempuser.sigli_data);
       })

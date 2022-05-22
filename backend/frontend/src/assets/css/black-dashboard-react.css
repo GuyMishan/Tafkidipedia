@@ -4577,12 +4577,25 @@ a.close.disabled {
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
-  background-color: #ffffff;
+  background-color: #27293d;
   background-clip: padding-box;
   border: 1px solid rgba(34, 42, 66, 0.2);
   border-radius: 0.2857rem;
   box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.5);
   outline: 0; }
+
+  .white-content .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid rgba(34, 42, 66, 0.2);
+    border-radius: 0.2857rem;
+    box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.5);
+    outline: 0; }
 
 .modal-backdrop {
   position: fixed;
@@ -12024,7 +12037,7 @@ hr {
   float: right;
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(#1e1e2f, #1e1e24);
+  background: #1e1e2f;
   -webkit-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
   -moz-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
   -o-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);

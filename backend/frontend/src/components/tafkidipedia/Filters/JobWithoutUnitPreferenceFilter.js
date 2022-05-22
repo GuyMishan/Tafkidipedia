@@ -86,7 +86,7 @@ const JobWithoutUnitPreferenceFilter = (props) => {
         <div style={{ width: '100%', margin: 'auto', textAlign: 'right' }}>
             <Button onClick={toggleCollapse} style={{ }}>סינון</Button>
             <Collapse isOpen={collapseOpen}>
-                <Card style={{background: 'rgb(228 228 228)' }}>
+                <Card style={{background: 'rgb(228,228,228,0.2)' }}>
                     <Row style={{ margin: '0px' }}>
                         <Col xs={12} md={6} style={{ textAlign: 'right' }}>
                             <h4 style={{ fontWeight: 'bold' }}>יחידה</h4>

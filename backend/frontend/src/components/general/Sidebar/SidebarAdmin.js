@@ -19,14 +19,22 @@ import {
 import { ThemeContext, themes } from "contexts/ThemeContext";
 
 import tafkidipedialogo from "assets/img/tafkidipedialogo.png";
+
 import home from "assets/img/home3.png";
+import home_white from "assets/img/home3_white.png";
+
 import table from "assets/img/table.png";
-import followers from "assets/img/followers.png";
-import shortlist from "assets/img/shortlist.png";
+import table_white from "assets/img/table_white.png";
+
 import people from "assets/img/people.png";
+import people_white from "assets/img/people_white.png";
+
 import editusers from "assets/img/editusers.png";
-import links from "assets/img/links.png";
-import setting from "assets/img/setting.png";
+import editusers_white from "assets/img/editusers_white.png";
+
+import shortlist from "assets/img/shortlist.png";
+import shortlist_white from "assets/img/shortlist_white.png";
+
 import { signout } from "auth/index";
 import history from "../../../history";
 
@@ -52,7 +60,7 @@ import {
 
 import { isAuthenticated } from "auth/index";
 
-function SidebarAdmin() {
+function SidebarAdmin(props) {
 
   const clickSubmit = (event) => {
     event.preventDefault();
@@ -66,15 +74,16 @@ function SidebarAdmin() {
       <div className="logo">
         <img src={tafkidipedialogo}></img>
       </div>
-      <Nav style={{ textAlign: "right"}}>
+      <Nav style={{ textAlign: "right" }}>
         <li>
           <NavLink to="/dashboard" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
-            <Row style={{ direction: "rtl"}}>
-              <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-                <img src={home} style={{ height: "20px" }}></img>
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
+                  : <img src={home_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-                <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   דף הבית
                 </h4>
               </Col>
@@ -84,11 +93,12 @@ function SidebarAdmin() {
         <li>
           <NavLink to="/mahzorimpage" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
-            <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-                <img src={table} style={{ height: "20px" }}></img>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
+                  : <img src={table_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-              <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   דיוני איוש
                 </h4>
               </Col>
@@ -98,11 +108,12 @@ function SidebarAdmin() {
         <li>
           <NavLink to="/tafkidipedia" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
-            <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-                <img src={people} style={{ height: "20px" }}></img>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={people} style={{ height: "20px" }}></img>
+                  : <img src={people_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-              <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   תפקידיפדיה
                 </h4>
               </Col>
@@ -112,11 +123,12 @@ function SidebarAdmin() {
         <li>
           <NavLink to="/manageusers" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
-            <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-                <img src={editusers} style={{ height: "20px" }}></img>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={editusers} style={{ height: "20px" }}></img>
+                  : <img src={editusers_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-              <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   עריכת משתמשים
                 </h4>
               </Col>
@@ -126,11 +138,12 @@ function SidebarAdmin() {
         <li>
           <NavLink to="/managejobs" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
-            <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-                <img src={shortlist} style={{ height: "20px" }}></img>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={shortlist} style={{ height: "20px" }}></img>
+                  : <img src={shortlist_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-              <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   עריכת תפקידים
                 </h4>
               </Col>
@@ -138,15 +151,6 @@ function SidebarAdmin() {
           </NavLink>
         </li>
       </Nav>
-      <div style={{ justifyContent: 'center', textAlign: 'center', bottom: 0, width: '100%' }}>
-        {/* <Button
-          onClick={clickSubmit}
-          className="btn-danger"
-          style={{ width: '80%' }}
-        >
-          התנתק
-        </Button> */}
-      </div>
     </>
   );
 }

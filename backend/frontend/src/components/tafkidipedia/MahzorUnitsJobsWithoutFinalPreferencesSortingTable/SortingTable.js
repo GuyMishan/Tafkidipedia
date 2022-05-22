@@ -251,7 +251,7 @@ const SortingTable = ({ match }) => {
           </select>
         </div>
         <div style={{ display: 'flex', paddingTop: '5px' }}>
-          <h4 style={{ fontWeight: 'bold' }}>מספר העדפות: {data.length}</h4>
+          <h4 style={{ fontWeight: 'bold' }}>מספר תפקידים ללא העדפות יחידה: {data.length}</h4>
         </div>
       </div>
     </>

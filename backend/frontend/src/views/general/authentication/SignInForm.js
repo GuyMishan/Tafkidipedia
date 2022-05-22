@@ -35,10 +35,13 @@ function Signin() {
     redirectToReferrer: false,
   })
   const { personalnumber, password, error, loading, redirectToReferrer } = values
+
   const { user } = isAuthenticated()
+
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value })
   }
+
   const clickSubmit = (event) => {
     //event.preventDefault()
     setValues({ ...values, loading: true, successmsg: false, error: false })
@@ -49,6 +52,17 @@ function Signin() {
       })
       .catch(error => {
         setValues({ ...values, errortype: error.error, loading: false, error: true })
+      })
+  }
+
+  const passport = event => {
+    axios.get(`http://localhost:8000/auth/passportauth`)
+      .then(response => {
+        console.log(response.data);
+        setValues({ ...values, personalnumber:response.data.stam._json.cn, password: response.data.stam._json.cn})
+      })
+      .catch(error => {
+        console.log(error);
       })
   }
 
@@ -87,8 +101,12 @@ function Signin() {
   )
 
   useEffect(() => {
-    clickSubmit();
+    passport();
   }, [])
+
+  // useEffect(() => {
+  //   clickSubmit();
+  // }, [])
 
   useEffect(() => {
     setValues({ ...values, password: values.personalnumber });

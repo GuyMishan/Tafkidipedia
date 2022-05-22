@@ -57,15 +57,28 @@ const JobsByMahzor = ({match}) => {
         }
 
         let result3 = await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`)
-        for (let i = 0; i < alljobs.length; i++) {
+        // for (let i = 0; i < alljobs.length; i++) {
+        //     let isinmahzor = false;
+        //     for (let j = 0; j < result3.data.length; j++) {
+        //         if (alljobs[i]._id == result3.data[j].job._id) {
+        //             isinmahzor = true;
+        //         }
+        //     }
+        //     if (isinmahzor == true) {
+        //         alljobsofmahzor.push(result2.data[i])
+        //     }
+        // }
+        for (let i = 0; i < result3.data.length; i++) {
             let isinmahzor = false;
-            for (let j = 0; j < result3.data.length; j++) {
-                if (alljobs[i]._id == result3.data[j].job._id) {
+            for (let j = 0; j < alljobs.length; j++) {
+                if (result3.data[i].job._id == alljobs[j]._id) {
                     isinmahzor = true;
                 }
             }
             if (isinmahzor == true) {
-                alljobsofmahzor.push(result2.data[i])
+                let temjobobject={...result3.data[i].job};
+                temjobobject.certain=result3.data[i].certain;
+                alljobsofmahzor.push(temjobobject);
             }
         }
         setJobs(alljobsofmahzor);
@@ -195,7 +208,7 @@ const JobsByMahzor = ({match}) => {
                         <Row style={{ direction: "rtl", paddingTop: '10px' }}>
                             {jobs ? jobs.map((job, index) => (
                                 <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                    <Card style={{ direction: 'ltr', background: 'rgb(27 42 54)', height: '200px' }}>
+                                    <Card style={{ direction: 'ltr', background: '#1e1e2f', height: '200px' }}>
                                         <CardBody style={{ direction: 'rtl', padding: '0px' }}>
                                             <Row style={{ height: '200px', width: '100%', margin: '0px' }}>
                                                 <Col xs={12} md={5} style={{ margin: 'auto' }}>
@@ -209,13 +222,7 @@ const JobsByMahzor = ({match}) => {
                                                         </button>
                                                     </Link>
                                                     <h3 style={{ color: 'grey', marginBottom: '10px', textAlign: 'center' }}>{job.unit.name}</h3>
-                                                    {job.meaish ?
-                                                        // <Link to={`/profilepage/${job.meaish._id}`}>
-                                                        <h4 style={{ color: 'gray', marginBottom: '10px', textAlign: 'center' }}>{job.meaish.name ? job.meaish.name : null} {job.meaish.lastname ? job.meaish.lastname : null}</h4>
-                                                        // </Link> 
-                                                        :
-                                                        <h4 style={{ color: 'gray', marginBottom: '10px', textAlign: 'center' }}> </h4>
-                                                    }
+                                                    <h3 style={{ color: 'grey', marginBottom: '10px', textAlign: 'center' }}>{job.certain}</h3>
                                                 </Col>
                                             </Row>
                                         </CardBody>

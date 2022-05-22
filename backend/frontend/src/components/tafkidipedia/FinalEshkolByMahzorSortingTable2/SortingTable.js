@@ -324,7 +324,7 @@ const SortingTable = (props) => {
           </thead>
           <tbody>
             <tr>
-              {data.length > 0 ? <th>שיבוץ סופי</th> : null}
+              {data.length > 0 ? <th style={{width:`${100/(data.length+1)}%`,minWidth:'150px'}}>שיבוץ סופי</th> : null}
               {data && data.length > 0 ? data.map(eshkol => {
                 return (
                   eshkol.finalcandidate && eshkol.finalcandidate.user ?
@@ -342,7 +342,7 @@ const SortingTable = (props) => {
                 {data && data.length > 0 ? data.map(eshkol => {
                   return (
                     eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
-                      <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
+                      <td style={{width:`${100/(data.length+1)}%`,minWidth:'150px'}}>
                         <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                           <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                         </button>
@@ -350,24 +350,24 @@ const SortingTable = (props) => {
                         {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                       </td>
                       : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
-                        <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
+                        <td style={{width:`${100/(data.length+1)}%`,minWidth:'150px'}}>
                           <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                             <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                           </button>
                           {eshkol.candidatesineshkol[i].candidaterank ? <p>דירוג מתמודד:{eshkol.candidatesineshkol[i].candidaterank}</p> : null}
                         </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && eshkol.candidatesineshkol[i].unitrank) ?
-                          <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
+                          <td style={{width:`${100/(data.length+1)}%`,minWidth:'150px'}}>
                             <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                               <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                             </button>
                             {eshkol.candidatesineshkol[i].unitrank ? <p>דירוג יחידה:{eshkol.candidatesineshkol[i].unitrank}</p> : null}
                           </td> : eshkol.candidatesineshkol[i] && eshkol.candidatesineshkol[i].candidate.user && (!eshkol.candidatesineshkol[i].candidaterank && !eshkol.candidatesineshkol[i].unitrank) ?
-                            <td style={{width:`${100/data.length}%`,minWidth:'150px'}}>
+                            <td style={{width:`${100/(data.length+1)}%`,minWidth:'150px'}}>
                               <button value={eshkol.candidatesineshkol[i].candidate.user._id} className="btn-empty" onClick={ToggleUserModal}>
                                 <p style={{ fontWeight: 'bold' }}>{eshkol.candidatesineshkol[i].candidate.user.name} {eshkol.candidatesineshkol[i].candidate.user.lastname}</p>
                               </button>
                               <p>הוסף ע"י מנהל מערכת</p>
-                            </td> : <td style={{width:`${100/data.length}%`,minWidth:'150px'}}></td>)
+                            </td> : <td style={{width:`${100/(data.length+1)}%`,minWidth:'150px'}}></td>)
                 }) : null}
               </tr>)
             })}

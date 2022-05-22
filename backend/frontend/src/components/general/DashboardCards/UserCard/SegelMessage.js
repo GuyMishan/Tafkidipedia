@@ -34,41 +34,42 @@ import tenepic8 from "assets/img/tenepic8.JPG";
 
 const SegelMessage = (props) => {
   return (
-    <Row>
-      <Col xs='12' md='3'>
-        <Card>
-          <img src={tenepic1} style={{ height: '180px' }}></img>
-          <CardBody>
-            <h2 style={{ textAlign: 'center' }}>הודעות סגליות</h2>
-          </CardBody>
-        </Card>
-      </Col>
-      <Col xs='12' md='3'>
-        <Card>
-          <img src={tenepic2} style={{ height: '180px' }}></img>
-          <CardBody>
-            <h2 style={{ textAlign: 'center' }}>הודעות סגליות</h2>
-          </CardBody>
-        </Card>
-      </Col>
-      <Col xs='12' md='3'>
-        <Card>
-          <img src={tenepic3} style={{ height: '180px' }}></img>
-          <CardBody>
-            <h2 style={{ textAlign: 'center' }}>הודעות סגליות</h2>
-          </CardBody>
-        </Card>
-      </Col>
-      <Col xs='12' md='3'>
+    <div style={{ width: '90%',margin:'auto',paddingTop:'15px'}}>
+      <Row>
+        <Col xs='12' md='4'>
+          <Card>
+            <img src={tenepic1}></img>
+            <CardBody>
+              <h2 style={{ textAlign: 'center' }}>הודעות סגליות</h2>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xs='12' md='4'>
+          <Card>
+            <img src={tenepic2}></img>
+            <CardBody>
+              <h2 style={{ textAlign: 'center' }}>הודעות סגליות</h2>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xs='12' md='4'>
+          <Card>
+            <img src={tenepic3}></img>
+            <CardBody>
+              <h2 style={{ textAlign: 'center' }}>הודעות סגליות</h2>
+            </CardBody>
+          </Card>
+        </Col>
+        {/* <Col xs='12' md='3'>
         <Card>
           <img src={tenepic4} style={{ height: '180px' }}></img>
           <CardBody>
             <h2 style={{ textAlign: 'center' }}>הודעות סגליות</h2>
           </CardBody>
         </Card>
-      </Col>
-    </Row>
-
+      </Col> */}
+      </Row>
+    </div>
   );
 };
 

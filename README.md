@@ -2,6 +2,6 @@
 
 ## To Deploy Fix these:
 
-- 📜 Un-deprecate Passport Code In Server.js
-- 📜 Un-deprecate Passport Code In Signin.js
-- 📜 Un-deprecate Pictures Code (.default) In: Tafkidipediapage.js , JobsByMahzor.js
+- 📜 Fix Passport Code In Server.js, Dont OverWrite!!
+- 📜 Un-deprecate (Replace) Pictures Code (.default) In: Tafkidipediapage.js , JobsByMahzor.js
+- 📜 Search&Switch Between: http://localhost:8000 To http://216.1.1.11:100

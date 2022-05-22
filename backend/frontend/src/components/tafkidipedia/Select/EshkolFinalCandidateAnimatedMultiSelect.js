@@ -6,25 +6,25 @@ import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
 
-export default function JobAnimatedMultiSelect(props) {
-    // const [dataoptions, setDataOptions] = useState([]);
+export default function EshkolFinalCandidateAnimatedMultiSelect(props) {
+    const [dataoptions, setDataOptions] = useState([]);
 
-    // useEffect(() => {
-    //     if (props.data.length != 0) {
-    //         let tempdataoptions = [];
-    //         for (let i = 0; i < props.data.length; i++) {
-    //             let tempdataoption = {
-    //                 value: i,
-    //                 label: props.data[i].user.name +" "+ props.data[i].user.lastname
-    //             }
-    //             tempdataoptions.push(tempdataoption)
-    //         }
-    //         setDataOptions(tempdataoptions);
-    //     }
-    //     else {
-    //         setDataOptions([]);
-    //     }
-    // }, [props.data]);
+    useEffect(() => {
+        if (props.data.length != 0) {
+            let tempdataoptions = [];
+            for (let i = 0; i < props.data.length; i++) {
+                let tempdataoption = {
+                    value: i,
+                    label: props.data[i].user.name +" "+ props.data[i].user.lastname
+                }
+                tempdataoptions.push(tempdataoption)
+            }
+            setDataOptions(tempdataoptions);
+        }
+        else {
+            setDataOptions([]);
+        }
+    }, [props.data]);
 
     return (
         <ThemeContext.Consumer>
@@ -34,19 +34,19 @@ export default function JobAnimatedMultiSelect(props) {
                         isMulti={false}
                         closeMenuOnSelect={true}
                         components={animatedComponents}
-                        // options={dataoptions}
-                        // onChange={props.handleChangeCandidatesInEshkol}
-                        // isDisabled={props.isDisabled}
-                        placeholder='חיפוש...'
+                        options={dataoptions}
+                        onChange={props.handleChangeFinalCandidateInEshkol2}
+                        isDisabled={props.isDisabled}
+                        placeholder='בחר מועמד'
                     /> :
                     <div style={{color:'white'}}>
                     <Select
                         isMulti={false}
                         closeMenuOnSelect={true}
                         components={animatedComponents}
-                        // options={dataoptions}
-                        // onChange={props.handleChangeCandidatesInEshkol}
-                        // isDisabled={props.isDisabled}
+                        options={dataoptions}
+                        onChange={props.handleChangeFinalCandidateInEshkol2}
+                        isDisabled={props.isDisabled}
                         placeholder='בחר מועמד'
                         theme={(theme) => ({
                             ...theme,

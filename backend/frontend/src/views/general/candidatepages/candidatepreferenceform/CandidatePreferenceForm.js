@@ -64,6 +64,11 @@ const CandidatePreferenceForm = ({ match }) => {
     setCandidatePreference({ ...candidatepreference, noncertjobpreferences: tempcandidatepreference });
   }
 
+  function handleChangePreferenceRemarks(evt) {
+    const value = evt.target.value;
+    setCandidatePreference({ ...candidatepreference, [evt.target.name]: value });
+  }
+
   const loadmahzor = async () => {
     await axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
       .then(response => {
@@ -495,6 +500,9 @@ const CandidatePreferenceForm = ({ match }) => {
                     </Row>
                   </>
                   : null}
+
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>הערות</div>
+                <Input placeholder="הערות" type="string" name="remarks" value={candidatepreference.remarks} onChange={handleChangePreferenceRemarks} />
 
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                   <button className="btn" onClick={clickSubmit}>עדכן העדפות</button>

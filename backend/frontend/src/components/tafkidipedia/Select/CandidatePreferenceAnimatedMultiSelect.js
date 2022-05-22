@@ -89,6 +89,7 @@ export default function CandidatePreferenceAnimatedMultiSelect(props) {
                                     primary25: '#1e1e2f',
                                     primary50: 'transparent',
                                     neutral50: 'white',
+                                    neutral80: 'white',
                                 },
                             })}
                         />

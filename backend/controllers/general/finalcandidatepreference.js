@@ -37,6 +37,75 @@ let readtipul = [
   },
 ];
 
+let readtipul2 = [
+  {
+    $lookup: {
+      from: "candidates",
+      localField: "candidate",
+      foreignField: "_id",
+      as: "candidate"
+    }
+  },
+  {
+    $unwind: "$candidate"
+  },
+  {
+    $lookup: {
+      from: "movements",
+      localField: "candidate.movement",
+      foreignField: "_id",
+      as: "candidate.movement"
+    }
+  },
+  {
+    $unwind: "$candidate.movement"
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "candidate.user",
+      foreignField: "_id",
+      as: "candidate.user"
+    }
+  },
+  {
+    $unwind: "$candidate.user"
+  },
+  {
+    $lookup: {
+      from: "jobs",
+      localField: "candidate.user.job",
+      foreignField: "_id",
+      as: "candidate.user.job"
+    }
+  },
+  {
+    $unwind: "$candidate.user.job"
+  },
+  {
+    $lookup: {
+      from: "units",
+      localField: "candidate.user.job.unit",
+      foreignField: "_id",
+      as: "candidate.user.job.unit"
+    }
+  },
+  {
+    $unwind: "$candidate.user.job.unit"
+  },
+  {
+    $lookup: {
+      from: "mahzors",
+      localField: "mahzor",
+      foreignField: "_id",
+      as: "mahzor"
+    }
+  },
+  {
+    $unwind: "$mahzor"
+  },
+];
+
 exports.findById = async(req, res) => {
   const finalcandidatepreference = await Finalcandidatepreference.findOne().where({_id:req.params.id})
   
@@ -84,7 +153,7 @@ exports.finalcandidatepreferencebycandidateid = async (req, res) => {
 }
 
 exports.smartfinalcandidatepreference = async (req, res) => {
-  let tipulfindquerry = readtipul.slice();
+  let tipulfindquerry = readtipul2.slice();
   let finalquerry = tipulfindquerry;
 
   // let andquery = [];

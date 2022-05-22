@@ -19,11 +19,16 @@ import {
 import { ThemeContext, themes } from "contexts/ThemeContext";
 
 import tafkidipedialogo from "assets/img/tafkidipedialogo.png";
+
 import home from "assets/img/home3.png";
+import home_white from "assets/img/home3_white.png";
+
 import table from "assets/img/table.png";
-import followers from "assets/img/followers.png";
-import shortlist from "assets/img/shortlist.png";
+import table_white from "assets/img/table_white.png";
+
 import people from "assets/img/people.png";
+import people_white from "assets/img/people_white.png";
+
 import { signout } from "auth/index";
 import history from "../../../history";
 
@@ -49,7 +54,7 @@ import {
 
 import { signin, authenticate, isAuthenticated } from "auth/index";
 
-function SidebarUnit() {
+function SidebarUnit(props) {
   const { user } = isAuthenticated();
 
   const clickSubmit = (event) => {
@@ -61,63 +66,57 @@ function SidebarUnit() {
 
   return (
     <>
-    <div className="logo">
-      <img src={tafkidipedialogo}></img>
-    </div>
-    <Nav style={{ textAlign: "right"}}>
-      <li>
-        <NavLink to={`/unitdashboard/${user.unitid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
-          <Row style={{ direction: "rtl"}}>
-            <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-              <img src={home} style={{ height: "20px" }}></img>
-            </Col>
-            <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-              <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
-                דף הבית
-              </h4>
-            </Col>
-          </Row>
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to={`/unitmahzorimpage/${user.unitid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
-          <Row style={{ direction: "rtl" }}>
-          <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-              <img src={table} style={{ height: "20px" }}></img>
-            </Col>
-            <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-            <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
-                דיוני איוש
-              </h4>
-            </Col>
-          </Row>
-        </NavLink>
-      </li>
-      <li>
-          <NavLink to="/tafkidipedia" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+      <div className="logo">
+        <img src={tafkidipedialogo}></img>
+      </div>
+      <Nav style={{ textAlign: "right" }}>
+        <li>
+          <NavLink to={`/unitdashboard/${user.unitid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
-            <Col xs={12} md={3} style={{ paddingLeft: "0px",textAlign:'center',alignSelf:'center' }}>
-                <img src={people} style={{ height: "20px" }}></img>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
+                  : <img src={home_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-              <h4 style={{ margin: "0px",paddingTop:'6px',paddingBottom:'6px' }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  דף הבית
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to={`/unitmahzorimpage/${user.unitid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
+                  : <img src={table_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  דיוני איוש
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/tafkidipedia" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={people} style={{ height: "20px" }}></img>
+                  : <img src={people_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   תפקידיפדיה
                 </h4>
               </Col>
             </Row>
           </NavLink>
         </li>
-    </Nav>
-    <div style={{ justifyContent: 'center', textAlign: 'center', bottom: 0, width: '100%' }}>
-      {/* <Button
-        onClick={clickSubmit}
-        className="btn-danger"
-        style={{ width: '80%' }}
-      >
-        התנתק
-      </Button> */}
-    </div>
-  </>
+      </Nav>
+    </>
   );
 }
 

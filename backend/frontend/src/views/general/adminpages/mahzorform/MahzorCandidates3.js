@@ -100,7 +100,7 @@ const MahzorCandidates3 = (props) => {
                         <Row style={{ direction: "rtl", paddingTop: '10px' }} >
                             {props.users ? props.users.map((user, userindex) => (
                                 <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
-                                    <Card style={{ direction: 'ltr', background: 'rgb(27 42 54)' }}>
+                                    <Card style={{ direction: 'ltr', background: '#1e1e2f' }}>
                                         <CardBody style={{ direction: 'rtl' }}>
                                             <Row>
                                                 <Col xs={12} md={5}>

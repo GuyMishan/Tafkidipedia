@@ -28,6 +28,8 @@ import { toast } from "react-toastify";
 
 import Select from 'components/tafkidipedia/Select/EshkolAnimatedMultiSelect'
 
+import Select1 from 'components/tafkidipedia/Select/EshkolFinalCandidateAnimatedMultiSelect'
+
 const EditEshkolForm = (props) => {
   //mahzor
   const [oldeshkoldata, setOldEshkolData] = useState({})
@@ -88,13 +90,13 @@ const EditEshkolForm = (props) => {
   }
 
   const handleChangeCandidatesInEshkol = event => {
-      let tempcandidate = candidates[event.value];
-      let tempeshkoldatacandidatesineshkol = [...eshkoldata.candidatesineshkol];
+    let tempcandidate = candidates[event.value];
+    let tempeshkoldatacandidatesineshkol = [...eshkoldata.candidatesineshkol];
 
-      if (!isDuplicate(tempeshkoldatacandidatesineshkol, tempcandidate)) {
-        tempeshkoldatacandidatesineshkol.push({ candidate: tempcandidate })
-        setEshkolData({ ...eshkoldata, candidatesineshkol: tempeshkoldatacandidatesineshkol });
-      }
+    if (!isDuplicate(tempeshkoldatacandidatesineshkol, tempcandidate)) {
+      tempeshkoldatacandidatesineshkol.push({ candidate: tempcandidate })
+      setEshkolData({ ...eshkoldata, candidatesineshkol: tempeshkoldatacandidatesineshkol });
+    }
     console.log(event)
   }
 
@@ -104,6 +106,13 @@ const EditEshkolForm = (props) => {
 
       setEshkolData({ ...eshkoldata, finalcandidate: tempfinalcandidate });
     }
+  }
+
+  const handleChangeFinalCandidateInEshkol2 = event => {
+    let tempcandidate = candidates[event.value];
+
+    setEshkolData({ ...eshkoldata, finalcandidate: tempcandidate });
+    console.log(event)
   }
 
   async function DeleteCandidateInEshkolFromEshkol(candidateineshkol) {
@@ -231,8 +240,8 @@ const EditEshkolForm = (props) => {
               </CardHeader>
 
               <CardBody style={{ direction: 'rtl' }}>
-                <div style={{width:'90%',margin:'auto'}}>
-                {/* <Row>
+                <div style={{ width: '90%', margin: 'auto' }}>
+                  {/* <Row>
                   <Col xs={12} md={12}>
                     <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
                     <FormGroup dir="rtl" >
@@ -245,15 +254,15 @@ const EditEshkolForm = (props) => {
                     </FormGroup>
                   </Col>
                 </Row> */}
-                
-                <Row>
-                  <Col xs={12} md={12}>
-                    <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
-                    <div style={{ textAlign: 'right' }}>
-                    <Select data={candidates} handleChangeCandidatesInEshkol={handleChangeCandidatesInEshkol}/>
-                    </div>
-                  </Col>
-                </Row>
+
+                  <Row>
+                    <Col xs={12} md={12}>
+                      <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף מועמד</div>
+                      <div style={{ textAlign: 'right' }}>
+                        <Select data={candidates} handleChangeCandidatesInEshkol={handleChangeCandidatesInEshkol} />
+                      </div>
+                    </Col>
+                  </Row>
 
                   <Row style={{ direction: "rtl", paddingTop: '10px' }} >
                     {eshkoldata && eshkoldata.candidatesineshkol ? eshkoldata.candidatesineshkol.map((candidateineshkol, index) => (
@@ -328,14 +337,17 @@ const EditEshkolForm = (props) => {
                       <Row style={{ paddingTop: '20px' }}>
                         <Col xs={12} md={12}>
                           <div style={{ textAlign: 'center', paddingTop: '10px' }}>בחר שיבוץ סופי</div>
-                          <FormGroup dir="rtl" >
+                          {/* <FormGroup dir="rtl" >
                             <Input type="select" onChange={handleChangeFinalCandidateInEshkol}>
                               <option value={"בחר מועמד"}>בחר מועמד</option>
                               {candidates.map((candidate, index) => (
                                 <option key={index} value={index}>{candidate.user.name} {candidate.user.lastname}</option>
                               ))}
                             </Input>
-                          </FormGroup>
+                          </FormGroup> */}
+                          <div style={{ textAlign: 'right' }}>
+                            <Select1 data={candidates} handleChangeFinalCandidateInEshkol2={handleChangeFinalCandidateInEshkol2} />
+                          </div>
                         </Col>
                       </Row>
 
