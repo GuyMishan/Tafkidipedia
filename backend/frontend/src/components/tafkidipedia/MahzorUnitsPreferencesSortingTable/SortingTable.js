@@ -4,11 +4,26 @@ import { withRouter, Redirect, Link } from "react-router-dom";
 import { COLUMNS } from "./coulmns";
 import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
-import style from 'components/Table.css'
-import editpic from "assets/img/edit.png";
-import deletepic from "assets/img/delete.png";
-
+import info from "assets/img/info.png";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+// reactstrap components
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Container,
+  Col,
+  Collapse,
+  Popover,
+  PopoverHeader,
+  PopoverBody,
+  UncontrolledPopover
+} from "reactstrap";
+
 import UnitPreferenceFilter from "../Filters/UnitPreferenceFilter";
 
 const SortingTable = ({ match }) => {
@@ -202,7 +217,28 @@ const SortingTable = ({ match }) => {
                           return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}>{cell.value}</td>
                         }
                         if (cell.column.id == "jobinmahzor.job.jobname") {
-                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}</Link></td>
+                          return <td style={{ width: `${100 / (headerspan + 3)}%`, minWidth: '125px' }}>
+                            <div>
+                              {row.original.remarks ?
+                                <>
+                                  <button id={`UncontrolledPopover${row.original._id}`} type="button" className="btn-empty">
+                                    <img src={info} style={{ height: '20px' }} />
+                                  </button>
+                                  <UncontrolledPopover
+                                    target={`UncontrolledPopover${row.original._id}`}
+                                    trigger="focus"
+                                  >
+                                    <PopoverHeader style={{ textAlign: 'right' }}>
+                                      הערות
+                                    </PopoverHeader>
+                                    <PopoverBody style={{ textAlign: 'right' }}>
+                                      {row.original.remarks}
+                                    </PopoverBody>
+                                  </UncontrolledPopover>
+                                </> : null}
+                              <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor.job._id}`}>{cell.value}</Link>
+                            </div>
+                          </td>
                         }
                         if (cell.column.id == "jobinmahzor.certain") {
                           return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}>{cell.value}</td>

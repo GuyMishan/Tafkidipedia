@@ -129,7 +129,7 @@ function SidebarAdmin(props) {
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
-                  עריכת משתמשים
+                  נתוני כח אדם
                 </h4>
               </Col>
             </Row>

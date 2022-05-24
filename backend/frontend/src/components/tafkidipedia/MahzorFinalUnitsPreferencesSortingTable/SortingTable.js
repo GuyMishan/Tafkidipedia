@@ -5,17 +5,39 @@ import { COLUMNS } from "./coulmns";
 import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
 import style from 'components/Table.css'
-import editpic from "assets/img/edit.png";
-import deletepic from "assets/img/delete.png";
-
+import info from "assets/img/info.png";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+
+// reactstrap components
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Container,
+  Col,
+  Collapse,
+  Popover,
+  PopoverHeader,
+  PopoverBody,
+  UncontrolledPopover
+} from "reactstrap";
+
+import UnitPreferenceFilter from "../Filters/UnitPreferenceFilter";
+
 
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
+  const [originaldata, setOriginalData] = useState([])
   const [data, setData] = useState([])
 
   const [headerspan, setheaderspan] = useState(0)
+
+  const [unitpreferencefilter, setUnitpreferencefilter] = useState({})
 
   function init() {
     getMahzorUnitsPreferences();
@@ -47,12 +69,83 @@ const SortingTable = ({ match }) => {
           }
         }
         setData(tempunitspreferences)
+        setOriginalData(tempunitspreferences)
         CalculateHeaderSpan(tempunitspreferences)
       })
       .catch((error) => {
         console.log(error);
       })
   }
+
+  const setfilter = (evt) => {
+    if (evt.currentTarget.name == 'unit') {
+      if (unitpreferencefilter.unitfilter) {
+        let tempunitfilter = [...unitpreferencefilter.unitfilter]
+        const index = tempunitfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempunitfilter.splice(index, 1);
+        }
+        else {
+          tempunitfilter.push(evt.currentTarget.value)
+        }
+        setUnitpreferencefilter({ ...unitpreferencefilter, unitfilter: tempunitfilter })
+      }
+      else {
+        setUnitpreferencefilter({ ...unitpreferencefilter, unitfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'certain') {
+      if (unitpreferencefilter.certainfilter) {
+        let tempcertainfilter = [...unitpreferencefilter.certainfilter]
+        const index = tempcertainfilter.indexOf(evt.currentTarget.value);
+        console.log(index)
+        if (index > -1) {
+          tempcertainfilter.splice(index, 1);
+        }
+        else {
+          tempcertainfilter.push(evt.currentTarget.value)
+        }
+        setUnitpreferencefilter({ ...unitpreferencefilter, certainfilter: tempcertainfilter })
+      }
+      else {
+        setUnitpreferencefilter({ ...unitpreferencefilter, certainfilter: [evt.currentTarget.value] })
+      }
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayUnitFiltered = [];
+    if (unitpreferencefilter.unitfilter && unitpreferencefilter.unitfilter.length > 0) {
+      myArrayUnitFiltered = tempdatabeforefilter.filter((el) => {
+        return unitpreferencefilter.unitfilter.some((f) => {
+          return f === el.jobinmahzor.job.unit._id;
+        });
+      });
+    }
+    else {
+      myArrayUnitFiltered = originaldata;
+    }
+
+    let myArrayUnitAndCertainFiltered = [];
+    if (unitpreferencefilter.certainfilter && unitpreferencefilter.certainfilter.length > 0) {
+      myArrayUnitAndCertainFiltered = myArrayUnitFiltered.filter((el) => {
+        return unitpreferencefilter.certainfilter.some((f) => {
+          return f === el.jobinmahzor.certain;
+        });
+      });
+    }
+    else {
+      myArrayUnitAndCertainFiltered = myArrayUnitFiltered;
+    }
+
+    setData(myArrayUnitAndCertainFiltered)
+  }
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [unitpreferencefilter]);
 
   useEffect(() => {
     init();
@@ -94,6 +187,7 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
+      <UnitPreferenceFilter originaldata={originaldata} unitpreferencefilter={unitpreferencefilter} setfilter={setfilter} />
       <div style={{ float: 'right' }}>
         <ReactHTMLTableToExcel
           id="test-table-xls-button"
@@ -123,10 +217,31 @@ const SortingTable = ({ match }) => {
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "jobinmahzor.job.unit.name") {
-                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}>{cell.value}</td>
+                          return <td style={{ width: `${100 / (headerspan + 3)}%`, minWidth: '125px' }}>{cell.value}</td>
                         }
                         if (cell.column.id == "jobinmahzor.job.jobname") {
-                          return <td style={{width:`${100/(headerspan+3)}%`,minWidth:'125px'}}><Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor._id}`}>{cell.value}</Link></td>
+                          return <td style={{ width: `${100 / (headerspan + 3)}%`, minWidth: '125px' }}>
+                            <div>
+                              {row.original.remarks ?
+                                <>
+                                  <button id={`UncontrolledPopover${row.original._id}`} type="button" className="btn-empty">
+                                    <img src={info} style={{ height: '20px' }} />
+                                  </button>
+                                  <UncontrolledPopover
+                                    target={`UncontrolledPopover${row.original._id}`}
+                                    trigger="focus"
+                                  >
+                                    <PopoverHeader style={{ textAlign: 'right' }}>
+                                      הערות
+                                    </PopoverHeader>
+                                    <PopoverBody style={{ textAlign: 'right' }}>
+                                      {row.original.remarks}
+                                    </PopoverBody>
+                                  </UncontrolledPopover>
+                                </> : null}
+                              <Link style={{ color: 'inherit', textDecoration: 'inherit', fontWeight: 'inherit' }} to={`/displayjob/${row.original.jobinmahzor.job._id}`}>{cell.value}</Link>
+                            </div>
+                          </td>
                         }
                         if (cell.column.id == "jobinmahzor.certain") {
                           return <td style={{ width: `${100 / (headerspan + 3)}%`, minWidth: '125px' }}>{cell.value}</td>

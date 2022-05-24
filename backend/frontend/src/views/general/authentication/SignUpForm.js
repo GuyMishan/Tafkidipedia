@@ -305,7 +305,7 @@ export default function SignUpForm() {
                     </>
                   ) : null}
                   <div className="text-center">
-                    <button onClick={clickSubmit} className="btn btn-primary">
+                    <button onClick={clickSubmit} className="btn">
                       הרשם
                     </button>
                   </div>

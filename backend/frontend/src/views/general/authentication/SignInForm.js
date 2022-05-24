@@ -128,11 +128,8 @@ function Signin() {
                 </div>
                 <Form role="form" >
                   <FormGroup className="mb-3">
-                    <Input onChange={handleChange('personalnumber')} placeholder="מספר אישי" type="string" value={personalnumber} />
+                    <Input onChange={handleChange('personalnumber')} placeholder="מספר אישי" type="string" value={personalnumber} /> {/* disable on prod*/}
                   </FormGroup>
-                  {/* <FormGroup>
-                    <Input onChange={handleChange('password')} placeholder="סיסמא" type="password" value={password} />
-                  </FormGroup>*/}
                   {loading ? (
                     <>
                     </>

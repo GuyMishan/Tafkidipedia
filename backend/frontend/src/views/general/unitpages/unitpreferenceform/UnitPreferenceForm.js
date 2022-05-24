@@ -27,7 +27,6 @@ import soldier from "assets/img/soldier.png";
 import UnitPreferenceAnimatedMultiSelect from 'components/tafkidipedia/Select/UnitPreferenceAnimatedMultiSelect';
 
 const UnitPreferenceForm = ({ match }) => {
-
   //mahzor data
   const [mahzordata, setMahzorData] = useState({})
   const [mahzorcandidates, setMahzorCandidates] = useState([]);
@@ -91,29 +90,62 @@ const UnitPreferenceForm = ({ match }) => {
   }
 
   const loadmahzordata = async () => {
-    //active candidates of mahzor -> beeds to be changed to a func that calcs active candidates if mahzor status == 4
-    let result1 = await axios.get(`http://localhost:8000/api/activecandidatesbymahzorid/${match.params.mahzorid}`)
-    let candidates = result1.data;
-    let tempmahzorcandidates = [];
-    for (let i = 0; i < candidates.length; i++) {
-      tempmahzorcandidates.push({ user: candidates[i].user, mahzor: candidates[i].mahzor._id, _id: candidates[i]._id })
-    }
-    setMahzorCandidates(tempmahzorcandidates);
+    //mahzor - for knowing the status..
+    let tempmahzor;
+    await axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
+      .then(response => {
+        tempmahzor = response.data;
+        setMahzorData(tempmahzor);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 
     //jobs
     let result2 = await axios.get(`http://localhost:8000/api/jobinmahzorbyid/${match.params.jobid}`)
     let job = result2.data[0];
     setJob(job);
 
-    //mahzor - for knowing the status..
-    axios.get(`http://localhost:8000/api/mahzor/${match.params.mahzorid}`)
-      .then(response => {
-        let tempmahzor = response.data;
-        setMahzorData(tempmahzor);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    if(tempmahzor.status== 2){
+      let result1 = await axios.get(`http://localhost:8000/api/activecandidatesbymahzorid/${match.params.mahzorid}`)
+      let candidates = result1.data;
+      let tempmahzorcandidates = [];
+      for (let i = 0; i < candidates.length; i++) {
+        tempmahzorcandidates.push({ user: candidates[i].user, mahzor: candidates[i].mahzor._id, _id: candidates[i]._id })
+      }
+      setMahzorCandidates(tempmahzorcandidates);
+    }
+
+    if(tempmahzor.status== 4){
+      let result3 = await axios.get(`http://localhost:8000/api/eshkolbyjobinmahzorid/${match.params.jobid}`)
+      if(result3.data.length>0)
+      {
+        let result4 = await axios.get(`http://localhost:8000/api/eshkolbyid/${result3.data[0]._id}`)
+        let tempeshkol = result4.data[0];
+
+        let response5 = await axios.get(`http://localhost:8000/api/candidatesbymahzorid/${match.params.mahzorid}`)
+        let tempcandidatesinmahzor = response5.data;
+
+        let tempcandidates=[]
+        for (let j = 0; j < tempeshkol.candidatesineshkol.length; j++) {
+          for (let k = 0; k < tempcandidatesinmahzor.length; k++) {
+            if (tempeshkol.candidatesineshkol[j].candidate == tempcandidatesinmahzor[k]._id) {
+              tempcandidates.push(tempcandidatesinmahzor[k])
+            }
+          }
+        }
+        setMahzorCandidates(tempcandidates);
+      }
+      else{
+        let result1 = await axios.get(`http://localhost:8000/api/activecandidatesbymahzorid/${match.params.mahzorid}`)
+        let candidates = result1.data;
+        let tempmahzorcandidates = [];
+        for (let i = 0; i < candidates.length; i++) {
+          tempmahzorcandidates.push({ user: candidates[i].user, mahzor: candidates[i].mahzor._id, _id: candidates[i]._id })
+        }
+        setMahzorCandidates(tempmahzorcandidates);
+      }
+    }
   }
 
   const loadunitpreference = async () => {

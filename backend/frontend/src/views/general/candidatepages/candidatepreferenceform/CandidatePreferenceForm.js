@@ -74,6 +74,7 @@ const CandidatePreferenceForm = ({ match }) => {
       .then(response => {
         let tempmahzor = response.data;
         setMahzorData(tempmahzor);
+        loadmahzorjobs(tempmahzor)
       })
       .catch((error) => {
         console.log(error);
@@ -133,24 +134,52 @@ const CandidatePreferenceForm = ({ match }) => {
     // console.log(tempcandidatepreferencedata)
   }
 
-  const loadmahzorjobs = async () => {
+  const loadmahzorjobs = async (tempmahzordata) => {
     let tempcertjobs = [];
     let tempnoncertjobs = [];
 
-    let result = await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`)
-    let jobs = result.data;
+    if (tempmahzordata.status == 2) {
+      let result = await axios.get(`http://localhost:8000/api/jobinmahzorsbymahzorid/${match.params.mahzorid}`)
+      let jobs = result.data;
 
-    for (let i = 0; i < jobs.length; i++) {
-      if (jobs[i].certain == "ודאי") // תפקיד ודאי
-      {
-        let tempjob = jobs[i];
-        tempcertjobs.push(tempjob)
+      for (let i = 0; i < jobs.length; i++) {
+        if (jobs[i].certain == "ודאי") // תפקיד ודאי
+        {
+          let tempjob = jobs[i];
+          tempcertjobs.push(tempjob)
+        }
+        else {// תפקיד אופציה
+          let tempjob = jobs[i];
+          tempnoncertjobs.push(tempjob)
+        }
       }
-      else {// תפקיד אופציה
-        let tempjob = jobs[i];
-        tempnoncertjobs.push(tempjob)
-      }
+    }
 
+    if (tempmahzordata.status == 4) {
+      //get all eshkols
+      let response = await axios.get(`http://localhost:8000/api/eshkolbymahzorid/${match.params.mahzorid}`)
+      let tempeshkolbymahzorid = response.data;
+
+      //check what eshkol jobs, user is in them.
+      for (let i = 0; i < tempeshkolbymahzorid.length; i++) {
+        let is_user_in_eshkol = false;
+        for (let j = 0; j < tempeshkolbymahzorid[i].candidatesineshkol.length; j++) {
+          if (tempeshkolbymahzorid[i].candidatesineshkol[j].candidate == match.params.candidateid) {
+            is_user_in_eshkol = true;
+          }
+        }
+        if (is_user_in_eshkol == true) {
+          if (tempeshkolbymahzorid[i].jobinmahzor.certain == "ודאי") // תפקיד ודאי
+          {
+            let tempjob = tempeshkolbymahzorid[i].jobinmahzor;
+            tempcertjobs.push(tempjob)
+          }
+          else {// תפקיד אופציה
+            let tempjob = tempeshkolbymahzorid[i].jobinmahzor;
+            tempnoncertjobs.push(tempjob)
+          }
+        }
+      }
     }
     setCertMahzorJobs(tempcertjobs);
     setNonCertMahzorJobs(tempnoncertjobs);
@@ -331,7 +360,7 @@ const CandidatePreferenceForm = ({ match }) => {
 
   function init() {
     loadmahzor()
-    loadmahzorjobs()
+    // loadmahzorjobs()
   }
 
   useEffect(() => {

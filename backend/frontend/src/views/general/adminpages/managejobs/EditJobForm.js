@@ -21,10 +21,10 @@ import {
   Label,
   Col
 } from "reactstrap";
-import ToggleButton from "react-toggle-button";
 import axios from 'axios';
 import history from 'history.js'
 import { toast } from "react-toastify";
+import UserAnimatedMultiSelect from 'components/tafkidipedia/Select/UserAnimatedMultiSelect';
 
 const EditJobForm = ({ match }) => {
   const [oldjob, setOldJob] = useState({});
@@ -81,6 +81,18 @@ const EditJobForm = ({ match }) => {
     const value = evt.target.value;
     if (value != "בחר")
       setJob({ ...job, [evt.target.name]: value });
+  }
+
+  const handle_change_job_meaish = event => {
+    if (event.value != "בחר מאייש") {
+      setJob({ ...job, meaish: event.value });
+    }
+  }
+
+  const handle_change_job_commander = event => {
+    if (event.value != "בחר מפקד") {
+      setJob({ ...job, commander: event.value });
+    }
   }
 
   const clickSubmit = (event) => {
@@ -298,7 +310,12 @@ const EditJobForm = ({ match }) => {
                   </Input>
 
                   <div style={{ textAlign: "right", paddingTop: "10px" }}>מאייש נוכחי</div>
-                  <FormGroup dir="rtl">
+                  {users ?
+                    <div style={{ textAlign: 'right' }}>
+                      <UserAnimatedMultiSelect data={users} handle_change={handle_change_job_meaish} placeholder={"בחר מאייש"} val={job.meaish ? job.meaish : undefined} />
+                    </div>
+                    : null}
+                  {/* <FormGroup dir="rtl">
                     <Input
                       type="select"
                       name="meaish"
@@ -306,13 +323,13 @@ const EditJobForm = ({ match }) => {
                       onChange={handleChange}>
                       <option value={"בחר"}>בחר</option>
                       {users ? users.map((user, index) => (
-                        <option value={user._id}>{user.name} {user.lastname}</option>
+                        <option value={user._id}>{user.name} {user.lastname} / {user.personalnumber}</option>
                       )) : null}
                     </Input>
-                  </FormGroup>
+                  </FormGroup> */}
 
                   <div style={{ textAlign: "right", paddingTop: "10px" }}>מפקד נוכחי</div>
-                  <FormGroup dir="rtl">
+                  {/* <FormGroup dir="rtl">
                     <Input
                       type="select"
                       name="commander"
@@ -320,10 +337,15 @@ const EditJobForm = ({ match }) => {
                       onChange={handleChange}>
                       <option value={"בחר"}>בחר</option>
                       {users ? users.map((user, index) => (
-                        <option value={user._id}>{user.name} {user.lastname}</option>
+                        <option value={user._id}>{user.name} {user.lastname}  / {user.personalnumber}</option>
                       )) : null}
                     </Input>
-                  </FormGroup>
+                  </FormGroup> */}
+                  {users ?
+                    <div style={{ textAlign: 'right' }}>
+                      <UserAnimatedMultiSelect data={users} handle_change={handle_change_job_commander} placeholder={"בחר מפקד"} val={job.commander ? job.commander : undefined} />
+                    </div>
+                    : null}
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>דרגת תקן</div>
                   <Input placeholder='דרגת תקן' type="select" name="rank" value={job.rank} onChange={handleChange}>
@@ -376,7 +398,14 @@ const EditJobForm = ({ match }) => {
                   </Input>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>רמת פעילות</div>
-                  <Input placeholder="רמת פעילות" type="string" name="peilut_level" value={job.peilut_level} onChange={handleChange} />
+                  <Input placeholder="רמת פעילות" type="select" name="peilut_level" value={job.peilut_level} onChange={handleChange}>
+                    <option value={"בחר"}>בחר</option>
+                    <option value={'א+'}>א+</option>
+                    <option value={'א'}>א</option>
+                    <option value={'ב'}>ב</option>
+                    <option value={'ג'}>ג</option>
+                    <option value={'ד'}>ד</option>
+                  </Input>
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>תיאור תפקיד</div>
                   <Input placeholder="תיאור תפקיד" type="string" name="description" value={job.description} onChange={handleChange} />
@@ -399,9 +428,10 @@ const EditJobForm = ({ match }) => {
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>רמת סיווג</div>
                   <Input placeholder='רמת סיווג' type="select" name="sivug" value={job.sivug} onChange={handleChange}>
                     <option value={"בחר"}>בחר</option>
-                    <option value={'בלמ"ס'}>בלמ"ס</option>
-                    <option value={'סודי'}>סודי</option>
-                    <option value={'סודי ביותר'}>סודי ביותר</option>
+                    <option value="שמור">שמור</option>
+                    <option value="סודי">סודי</option>
+                    <option value="סודי ביותר">סודי ביותר</option>
+                    <option value='שו"ס'>שו"ס</option>
                   </Input>
 
                   <Row style={{ direction: "rtl", paddingTop: '10px' }}>

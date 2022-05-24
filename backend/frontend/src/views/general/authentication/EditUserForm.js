@@ -26,6 +26,7 @@ import { generate } from 'shortid'
 import axios from 'axios';
 import history from 'history.js'
 import { toast } from "react-toastify";
+import JobAnimatedMultiSelect from 'components/tafkidipedia/Select/JobAnimatedMultiSelect';
 
 const EditUserForm = ({ match }) => {
   const [data, setData] = useState({
@@ -86,6 +87,12 @@ const EditUserForm = ({ match }) => {
     const value = evt.target.value;
     if (value != "בחר")
       setData({ ...data, [evt.target.name]: value });
+  }
+
+  const handle_change_user_job = event => {
+    if (event.value != "בחר תפקיד") {
+      setData({ ...data, job: event.value });
+    }
   }
 
   const clickSubmit = (event) => {
@@ -376,8 +383,8 @@ const EditUserForm = ({ match }) => {
                       <Input placeholder='השכלה' type="select" name="service_model" value={data.service_model} onChange={handleChange}>
                         <option value={"בחר"}>בחר</option>
                         <option value={'2016'}>2016</option>
-                        {/* <option value={'תיכונית'}>תיכונית</option>
-                        <option value={'על-תיכונית'}>על-תיכונית</option> */}
+                        <option value={'2016 תקציבית'}>2016 תקציבית</option>
+                        <option value={'2010'}>2010</option>
                       </Input>
                     </FormGroup>
 
@@ -601,6 +608,7 @@ const EditUserForm = ({ match }) => {
                         <option value="שמור">שמור</option>
                         <option value="סודי">סודי</option>
                         <option value="סודי ביותר">סודי ביותר</option>
+                        <option value='שו"ס'>שו"ס</option>
                       </Input>
                     </FormGroup>
 
@@ -657,7 +665,7 @@ const EditUserForm = ({ match }) => {
                     ) : data.role === "2" ? (
                       <>
                         <div style={{ textAlign: "right", paddingTop: "10px" }}>תפקיד</div>
-                        <FormGroup dir="rtl">
+                        {/* <FormGroup dir="rtl">
                           <Input
                             type="select"
                             name="job"
@@ -668,7 +676,12 @@ const EditUserForm = ({ match }) => {
                               <option value={job._id}>{job.jobname} / {job.unit.name} / {job.jobcode}</option>
                             )) : null}
                           </Input>
-                        </FormGroup>
+                        </FormGroup> */}
+                    {jobs ?
+                    <div style={{ textAlign: 'right' }}>
+                      <JobAnimatedMultiSelect data={jobs} handle_change={handle_change_user_job} placeholder={"בחר תפקיד"} val={data.job ? data.job : undefined} />
+                    </div>
+                    : null}
                       </>
                     ) : null}
 
@@ -681,7 +694,7 @@ const EditUserForm = ({ match }) => {
                     </FormGroup>
 
                     <div className="text-center">
-                      <button onClick={clickSubmit} className="btn btn-primary">עדכן</button>
+                      <button onClick={clickSubmit} className="btn">עדכן</button>
                     </div>
                   </Form>
                 </Container>

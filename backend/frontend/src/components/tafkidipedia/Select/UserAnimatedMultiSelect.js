@@ -6,7 +6,7 @@ import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
 
-export default function JobAnimatedMultiSelect(props) {
+export default function UserAnimatedMultiSelect(props) {
     const [value, setValue] = useState([]);
 
     const [dataoptions, setDataOptions] = useState([]);
@@ -22,7 +22,7 @@ export default function JobAnimatedMultiSelect(props) {
             for (let i = 0; i < props.data.length; i++) {
                 let tempdataoption = {
                     value: props.data[i]._id,
-                    label: props.data[i].jobname + " / " +props.data[i].unit.name +" / " + props.data[i].jobcode
+                    label: props.data[i].name + " " + props.data[i].lastname + " / " + props.data[i].personalnumber
                 }
                 tempdataoptions.push(tempdataoption)
 
