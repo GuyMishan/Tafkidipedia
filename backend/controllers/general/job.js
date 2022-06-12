@@ -87,6 +87,77 @@ let readtipul3 = [
   }
 ];
 
+let readtipul4 = [
+  {
+    $lookup: {
+      from: "units",
+      localField: "unit",
+      foreignField: "_id",
+      as: "unit"
+    }
+  },
+  {
+    $unwind: "$unit"
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "meaish",
+      foreignField: "_id",
+      as: "meaish"
+    }
+  },
+  {
+    $unwind: "$meaish"
+  },
+  {
+    $lookup: {
+      from: "populations",
+      localField: "population",
+      foreignField: "_id",
+      as: "population"
+    }
+  },
+  {
+    $unwind: "$population"
+  },
+];
+
+let readtipul5 = [
+  {
+    $lookup: {
+      from: "units",
+      localField: "unit",
+      foreignField: "_id",
+      as: "unit"
+    }
+  },
+  {
+    $unwind: "$unit"
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "commander",
+      foreignField: "_id",
+      as: "commander"
+    }
+  },
+  {
+    $unwind: "$commander"
+  },
+  {
+    $lookup: {
+      from: "populations",
+      localField: "population",
+      foreignField: "_id",
+      as: "population"
+    }
+  },
+  {
+    $unwind: "$population"
+  },
+];
 exports.findById = async(req, res) => {
   let tipulfindquerry = readtipul2.slice();
   let finalquerry = tipulfindquerry;
@@ -289,3 +360,67 @@ exports.jobbyjobcode = (req, res) => {
       res.status(400).json('Error: ' + error);
     });
 }
+
+exports.smartjobbyidwithoutcommander = async(req, res) => {
+  let tipulfindquerry = readtipul4.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //id
+  if (req.params.id != 'undefined') {
+    andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Job.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+ }
+
+ exports.smartjobbyidwithoutmeaish = async(req, res) => {
+  let tipulfindquerry = readtipul5.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  //id
+  if (req.params.id != 'undefined') {
+    andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
+  }
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Job.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+ }

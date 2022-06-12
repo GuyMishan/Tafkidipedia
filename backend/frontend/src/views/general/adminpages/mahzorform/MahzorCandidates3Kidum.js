@@ -186,7 +186,7 @@ const MahzorCandidates3Kidum = (props) => {
                                                 <td style={{ textAlign: "center" }}>{job.jobname}</td>
                                                 <td style={{ textAlign: "center" }}>{job.jobcode}</td>
                                                 <td style={{ textAlign: "center" }}>
-                                                    <Input type="select" value={job.unit} disabled>
+                                                    <Input type="select" value={job.unit._id} disabled>
                                                         {units.map((unit, index) => (
                                                             <option key={index} value={unit._id}>{unit.name}</option>
                                                         ))}

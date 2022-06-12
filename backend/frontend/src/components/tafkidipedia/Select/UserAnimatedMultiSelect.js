@@ -38,7 +38,7 @@ export default function UserAnimatedMultiSelect(props) {
                 for (let i = 0; i < props.data.length; i++) {
                     let tempdataoption = {
                         value: props.data[i]._id,
-                        label: props.data[i].name + " " + props.data[i].lastname
+                        label: props.data[i].name + " " + props.data[i].lastname + " / " + props.data[i].personalnumber
                     }
                     tempdataoptions.push(tempdataoption)
 

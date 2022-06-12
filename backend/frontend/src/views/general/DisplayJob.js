@@ -30,10 +30,34 @@ function DisplayJob({ match }) {
     axios.get(`http://localhost:8000/api/smartjobbyid/${match.params.jobid}`)
       .then(response => {
         if (response.data.length == 0) {
-          axios.get(`http://localhost:8000/api/job/${match.params.jobid}`)
-            .then(response1 => {
-              let tempjob = response1.data[0];
-              setJobData(tempjob);
+          axios.get(`http://localhost:8000/api/smartjobbyidwithoutcommander/${match.params.jobid}`)
+            .then(response2 => {
+              if (response2.data.length == 0) {
+                axios.get(`http://localhost:8000/api/smartjobbyidwithoutmeaish/${match.params.jobid}`)
+                  .then(response3 => {
+                    if (response3.data.length == 0) {
+                      axios.get(`http://localhost:8000/api/job/${match.params.jobid}`)
+                        .then(response3 => {
+                          let tempjob = response3.data[0];
+                          setJobData(tempjob);
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        })
+                    }
+                    else {
+                      let tempjob = response3.data[0];
+                      setJobData(tempjob);
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  })
+              }
+              else {
+                let tempjob = response2.data[0];
+                setJobData(tempjob);
+              }
             })
             .catch((error) => {
               console.log(error);
@@ -207,18 +231,18 @@ function DisplayJob({ match }) {
             </Col>
           </Row>
 
-          <Row style={{ direction: "rtl"}}>
+          <Row style={{ direction: "rtl" }}>
             <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
-                <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - הנדסי</h4>
-                <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_handasi * 16.6} text={jobdata.grade_handasi} color={'#7c99ac'} />
+              <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - הנדסי</h4>
+              <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_handasi * 16.6} text={jobdata.grade_handasi} color={'#7c99ac'} />
             </Col>
             <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
-                <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</h4>
-                <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_nihuli * 16.6} text={jobdata.grade_nihuli} color={'#7c99ac'} />
+              <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - ניהולי</h4>
+              <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_nihuli * 16.6} text={jobdata.grade_nihuli} color={'#7c99ac'} />
             </Col>
             <Col xs={12} md={4} style={{ alignSelf: 'center' }}>
-                <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - פיקודי</h4>
-                <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_pikudi * 16.6} text={jobdata.grade_pikudi} color={'#7c99ac'} />
+              <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>ניקוד תפקיד - פיקודי</h4>
+              <LiquidFillGauge style={{ margin: 'auto' }} radius={100} value={jobdata.grade_pikudi * 16.6} text={jobdata.grade_pikudi} color={'#7c99ac'} />
             </Col>
           </Row>
         </Container >
