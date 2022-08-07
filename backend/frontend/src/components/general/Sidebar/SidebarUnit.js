@@ -71,7 +71,7 @@ function SidebarUnit(props) {
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
-          <NavLink to={`/unitdashboard/${user.unitid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/tafkidipedia`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
@@ -100,7 +100,7 @@ function SidebarUnit(props) {
             </Row>
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink to="/tafkidipedia" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
@@ -114,7 +114,7 @@ function SidebarUnit(props) {
               </Col>
             </Row>
           </NavLink>
-        </li>
+        </li> */}
       </Nav>
     </>
   );

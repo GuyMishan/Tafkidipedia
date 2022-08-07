@@ -11,8 +11,8 @@ import soldier from "assets/img/soldier.png";
 import deletepic from "assets/img/delete.png";
 import SettingModal from "../../../../components/general/modal/SettingModal";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-
 import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePageModal';
+import MahzorFormFilter from 'components/tafkidipedia/Filters/MahzorFormFilter';
 
 const MahzorCandidates3Kidum = (props) => {
     const [tempjobcode, setTempjobcode] = useState("");
@@ -22,6 +22,14 @@ const MahzorCandidates3Kidum = (props) => {
     const [isprofilepageopen, setIsprofilepageopen] = useState(false);
     const [useridformodal, setUseridformodal] = useState(undefined);
 
+    // filter
+    const [candidatestoshow, setCandidatestoshow] = useState([])
+
+    const [candidatefilter, setCandidatefilter] = useState({})
+
+    const [onetimeflag, setOnetimeflag] = useState(false)
+    // filter
+
     function Toggle(evt) {
         setUseridformodal(evt.target.value)
         setIsprofilepageopen(!isprofilepageopen);
@@ -30,7 +38,7 @@ const MahzorCandidates3Kidum = (props) => {
     function handleChangetempjobcode(evt) {
         const value = evt.target.value;
         setTempjobcode(value);
-      }
+    }
 
     const loadunits = async () => {
         await axios.get(`http://localhost:8000/api/unit`)
@@ -45,6 +53,82 @@ const MahzorCandidates3Kidum = (props) => {
     function init(evt) {
         loadunits();
     }
+
+    const setfilter = (evt) => {
+        if (evt.currentTarget.name == 'movement') {
+            if (candidatefilter.movementfilter) {
+                let tempmovementfilter = [...candidatefilter.movementfilter]
+                const index = tempmovementfilter.indexOf(evt.currentTarget.value);
+                if (index > -1) {
+                    tempmovementfilter.splice(index, 1);
+                }
+                else {
+                    tempmovementfilter.push(evt.currentTarget.value)
+                }
+                setCandidatefilter({ ...candidatefilter, movementfilter: tempmovementfilter })
+            }
+            else {
+                setCandidatefilter({ ...candidatefilter, movementfilter: [evt.currentTarget.value] })
+            }
+        }
+    }
+
+    const applyfiltersontodata = () => {
+        let tempdatabeforefilter = [...props.users];
+
+        let myArrayMovementFiltered = [];
+        if (candidatefilter.movementfilter && candidatefilter.movementfilter.length > 0) {
+            myArrayMovementFiltered = tempdatabeforefilter.filter((el) => {
+                return candidatefilter.movementfilter.some((f) => {
+                    return f === el.movement;
+                });
+            });
+        }
+        else {
+            myArrayMovementFiltered = tempdatabeforefilter;
+        }
+
+        let myArrayMovementAndIdFiltered = [];
+        if (candidatefilter.useridFilter && candidatefilter.useridFilter.length > 0) {
+            myArrayMovementAndIdFiltered = myArrayMovementFiltered.filter((el) => {
+                return candidatefilter.useridFilter.some((f) => {
+                    return f === el._id;
+                });
+            });
+        }
+        else {
+            myArrayMovementAndIdFiltered = myArrayMovementFiltered;
+        }
+
+        setCandidatestoshow(myArrayMovementAndIdFiltered)
+    }
+
+    function handleChangeManage(evt) {
+        props.handleChangeUser(evt);
+        applyfiltersontodata();
+    }
+
+    function handle_change_candidate_name(evt) {
+        if (evt.value != 'בחר מתמודד') {
+            setCandidatefilter({ ...candidatefilter, useridFilter: [evt.value] })
+            applyfiltersontodata();
+        }
+        else {
+            setCandidatefilter({ ...candidatefilter, useridFilter: [] })
+            applyfiltersontodata();
+        }
+    }
+
+    useEffect(() => {
+        applyfiltersontodata();
+    }, [candidatefilter]);
+
+    useEffect(() => {
+        if (onetimeflag == false && candidatestoshow.length == 0 && props.users.length>0) {
+            setCandidatestoshow([...props.users]);
+            setOnetimeflag(true);
+        }
+    }, [props.users])
 
     useEffect(() => {
         init();
@@ -97,8 +181,9 @@ const MahzorCandidates3Kidum = (props) => {
                             </table>
                         </Row>
                     </Container> */}
+                        <MahzorFormFilter originaldata={props.users} candidatefilter={candidatefilter} setfilter={setfilter} candidatestoshow={candidatestoshow} handle_change_candidate_name={handle_change_candidate_name} />
                         <Row style={{ direction: "rtl", paddingTop: '10px' }} >
-                            {props.users ? props.users.map((user, userindex) => (
+                            {candidatestoshow ? candidatestoshow.map((user, userindex) => (
                                 <Col xs={12} md={3} style={{ alignSelf: 'center' }}>
                                     <Card style={{ direction: 'ltr', background: '#1e1e2f' }}>
                                         <CardBody style={{ direction: 'rtl' }}>
@@ -110,7 +195,7 @@ const MahzorCandidates3Kidum = (props) => {
                                                     <Button value={user._id} onClick={Toggle} style={{ width: '100%' }}>
                                                         {user.name} {user.lastname}
                                                     </Button>
-                                                    <Input style={{ color: 'white', textAlign: 'center' }} type="select" name={userindex} value={user.movement} onChange={props.handleChangeUser}>
+                                                    <Input style={{ color: 'white', textAlign: 'center' }} type="select" name={user._id} value={user.movement} onChange={handleChangeManage}>
                                                         {props.movement.map((movement, index) => (
                                                             <option style={{ textAlign: 'center' }} key={index} value={movement._id}>{movement.name}</option>
                                                         ))}
@@ -141,13 +226,13 @@ const MahzorCandidates3Kidum = (props) => {
                                     </Input>
                                 </FormGroup>
                             </> : null}
-                        
+
                         <FormGroup dir="rtl" >
                             <Row>
-                            <Col xs={12} md={3} style={{ display: 'flex', justifyContent: 'center' }}>
+                                <Col xs={12} md={3} style={{ display: 'flex', justifyContent: 'center' }}>
                                 </Col>
-                                <Col xs={12} md={4} style={{margin:'auto'}}>
-                                {/* <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף תפקיד</div> */}
+                                <Col xs={12} md={4} style={{ margin: 'auto' }}>
+                                    {/* <div style={{ textAlign: 'center', paddingTop: '10px' }}>הוסף תפקיד</div> */}
                                     <Input type="number" value={tempjobcode} placeholder={'הכנס קוד תפקיד'} onChange={handleChangetempjobcode}></Input>
                                 </Col>
                                 <Col xs={12} md={2} style={{ display: 'flex', justifyContent: 'center' }}>

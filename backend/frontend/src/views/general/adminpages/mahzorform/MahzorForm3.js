@@ -279,6 +279,31 @@ const MahzorForm3 = ({ match }) => {
     setUsers(tempusers);
   }
 
+  function handleChangeUser2(evt) {
+    const namevalue = evt.target.name; //id of user
+    const value = evt.target.value; //id of movement
+
+    let tempusers = [...users];
+    let tempuser;
+    let tempindex=999;
+
+    for(let i=0;i<users.length;i++)
+    {
+      if(users[i]._id==namevalue)
+      {
+        tempuser = users[i];
+        tempindex=i;
+      }
+    }
+
+    if(tempindex!=999)
+    {
+      tempuser.movement = value;
+      tempusers[tempindex] = tempuser;
+      setUsers(tempusers);
+    }
+  }
+
   function handleChangeJobCertain(evt) {
     const namevalue = evt.target.name; //index of job in job arr
     const value = evt.target.value; // ודאי או אופציה
@@ -2608,8 +2633,8 @@ const MahzorForm3 = ({ match }) => {
       <MahzorDataComponent mahzordata={mahzordata} oldmahzordata={oldmahzordata} population={population} handleChangeMahzorData={handleChangeMahzorData} />
 
       {iskidum == false ?
-        <MahzorCandidates3 mahzordata={mahzordata} users={users} movement={movement} handleChangeUser={handleChangeUser} jobs={jobs} deletejobfromjobs={deletejobfromjobs} handleChangeJobCertain={handleChangeJobCertain} SerachAndAddJobToJobsList={SerachAndAddJobToJobsList} />
-        : <MahzorCandidates3Kidum mahzordata={mahzordata} users={users} movement={movement} population={population} jobs={jobs} handleChangeUser={handleChangeUser} handleChangeKidumPopulation={handleChangeKidumPopulation} deletejobfromjobs={deletejobfromjobs} handleChangeJobCertain={handleChangeJobCertain} SerachAndAddJobToJobsList={SerachAndAddJobToJobsList} />}
+        <MahzorCandidates3 mahzordata={mahzordata} users={users} movement={movement} handleChangeUser={handleChangeUser2} jobs={jobs} deletejobfromjobs={deletejobfromjobs} handleChangeJobCertain={handleChangeJobCertain} SerachAndAddJobToJobsList={SerachAndAddJobToJobsList} />
+        : <MahzorCandidates3Kidum mahzordata={mahzordata} users={users} movement={movement} population={population} jobs={jobs} handleChangeUser={handleChangeUser2} handleChangeKidumPopulation={handleChangeKidumPopulation} deletejobfromjobs={deletejobfromjobs} handleChangeJobCertain={handleChangeJobCertain} SerachAndAddJobToJobsList={SerachAndAddJobToJobsList} />}
 
       <Button type="primary" onClick={() => clickSubmit()}>אישור</Button>
     </div>

@@ -73,7 +73,7 @@ function SidebarCandidate(props) {
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
-          <NavLink to={`/candidatedashboard/${user._id}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/tafkidipedia`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
@@ -102,7 +102,7 @@ function SidebarCandidate(props) {
             </Row>
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink to="/tafkidipedia" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
@@ -116,7 +116,7 @@ function SidebarCandidate(props) {
               </Col>
             </Row>
           </NavLink>
-        </li>
+        </li> */}
       </Nav>
     </>
   );
